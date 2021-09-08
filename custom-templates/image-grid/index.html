@@ -290,6 +290,12 @@
     document.querySelector("#selected-link").href = '';
     document.querySelector("#selected-property-type").innerHTML = '';
     document.querySelector("#selected-room-type").innerHTML = '';
+
+    document.querySelector("#selected-listing-title").innerHTML = '';
+    document.querySelector("#selected-listing-location").innerHTML = '';
+    document.querySelector("#selected-listing-description").innerHTML = '';
+    document.querySelector("#selected-listing-where").innerHTML = '';
+
     document.querySelector("#panel").innerHTML = '';
   }
 
@@ -309,6 +315,10 @@
       propertyType: propertyType,
       roomType: roomType,
       listingImages: listingImages,
+      listingTitle: listingTitle = "N/A",
+      listingLocation: listingLocation = "N/A",
+      listingDescription: listingDescription = "N/A",
+      listingWhere: listingWhere = "N/A",
     } = state.currentAssetData.gridImages[itemIdx];
 
     clearSelectedMetadata();
@@ -319,6 +329,12 @@
     document.querySelector("#selected-link").href = pdpUrl(listingId);
     document.querySelector("#selected-property-type").innerHTML = propertyType;
     document.querySelector("#selected-room-type").innerHTML = roomType;
+
+    document.querySelector("#selected-listing-title").innerHTML = listingTitle;
+    document.querySelector("#selected-listing-location").innerHTML = listingLocation;
+    document.querySelector("#selected-listing-description").innerHTML = listingDescription;
+    document.querySelector("#selected-listing-where").innerHTML = listingWhere;
+
     // window.open(pdpUrl(listingId), '_blank');
 
     document.querySelector("#panel").innerHTML = listingImages.map(createAdditionalImage).join("\n");
@@ -342,12 +358,9 @@
         <div style="display:flex;flex-direction:column;">
           <h3>${parsedData.attribute} - ${parsedData.qualityTier}</h3>
 
-          <div style="display:flex;flex-direction:row;flex-grow:1;align-items:flex-end;padding-bottom:20px">
+          <div style="display:flex;flex-direction:row;flex-grow:1;align-items:flex-end;padding-bottom:10px">
             <div class="listing-info">
-              Selected listing
-            </div>
-            <div class="listing-info">
-              ID: <span id="selected-id"></span>
+              Listing ID: <span id="selected-id"></span>
             </div>
             <div class="listing-info">
               Photo ID: <span id="selected-photo"></span>
@@ -360,6 +373,30 @@
             </div>
             <div class="listing-info">
               <a href="" id="selected-link" target="_blank">Link to PDP</a>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:row;flex-grow:1;align-items:flex-end;padding-bottom:10px">
+            <div class="listing-info">
+              Listing Title: <span id="selected-listing-title"></span>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:row;flex-grow:1;align-items:flex-end;padding-bottom:10px">
+            <div class="listing-info">
+              Listing Location: <span id="selected-listing-location"></span>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:row;flex-grow:1;align-items:flex-end;padding-bottom:10px">
+            <div class="listing-info">
+              Listing Description: <span id="selected-listing-description"></span>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:row;flex-grow:1;align-items:flex-end;padding-bottom:20px">
+            <div class="listing-info">
+              Where You'll Be: <span id="selected-listing-where"></span>
             </div>
           </div>
         </div>
