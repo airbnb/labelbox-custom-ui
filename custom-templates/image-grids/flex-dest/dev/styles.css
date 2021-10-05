@@ -1,0 +1,133 @@
+body{
+  height: 100vh;
+  overflow: hidden;
+}
+.app{
+  height: 100vh;
+  overflow: hidden;
+}
+.flex-column{
+  flex-direction: column;
+}
+.flex-grow{
+  display: flex;
+  flex-grow: 1;
+}
+.content{
+  margin: 0px 20px;
+  overflow-y: scroll;
+  max-height: calc(100vh - 60px);
+}
+.side-panel{
+  width: 500px;
+  min-width: 500px;
+  border-left: 1px solid #DDDDDD;
+  overflow-y: scroll;
+  height: 100vh;
+  margin-right: 0px !important;
+  padding: 20px;
+}
+.additional-image{
+  padding-top: 20px;
+  padding-bottom: 20px;
+  width: 100%;
+}
+.questions{
+  display: flex;
+  padding-bottom: 50px;
+  max-width: 400px;
+  min-width: 200px;
+}
+
+.photo-grid{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.listing-info{
+  margin-right: 20px;
+}
+
+.image-container{
+  width: 210px;
+  height: 210px;
+  padding-top: 5px;
+  padding-left: 5px;
+  overflow: hidden;
+}
+.image-container.selected{
+  background-color: red;
+}
+
+.image{
+  object-fit: cover;
+  width: 200px;
+  height: 200px;
+}
+
+.grod-container{
+  grid-gap: 20px 20px;
+}
+
+.text{
+background-color: #ececec;
+padding: 30px;
+font-size: 20px;
+overflow: auto;
+font-style: italic;
+}
+
+.sticky{
+  position: sticky;
+  top: 0;
+  background-color: white;
+}
+
+.navbar{
+ padding: 10px;
+ border-bottom: 1px solid #e8e8e8;
+}
+
+.btn{
+background-color: aqua
+}
+.btn:visited{
+background-color: yellow
+}
+.btn:hover {
+background-color: skyblue
+}
+.btn:active{
+background-color: pink;
+}
+.btn:focus{
+background-color: pink;
+}
+#questions{
+padding: 10px;
+overflow-y: auto;
+height: 100%;
+}
+.label{
+color: #717171;
+}
+.question{
+margin-bottom: 15px;
+}
+
+[type="radio"]:checked+span:after,
+[type="radio"].with-gap:checked+span:before,
+[type="radio"].with-gap:checked+span:after {
+border-color: #03a9f4 !important;
+}
+[type="checkbox"].filled-in:checked+span:not(.lever):after {
+border-color: #03a9f4 !important;
+background-color: #03a9f4 !important;
+
+}
+
+input.materialize-textarea:focus:not([readonly]) {
+border-color: #03a9f4 !important;
+}
