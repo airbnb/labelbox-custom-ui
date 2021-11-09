@@ -276,14 +276,16 @@
     return `https://www.airbnb.com/rooms/${listingId}`;
   }
 
-  function gsheetUrl(listingId, photoLink) {
+  //function gsheetUrl(listingId, photoLink) {
+  function gsheetUrl(listingId) {
     const gsheetUrlMain = "https://docs.google.com/forms/d/e/1FAIpQLSdZuDncKFE3pSUd_vMTkKIrnA3PDOY2x7uupe_RzAERSc6wVQ/viewform?usp=pp_url";
     const paramAttribute = `entry.1331702945=${state.currentAssetData.attribute}`;
     const paramQuality = `entry.1305733443=${state.currentAssetData.qualityTier}`;
-    const paramListingId = `entry.1673408678=${listing_id}`;
-    const paramPhotoLink = `entry.709101333=${encodeURIComponent(photoLink)}`;
+    const paramListingId = `entry.1673408678=${listingId}`;
+    //const paramPhotoLink = `entry.709101333=${encodeURIComponent(photoLink)}`;
 
-    return `${gsheetUrlMain}&${paramAttribute}&${paramQuality}&${paramListingId}&${paramPhotoLink}`;
+    //return `${gsheetUrlMain}&${paramAttribute}&${paramQuality}&${paramListingId}&${paramPhotoLink}`;
+    return `${gsheetUrlMain}&${paramAttribute}&${paramQuality}&${paramListingId}`;
   }
 
   function createAdditionalImage(listingImage) {
@@ -364,7 +366,8 @@
     }
   }
 
-  function displayInfo(itemIdx, photoLink) {
+  //function displayInfo(itemIdx, photoLink) {
+  function displayInfo(itemIdx) {
     console.log("Image state:", state.currentAssetData.gridImages[itemIdx]);
     const {
       listingId: listingId,
@@ -386,7 +389,8 @@
     document.querySelector("#selected-id").innerHTML = listingId;
     document.querySelector("#selected-photo").innerHTML = photoId;
     document.querySelector("#selected-pdp-link").href = pdpUrl(listingId);
-    document.querySelector("#selected-gsheet-link").href = gsheetUrl(listingId, photoLink);
+    //document.querySelector("#selected-gsheet-link").href = gsheetUrl(listingId, photoLink);
+    document.querySelector("#selected-gsheet-link").href = gsheetUrl(listingId);
     document.querySelector("#selected-property-type").innerHTML = propertyType;
     document.querySelector("#selected-room-type").innerHTML = roomType;
 
@@ -411,7 +415,7 @@
     return `
       <div
         class="image-container"
-        onclick="{displayInfo(${idx},${photoLink})}"
+        onclick="{displayInfo(${idx})}"
         tabindex="${idx}"
         id="image-container-${listingId}"
       >
