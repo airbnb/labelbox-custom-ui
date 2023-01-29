@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-prettier --write --single-quote custom-templates/image-grids/flex-dest/dev/js && rollup -c rollup.config.js && git add -A .
+prettier --write --single-quote custom-templates/image-grids/flex-dest/v3/js && rollup -c rollup.config.js && git add -A .
