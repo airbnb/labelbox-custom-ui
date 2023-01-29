@@ -7861,7 +7861,7 @@
 	}
 
 	function getResizedImageUrl(photoLink) {
-	  return photoLink !== null && photoLink !== void 0 && photoLink.includes('?') ? "".concat(photoLink) : "".concat(photoLink, "?img_w=480");
+	  return photoLink !== null && photoLink !== void 0 && photoLink.includes('?') ? "".concat(photoLink) : "".concat(photoLink, "?im_w=480");
 	}
 
 	function DefaultImage(_ref) {
