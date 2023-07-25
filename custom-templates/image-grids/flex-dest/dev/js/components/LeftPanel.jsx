@@ -92,7 +92,6 @@ export default function LeftPanel({
         case 'enter':
           e.preventDefault();
           handleSubmit(e);
-          break;
 
         default:
           return;
