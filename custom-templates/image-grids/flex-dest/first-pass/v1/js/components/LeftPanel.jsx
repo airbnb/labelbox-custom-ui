@@ -59,7 +59,9 @@ export default function LeftPanel({
 
   const handleKeyupEvent = (e) => {
     if (!isSaving && !isSkipping) {
-      switch (e.key.toLowerCase()) {
+      const key = e.key.toLowerCase();
+      console.log('key', key);
+      switch (key) {
         case '1':
           e.preventDefault();
           setPhotoQualityTier('Most Inspiring');

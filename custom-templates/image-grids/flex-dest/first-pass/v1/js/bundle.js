@@ -8473,7 +8473,9 @@
 	  };
 	  var handleKeyupEvent = function handleKeyupEvent(e) {
 	    if (!isSaving && !isSkipping) {
-	      switch (e.key.toLowerCase()) {
+	      var key = e.key.toLowerCase();
+	      console.log('key', key);
+	      switch (key) {
 	        case '1':
 	          e.preventDefault();
 	          setPhotoQualityTier('Most Inspiring');
