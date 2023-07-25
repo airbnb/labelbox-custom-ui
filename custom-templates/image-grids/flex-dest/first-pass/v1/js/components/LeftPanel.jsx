@@ -32,6 +32,7 @@ export default function LeftPanel({
   };
 
   const handleSubmit = (e) => {
+    console.log('IN HANDLE SUBMIT',e)
     if (photoQualityTier === '') {
       e.preventDefault();
       return;
@@ -92,7 +93,6 @@ export default function LeftPanel({
         case 'enter':
           e.preventDefault();
           handleSubmit(e);
-          break;
 
         default:
           return;
