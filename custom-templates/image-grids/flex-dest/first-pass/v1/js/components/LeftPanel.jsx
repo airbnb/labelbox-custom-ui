@@ -102,7 +102,6 @@ export default function LeftPanel({
   };
 
   useEffect(() => {
-    console.log('useEffect fired', photoQualityTier)
     document.addEventListener('keyup', handleKeyupEvent);
     return () => document.removeEventListener('keyup', handleKeyupEvent);
   }, [listingId, photoId, photoQualityTier, handleKeyupEvent]);
@@ -137,7 +136,6 @@ export default function LeftPanel({
       <div className="left-panel-ctas-wrapper">
         <button
           disabled={isSkipping || isSaving}
-          onClick={(e) => handleSkip(e)}
           className="cta skip-cta"
         >
           {isSkipping ? 'Skipping...' : 'Skip Listing'}

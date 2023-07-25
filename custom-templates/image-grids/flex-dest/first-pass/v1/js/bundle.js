@@ -8509,7 +8509,6 @@
 	    }
 	  };
 	  react.exports.useEffect(function () {
-	    console.log('useEffect fired', photoQualityTier);
 	    document.addEventListener('keyup', handleKeyupEvent);
 	    return function () {
 	      return document.removeEventListener('keyup', handleKeyupEvent);
@@ -8550,9 +8549,6 @@
 	    className: "left-panel-ctas-wrapper"
 	  }, /*#__PURE__*/React.createElement("button", {
 	    disabled: isSkipping || isSaving,
-	    onClick: function onClick(e) {
-	      return handleSkip(e);
-	    },
 	    className: "cta skip-cta"
 	  }, isSkipping ? 'Skipping...' : 'Skip Listing'), /*#__PURE__*/React.createElement("button", {
 	    disabled: isSkipping || isSaving || photoQualityTier === '',
