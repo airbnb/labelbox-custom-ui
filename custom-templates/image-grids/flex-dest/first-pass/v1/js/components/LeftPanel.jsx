@@ -32,7 +32,7 @@ export default function LeftPanel({
   };
 
   const handleSubmit = (e) => {
-    console.log('in handle submit', e)
+    console.log('in handle submit photoQualityTier', photoQualityTier)
     if (photoQualityTier === '') {
       e.preventDefault();
       return;
@@ -58,7 +58,6 @@ export default function LeftPanel({
   };
 
   const handleKeyupEvent = (e) => {
-    console.log('isSkipping', isSkipping)
     if (!isSaving && !isSkipping) {
       const key = e.key.toLowerCase();
       switch (key) {
@@ -103,6 +102,7 @@ export default function LeftPanel({
   };
 
   useEffect(() => {
+    console.log('useEffect fired', photoQualityTier)
     document.addEventListener('keyup', handleKeyupEvent);
     return () => document.removeEventListener('keyup', handleKeyupEvent);
   }, [listingId, photoId, photoQualityTier, handleKeyupEvent]);

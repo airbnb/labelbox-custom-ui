@@ -8450,7 +8450,7 @@
 	    });
 	  };
 	  var handleSubmit = function handleSubmit(e) {
-	    console.log('in handle submit', e);
+	    console.log('in handle submit photoQualityTier', photoQualityTier);
 	    if (photoQualityTier === '') {
 	      e.preventDefault();
 	      return;
@@ -8472,7 +8472,6 @@
 	    });
 	  };
 	  var handleKeyupEvent = function handleKeyupEvent(e) {
-	    console.log('isSkipping', isSkipping);
 	    if (!isSaving && !isSkipping) {
 	      var key = e.key.toLowerCase();
 	      switch (key) {
@@ -8510,6 +8509,7 @@
 	    }
 	  };
 	  react.exports.useEffect(function () {
+	    console.log('useEffect fired', photoQualityTier);
 	    document.addEventListener('keyup', handleKeyupEvent);
 	    return function () {
 	      return document.removeEventListener('keyup', handleKeyupEvent);
