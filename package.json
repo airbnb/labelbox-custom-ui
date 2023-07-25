@@ -2,7 +2,7 @@
   "name": "labelbox-custom-ui",
   "type": "module",
   "version": "1.0.0",
-  "description": "",
+  "description": "Ops agents use Labelbox to collect structured data about listings in service of products like Flexible Destinations. Due to the complex nature of the Quality Assurance step, the custom editor is used in order to display multiple images in a grid, along with relevant listing information per each image in the grid. Projects are hosted on [Labelbox](https://app.labelbox.com/projects).",
   "main": "rollup.config.js",
   "dependencies": {
     "@babel/core": "^7.16.12",
@@ -18,8 +18,8 @@
     "@rollup/plugin-node-resolve": "^13.1.3",
     "@rollup/plugin-replace": "^3.0.1",
     "husky": "^7.0.4",
-    "prettier": "^2.5.1",
-    "rollup": "^2.66.0"
+    "prettier": "^2.8.8",
+    "rollup": "^2.79.1"
   },
   "scripts": {
     "prepare": "husky install"
@@ -33,5 +33,6 @@
   "bugs": {
     "url": "https://github.com/airbnb/labelbox-custom-ui/issues"
   },
-  "homepage": "https://github.com/airbnb/labelbox-custom-ui#readme"
+  "homepage": "https://github.com/airbnb/labelbox-custom-ui#readme",
+  "keywords": []
 }
