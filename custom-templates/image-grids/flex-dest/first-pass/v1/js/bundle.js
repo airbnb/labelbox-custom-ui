@@ -8450,7 +8450,6 @@
 	    });
 	  };
 	  var handleSubmit = function handleSubmit(e) {
-	    console.log('in handle submit photoQualityTier', photoQualityTier);
 	    if (photoQualityTier === '') {
 	      e.preventDefault();
 	      return;
@@ -8549,7 +8548,9 @@
 	    className: "left-panel-ctas-wrapper"
 	  }, /*#__PURE__*/React.createElement("button", {
 	    disabled: isSkipping || isSaving,
-	    className: "cta skip-cta"
+	    className: "cta skip-cta",
+	    onClick: handleSkip,
+	    type: "button"
 	  }, isSkipping ? 'Skipping...' : 'Skip Listing'), /*#__PURE__*/React.createElement("button", {
 	    disabled: isSkipping || isSaving || photoQualityTier === '',
 	    className: "cta save-cta",

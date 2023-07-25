@@ -32,7 +32,6 @@ export default function LeftPanel({
   };
 
   const handleSubmit = (e) => {
-    console.log('in handle submit photoQualityTier', photoQualityTier)
     if (photoQualityTier === '') {
       e.preventDefault();
       return;
@@ -137,6 +136,8 @@ export default function LeftPanel({
         <button
           disabled={isSkipping || isSaving}
           className="cta skip-cta"
+          onClick={handleSkip}
+          type="button"
         >
           {isSkipping ? 'Skipping...' : 'Skip Listing'}
         </button>
