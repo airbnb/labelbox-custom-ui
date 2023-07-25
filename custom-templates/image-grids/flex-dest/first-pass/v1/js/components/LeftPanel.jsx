@@ -32,6 +32,7 @@ export default function LeftPanel({
   };
 
   const handleSubmit = (e) => {
+    console.log('in handle submit', e)
     if (photoQualityTier === '') {
       e.preventDefault();
       return;
@@ -92,7 +93,6 @@ export default function LeftPanel({
         case 'enter':
           e.preventDefault();
           handleSubmit(e);
-          break;
 
         default:
           return;
@@ -144,7 +144,7 @@ export default function LeftPanel({
           disabled={isSkipping || isSaving || photoQualityTier === ''}
           className="cta save-cta"
           type="submit"
-          onClick={(e) => handleSubmit(e)}
+          onClick={handleSubmit}
         >
           {isSaving ? 'Submitting...' : 'Submit'}
         </button>
