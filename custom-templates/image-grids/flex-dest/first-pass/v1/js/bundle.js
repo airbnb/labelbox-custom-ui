@@ -8472,9 +8472,9 @@
 	    });
 	  };
 	  var handleKeyupEvent = function handleKeyupEvent(e) {
+	    console.log('isSkipping', isSkipping);
 	    if (!isSaving && !isSkipping) {
 	      var key = e.key.toLowerCase();
-	      console.log('key', key);
 	      switch (key) {
 	        case '1':
 	          e.preventDefault();
@@ -8503,6 +8503,7 @@
 	        case 'enter':
 	          e.preventDefault();
 	          handleSubmit(e);
+	          break;
 	        default:
 	          return;
 	      }

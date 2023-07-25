@@ -58,9 +58,9 @@ export default function LeftPanel({
   };
 
   const handleKeyupEvent = (e) => {
+    console.log('isSkipping', isSkipping)
     if (!isSaving && !isSkipping) {
       const key = e.key.toLowerCase();
-      console.log('key', key);
       switch (key) {
         case '1':
           e.preventDefault();
@@ -95,7 +95,7 @@ export default function LeftPanel({
         case 'enter':
           e.preventDefault();
           handleSubmit(e);
-
+          break;
         default:
           return;
       }
