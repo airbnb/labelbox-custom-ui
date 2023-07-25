@@ -8450,6 +8450,7 @@
 	    });
 	  };
 	  var handleSubmit = function handleSubmit(e) {
+	    console.log('in handle submit', e);
 	    if (photoQualityTier === '') {
 	      e.preventDefault();
 	      return;
@@ -8554,9 +8555,7 @@
 	    disabled: isSkipping || isSaving || photoQualityTier === '',
 	    className: "cta save-cta",
 	    type: "submit",
-	    onClick: function onClick(e) {
-	      return handleSubmit(e);
-	    }
+	    onClick: handleSubmit
 	  }, isSaving ? 'Submitting...' : 'Submit')), labeledPhotoId && /*#__PURE__*/React.createElement("div", {
 	    className: "existing-label-container"
 	  }, /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("span", {
