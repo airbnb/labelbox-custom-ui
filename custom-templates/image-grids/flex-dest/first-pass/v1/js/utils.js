@@ -49,7 +49,7 @@ export function parseHtmlInput(input) {
       .map((str) => str.trim())
 
       // remove first two html tags and listing/map elements (first 4 elements and last element)
-      .slice(4, htmlSplit.length - 1)
+      .slice(2, htmlSplit.length - 1)
 
       // items are grouped in the array by empty strings, with a line each for the photo id and img tag,
       // and 0+ lines for the caption. here, actually turn the big array into an array of chunks accordingly.

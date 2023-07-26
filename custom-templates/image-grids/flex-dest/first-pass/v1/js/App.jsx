@@ -52,23 +52,24 @@ export default function App() {
 
           assetNext.current = asset.next;
           assetPrev.current = asset.previous;
-          const assetDataStr = get(asset.metadata[0].metaValue);
-          const parsedAssetData = parseHtmlInput(assetDataStr);
-          console.log(parsedAssetData)
+          const assetDataStr = get(asset.data);
+          console.log(assetDataStr)
+          const assetImagesStr = get(asset.metadata[0].metaValue);
+          const parsedAssetImages = parseHtmlInput(assetImagesStr);
 
           // Full match will be first element, listing ID will be second
           setListingId(
-            assetDataStr.match(
+            assetImagesStr.match(
               /href="https:\/\/www.airbnb.com\/rooms\/(.*?)"/
             )[1]
           );
 
           // default to first image
           setSelectedImageIdx(0);
-          setSelectedPhotoId(parsedAssetData[0].photoId);
+          setSelectedPhotoId(parsedAssetImages[0].photoId);
 
           setCurrentAsset(asset);
-          setAssetData(parsedAssetData);
+          setAssetData(parsedAssetImages);
 
           setIsLoading(false);
           setShouldAllowImageSelection(true);

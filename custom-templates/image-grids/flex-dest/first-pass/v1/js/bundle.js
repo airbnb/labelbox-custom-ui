@@ -7403,7 +7403,7 @@
 	  })
 
 	  // remove first two html tags and listing/map elements (first 4 elements and last element)
-	  .slice(4, htmlSplit.length - 1)
+	  .slice(2, htmlSplit.length - 1)
 
 	  // items are grouped in the array by empty strings, with a line each for the photo id and img tag,
 	  // and 0+ lines for the caption. here, actually turn the big array into an array of chunks accordingly.
@@ -8679,18 +8679,19 @@
 	        resetState();
 	        assetNext.current = asset.next;
 	        assetPrev.current = asset.previous;
-	        var assetDataStr = get(asset.metadata[0].metaValue);
-	        var parsedAssetData = parseHtmlInput(assetDataStr);
-	        console.log(parsedAssetData);
+	        var assetDataStr = get(asset.data);
+	        console.log(assetDataStr);
+	        var assetImagesStr = get(asset.metadata[0].metaValue);
+	        var parsedAssetImages = parseHtmlInput(assetImagesStr);
 
 	        // Full match will be first element, listing ID will be second
-	        setListingId(assetDataStr.match(/href="https:\/\/www.airbnb.com\/rooms\/(.*?)"/)[1]);
+	        setListingId(assetImagesStr.match(/href="https:\/\/www.airbnb.com\/rooms\/(.*?)"/)[1]);
 
 	        // default to first image
 	        setSelectedImageIdx(0);
-	        setSelectedPhotoId(parsedAssetData[0].photoId);
+	        setSelectedPhotoId(parsedAssetImages[0].photoId);
 	        setCurrentAsset(asset);
-	        setAssetData(parsedAssetData);
+	        setAssetData(parsedAssetImages);
 	        setIsLoading(false);
 	        setShouldAllowImageSelection(true);
 	      }
