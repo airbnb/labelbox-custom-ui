@@ -7466,13 +7466,12 @@
 	}
 
 	function getEffectiveImageUrl(photoLink) {
-	  var _effectiveImgUrl;
 	  var effectiveImgUrl = photoLink;
-	  if (!photoLink.includes('/im/')) {
-	    var originalUrl = new URL(photoLink);
-	    effectiveImgUrl = "".concat(originalUrl.origin, "/im").concat(originalUrl.pathname).concat(originalUrl.search);
-	  }
-	  return (_effectiveImgUrl = effectiveImgUrl) !== null && _effectiveImgUrl !== void 0 && _effectiveImgUrl.includes('?') ? "".concat(effectiveImgUrl) : "".concat(effectiveImgUrl, "?im_w=480");
+	  // if (!photoLink.includes('/im/')) {
+	  //   const originalUrl = new URL(photoLink);
+	  //   effectiveImgUrl = `${originalUrl.origin}/im${originalUrl.pathname}${originalUrl.search}`;
+	  // }
+	  return effectiveImgUrl !== null && effectiveImgUrl !== void 0 && effectiveImgUrl.includes('?') ? "".concat(effectiveImgUrl) : "".concat(effectiveImgUrl, "?im_w=480");
 	}
 
 	function DefaultImage(_ref) {
