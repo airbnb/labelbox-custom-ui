@@ -1,5 +1,5 @@
 import React from 'react';
-import { getResizedImageUrl } from '../utils';
+import { getEffectiveImageUrl } from '../utils';
 
 export default function DefaultImage({
   imgObj,
@@ -7,12 +7,7 @@ export default function DefaultImage({
   isSelected,
   onClickImage,
 }) {
-  let effectiveImgUrl = imgObj.imageSrc;
-  if (imgObj.imageSrc && !imgObj.imageSrc.includes('/im/')) {
-    const originalUrl = new URL(imgObj.imageSrc);
-    effectiveImgUrl = `${originalUrl.origin}/im${originalUrl.pathname}${originalUrl.search}`;
-  }
-  const imageUrl = getResizedImageUrl(effectiveImgUrl);
+  const imageUrl = getEffectiveImageUrl(imgObj.imageSrc);
 
   return (
     <div

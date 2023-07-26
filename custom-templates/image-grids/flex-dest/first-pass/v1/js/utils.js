@@ -96,7 +96,11 @@ export function parseHtmlAssetData(assetDataStr) {
     .slice(0, 7);
 }
 
-// TODO: double check that im_w is okay too
-export function getResizedImageUrl(photoLink) {
-  return photoLink?.includes('?') ? `${photoLink}` : `${photoLink}?im_w=480`;
+export function getEffectiveImageUrl(photoLink) {
+  let effectiveImgUrl = photoLink;
+  if (!photoLink.includes('/im/')) {
+    const originalUrl = new URL(photoLink);
+    effectiveImgUrl = `${originalUrl.origin}/im${originalUrl.pathname}${originalUrl.search}`;
+  }
+  return effectiveImgUrl?.includes('?') ? `${photoLink}` : `${photoLink}?im_w=480`;
 }

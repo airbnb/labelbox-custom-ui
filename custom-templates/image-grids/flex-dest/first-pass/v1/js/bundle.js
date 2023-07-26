@@ -7446,10 +7446,14 @@
 	  // return first 7 metadata
 	  .slice(0, 7);
 	}
-
-	// TODO: double check that im_w is okay too
-	function getResizedImageUrl(photoLink) {
-	  return photoLink !== null && photoLink !== void 0 && photoLink.includes('?') ? "".concat(photoLink) : "".concat(photoLink, "?im_w=480");
+	function getEffectiveImageUrl(photoLink) {
+	  var _effectiveImgUrl;
+	  var effectiveImgUrl = photoLink;
+	  if (!photoLink.includes('/im/')) {
+	    var originalUrl = new URL(photoLink);
+	    effectiveImgUrl = "".concat(originalUrl.origin, "/im").concat(originalUrl.pathname).concat(originalUrl.search);
+	  }
+	  return (_effectiveImgUrl = effectiveImgUrl) !== null && _effectiveImgUrl !== void 0 && _effectiveImgUrl.includes('?') ? "".concat(photoLink) : "".concat(photoLink, "?im_w=480");
 	}
 
 	function DefaultImage(_ref) {
@@ -7457,12 +7461,7 @@
 	    idx = _ref.idx,
 	    isSelected = _ref.isSelected,
 	    onClickImage = _ref.onClickImage;
-	  var effectiveImgUrl = imgObj.imageSrc;
-	  if (imgObj.imageSrc && !imgObj.imageSrc.includes('/im/')) {
-	    var originalUrl = new URL(imgObj.imageSrc);
-	    effectiveImgUrl = "".concat(originalUrl.origin, "/im").concat(originalUrl.pathname).concat(originalUrl.search);
-	  }
-	  var imageUrl = getResizedImageUrl(effectiveImgUrl);
+	  var imageUrl = getEffectiveImageUrl(imgObj.imageSrc);
 	  return /*#__PURE__*/React.createElement("div", {
 	    className: "image-container",
 	    onClick: function onClick() {
