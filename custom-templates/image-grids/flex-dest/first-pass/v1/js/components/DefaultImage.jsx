@@ -10,7 +10,7 @@ export default function DefaultImage({
   let effectiveImgUrl = imgObj.imageSrc;
   if (imgObj.imageSrc && !imgObj.imageSrc.includes('/im/')) {
     const originalUrl = new URL(imgObj.imageSrc);
-    effectiveImgUrl = `${originalUrl.origin}/im${originalUrl.pathname}`;
+    effectiveImgUrl = `${originalUrl.origin}/im${originalUrl.pathname}${originalUrl.search}`;
   }
   const imageUrl = getResizedImageUrl(effectiveImgUrl);
 
