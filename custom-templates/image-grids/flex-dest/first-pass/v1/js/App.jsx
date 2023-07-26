@@ -104,11 +104,11 @@ export default function App() {
     (imageIdx) => {
       if (shouldAllowImageSelection) {
         setSelectedImageIdx(imageIdx);
-        setSelectedPhotoId(assetData[imageIdx].photoId);
+        setSelectedPhotoId(imageObjs[imageIdx].photoId);
       }
     },
     [
-      assetData,
+      imageObjs,
       setSelectedImageIdx,
       setSelectedPhotoId,
       shouldAllowImageSelection,

@@ -8736,9 +8736,9 @@
 	  var handleClickImage = react.exports.useCallback(function (imageIdx) {
 	    if (shouldAllowImageSelection) {
 	      setSelectedImageIdx(imageIdx);
-	      setSelectedPhotoId(assetData[imageIdx].photoId);
+	      setSelectedPhotoId(imageObjs[imageIdx].photoId);
 	    }
-	  }, [assetData, setSelectedImageIdx, setSelectedPhotoId, shouldAllowImageSelection]);
+	  }, [imageObjs, setSelectedImageIdx, setSelectedPhotoId, shouldAllowImageSelection]);
 	  var onSubmitOrSkip = function onSubmitOrSkip() {
 	    setShouldAllowImageSelection(false);
 	  };
