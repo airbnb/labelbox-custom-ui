@@ -8681,6 +8681,7 @@
 	        assetPrev.current = asset.previous;
 	        var assetDataStr = get(asset.metadata[0].metaValue);
 	        var parsedAssetData = parseHtmlInput(assetDataStr);
+	        console.log(parsedAssetData);
 
 	        // Full match will be first element, listing ID will be second
 	        setListingId(assetDataStr.match(/href="https:\/\/www.airbnb.com\/rooms\/(.*?)"/)[1]);

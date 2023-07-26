@@ -54,6 +54,7 @@ export default function App() {
           assetPrev.current = asset.previous;
           const assetDataStr = get(asset.metadata[0].metaValue);
           const parsedAssetData = parseHtmlInput(assetDataStr);
+          console.log(parsedAssetData)
 
           // Full match will be first element, listing ID will be second
           setListingId(
