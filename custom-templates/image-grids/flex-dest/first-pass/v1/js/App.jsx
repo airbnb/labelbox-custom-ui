@@ -10,7 +10,8 @@ export default function App() {
   const projectId = new URL(window.location.href).searchParams.get('project');
   const [listingId, setListingId] = useState();
   const [currentAsset, setCurrentAsset] = useState();
-  const [assetData, setAssetData] = useState([]);
+  const [imageObjs, setImageObjs] = useState([]);
+  const [listingInfo, setListingInfo] = useState([]);
   const [selectedImageIdx, setSelectedImageIdx] = useState();
   const [selectedPhotoId, setSelectedPhotoId] = useState();
   const [labeledPhotoId, setLabeledPhotoId] = useState();
@@ -30,10 +31,10 @@ export default function App() {
     document.querySelector('.content').scrollTo(0, 0);
     if (labeledPhotoId) {
       setSelectedImageIdx(
-        assetData.findIndex((image) => labeledPhotoId === image.photoId)
+        imageObjs.findIndex((image) => labeledPhotoId === image.photoId)
       );
     }
-  }, [assetData, labeledPhotoId, setSelectedImageIdx]);
+  }, [imageObjs, labeledPhotoId, setSelectedImageIdx]);
 
   const handleAssetChange = useCallback(
     (asset) => {
@@ -69,7 +70,8 @@ export default function App() {
           setSelectedPhotoId(parsedAssetImages[0].photoId);
 
           setCurrentAsset(asset);
-          setAssetData(parsedAssetImages);
+          setImageObjs(parsedAssetImages);
+          setListingInfo(parsedAssetData);
 
           setIsLoading(false);
           setShouldAllowImageSelection(true);
@@ -147,7 +149,7 @@ export default function App() {
         <div className="content">
           {!isLoading && (
             <ImageGrid
-              images={assetData}
+              images={imageObjs}
               onClickImage={handleClickImage}
               selectedImageIdx={selectedImageIdx}
             />

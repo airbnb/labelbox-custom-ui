@@ -8643,34 +8643,38 @@
 	    setCurrentAsset = _useState4[1];
 	  var _useState5 = react.exports.useState([]),
 	    _useState6 = _slicedToArray(_useState5, 2),
-	    assetData = _useState6[0],
-	    setAssetData = _useState6[1];
-	  var _useState7 = react.exports.useState(),
-	    _useState8 = _slicedToArray(_useState7, 2),
-	    selectedImageIdx = _useState8[0],
-	    setSelectedImageIdx = _useState8[1];
+	    imageObjs = _useState6[0],
+	    setImageObjs = _useState6[1];
+	  var _useState7 = react.exports.useState([]),
+	    _useState8 = _slicedToArray(_useState7, 2);
+	    _useState8[0];
+	    var setListingInfo = _useState8[1];
 	  var _useState9 = react.exports.useState(),
 	    _useState10 = _slicedToArray(_useState9, 2),
-	    selectedPhotoId = _useState10[0],
-	    setSelectedPhotoId = _useState10[1];
+	    selectedImageIdx = _useState10[0],
+	    setSelectedImageIdx = _useState10[1];
 	  var _useState11 = react.exports.useState(),
 	    _useState12 = _slicedToArray(_useState11, 2),
-	    labeledPhotoId = _useState12[0],
-	    setLabeledPhotoId = _useState12[1];
+	    selectedPhotoId = _useState12[0],
+	    setSelectedPhotoId = _useState12[1];
 	  var _useState13 = react.exports.useState(),
 	    _useState14 = _slicedToArray(_useState13, 2),
-	    labeledPhotoQualityTier = _useState14[0],
-	    setLabeledPhotoQualityTier = _useState14[1];
+	    labeledPhotoId = _useState14[0],
+	    setLabeledPhotoId = _useState14[1];
+	  var _useState15 = react.exports.useState(),
+	    _useState16 = _slicedToArray(_useState15, 2),
+	    labeledPhotoQualityTier = _useState16[0],
+	    setLabeledPhotoQualityTier = _useState16[1];
 	  var assetNext = react.exports.useRef();
 	  var assetPrev = react.exports.useRef();
-	  var _useState15 = react.exports.useState(true),
-	    _useState16 = _slicedToArray(_useState15, 2),
-	    isLoading = _useState16[0],
-	    setIsLoading = _useState16[1];
 	  var _useState17 = react.exports.useState(true),
 	    _useState18 = _slicedToArray(_useState17, 2),
-	    shouldAllowImageSelection = _useState18[0],
-	    setShouldAllowImageSelection = _useState18[1];
+	    isLoading = _useState18[0],
+	    setIsLoading = _useState18[1];
+	  var _useState19 = react.exports.useState(true),
+	    _useState20 = _slicedToArray(_useState19, 2),
+	    shouldAllowImageSelection = _useState20[0],
+	    setShouldAllowImageSelection = _useState20[1];
 	  var resetState = function resetState() {
 	    setLabeledPhotoId();
 	    setLabeledPhotoQualityTier();
@@ -8678,11 +8682,11 @@
 	  react.exports.useEffect(function () {
 	    document.querySelector('.content').scrollTo(0, 0);
 	    if (labeledPhotoId) {
-	      setSelectedImageIdx(assetData.findIndex(function (image) {
+	      setSelectedImageIdx(imageObjs.findIndex(function (image) {
 	        return labeledPhotoId === image.photoId;
 	      }));
 	    }
-	  }, [assetData, labeledPhotoId, setSelectedImageIdx]);
+	  }, [imageObjs, labeledPhotoId, setSelectedImageIdx]);
 	  var handleAssetChange = react.exports.useCallback(function (asset) {
 	    if (asset) {
 	      // subscription to Labelbox makes increasing network calls as label history gets longer
@@ -8694,7 +8698,7 @@
 	        assetNext.current = asset.next;
 	        assetPrev.current = asset.previous;
 	        var assetDataStr = get(asset.data);
-	        parseHtmlAssetData(assetDataStr);
+	        var parsedAssetData = parseHtmlAssetData(assetDataStr);
 	        var assetImagesStr = get(asset.metadata[0].metaValue);
 	        var parsedAssetImages = parseHtmlInput(assetImagesStr);
 
@@ -8705,7 +8709,8 @@
 	        setSelectedImageIdx(0);
 	        setSelectedPhotoId(parsedAssetImages[0].photoId);
 	        setCurrentAsset(asset);
-	        setAssetData(parsedAssetImages);
+	        setImageObjs(parsedAssetImages);
+	        setListingInfo(parsedAssetData);
 	        setIsLoading(false);
 	        setShouldAllowImageSelection(true);
 	      }
@@ -8761,7 +8766,7 @@
 	  }), /*#__PURE__*/React.createElement("div", {
 	    className: "content"
 	  }, !isLoading && /*#__PURE__*/React.createElement(ImageGrid, {
-	    images: assetData,
+	    images: imageObjs,
 	    onClickImage: handleClickImage,
 	    selectedImageIdx: selectedImageIdx
 	  }), isLoading && /*#__PURE__*/React.createElement("p", null, "Loading..."))));
