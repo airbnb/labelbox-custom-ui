@@ -7403,7 +7403,7 @@
 	  })
 
 	  // remove first two html tags and listing/map elements (first 4 elements and last element)
-	  .slice(2, htmlSplit.length - 1)
+	  .slice(4, htmlSplit.length - 1)
 
 	  // items are grouped in the array by empty strings, with a line each for the photo id and img tag,
 	  // and 0+ lines for the caption. here, actually turn the big array into an array of chunks accordingly.
@@ -8685,7 +8685,8 @@
 	        assetNext.current = asset.next;
 	        assetPrev.current = asset.previous;
 	        var assetDataStr = get(asset.data);
-	        console.log(assetDataStr);
+	        var parsedAssetData = parseHtmlAssetData(assetDataStr);
+	        console.log(parsedAssetData);
 	        var assetImagesStr = get(asset.metadata[0].metaValue);
 	        var parsedAssetImages = parseHtmlInput(assetImagesStr);
 

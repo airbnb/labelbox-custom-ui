@@ -49,7 +49,7 @@ export function parseHtmlInput(input) {
       .map((str) => str.trim())
 
       // remove first two html tags and listing/map elements (first 4 elements and last element)
-      .slice(2, htmlSplit.length - 1)
+      .slice(4, htmlSplit.length - 1)
 
       // items are grouped in the array by empty strings, with a line each for the photo id and img tag,
       // and 0+ lines for the caption. here, actually turn the big array into an array of chunks accordingly.
@@ -85,6 +85,15 @@ export function parseHtmlInput(input) {
         };
       })
   );
+}
+
+export function parseHtmlAssetData(assetDataStr) {
+    // first, split the string by lines
+    const htmlSplit = assetDataStr.split('\n')
+    // filter empty strings
+    .filter(i => i.length)
+    // return first 7 metadata
+    .slice(0, 7);
 }
 
 // TODO: double check that im_w is okay too
