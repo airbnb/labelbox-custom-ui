@@ -36,7 +36,7 @@ export default function App() {
   }, [assetData, labeledPhotoId, setSelectedImageIdx]);
 
   const handleAssetChange = useCallback(
-    async (asset) => {
+    (asset) => {
       if (asset) {
         // subscription to Labelbox makes increasing network calls as label history gets longer
         // to reduce jank from network calls, check the refs to ensure call is only made when relevant
@@ -52,7 +52,7 @@ export default function App() {
 
           assetNext.current = asset.next;
           assetPrev.current = asset.previous;
-          const assetDataStr = await get(asset.data).then((x) => x.text());
+          const assetDataStr = get(asset.data);
           console.log(assetDataStr)
           const assetImagesStr = get(asset.metadata[0].metaValue);
           const parsedAssetImages = parseHtmlInput(assetImagesStr);
