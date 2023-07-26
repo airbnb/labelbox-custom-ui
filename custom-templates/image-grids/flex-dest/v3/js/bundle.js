@@ -10,85 +10,71 @@
 	(c) Sindre Sorhus
 	@license MIT
 	*/
-	/* eslint-disable no-unused-vars */
 
+	/* eslint-disable no-unused-vars */
 	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
 	var hasOwnProperty = Object.prototype.hasOwnProperty;
 	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
-
 	function toObject(val) {
 	  if (val === null || val === undefined) {
 	    throw new TypeError('Object.assign cannot be called with null or undefined');
 	  }
-
 	  return Object(val);
 	}
-
 	function shouldUseNative() {
 	  try {
 	    if (!Object.assign) {
 	      return false;
-	    } // Detect buggy property enumeration order in older V8 versions.
+	    }
+
+	    // Detect buggy property enumeration order in older V8 versions.
+
 	    // https://bugs.chromium.org/p/v8/issues/detail?id=4118
-
-
 	    var test1 = new String('abc'); // eslint-disable-line no-new-wrappers
-
 	    test1[5] = 'de';
-
 	    if (Object.getOwnPropertyNames(test1)[0] === '5') {
 	      return false;
-	    } // https://bugs.chromium.org/p/v8/issues/detail?id=3056
+	    }
 
-
+	    // https://bugs.chromium.org/p/v8/issues/detail?id=3056
 	    var test2 = {};
-
 	    for (var i = 0; i < 10; i++) {
 	      test2['_' + String.fromCharCode(i)] = i;
 	    }
-
 	    var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
 	      return test2[n];
 	    });
-
 	    if (order2.join('') !== '0123456789') {
 	      return false;
-	    } // https://bugs.chromium.org/p/v8/issues/detail?id=3056
+	    }
 
-
+	    // https://bugs.chromium.org/p/v8/issues/detail?id=3056
 	    var test3 = {};
 	    'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
 	      test3[letter] = letter;
 	    });
-
 	    if (Object.keys(Object.assign({}, test3)).join('') !== 'abcdefghijklmnopqrst') {
 	      return false;
 	    }
-
 	    return true;
 	  } catch (err) {
 	    // We don't expect any of the above to throw, but better to be safe.
 	    return false;
 	  }
 	}
-
 	var objectAssign = shouldUseNative() ? Object.assign : function (target, source) {
 	  var from;
 	  var to = toObject(target);
 	  var symbols;
-
 	  for (var s = 1; s < arguments.length; s++) {
 	    from = Object(arguments[s]);
-
 	    for (var key in from) {
 	      if (hasOwnProperty.call(from, key)) {
 	        to[key] = from[key];
 	      }
 	    }
-
 	    if (getOwnPropertySymbols) {
 	      symbols = getOwnPropertySymbols(from);
-
 	      for (var i = 0; i < symbols.length; i++) {
 	        if (propIsEnumerable.call(from, symbols[i])) {
 	          to[symbols[i]] = from[symbols[i]];
@@ -96,7 +82,6 @@
 	      }
 	    }
 	  }
-
 	  return to;
 	};
 
@@ -114,15 +99,16 @@
 	{
 	  (function () {
 
-	    var _assign = objectAssign; // TODO: this is special because it gets imported during build.
+	    var _assign = objectAssign;
 
+	    // TODO: this is special because it gets imported during build.
+	    var ReactVersion = '17.0.2';
 
-	    var ReactVersion = '17.0.2'; // ATTENTION
+	    // ATTENTION
 	    // When adding new symbols to this file,
 	    // Please consider also adding to 'react-devtools-shared/src/backend/ReactSymbols'
 	    // The Symbol used to tag the ReactElement-like types. If there is no native Symbol
 	    // nor polyfill, then a plain number is used for performance.
-
 	    var REACT_ELEMENT_TYPE = 0xeac7;
 	    var REACT_PORTAL_TYPE = 0xeaca;
 	    exports.Fragment = 0xeacb;
@@ -140,7 +126,6 @@
 	    var REACT_FUNDAMENTAL_TYPE = 0xead5;
 	    var REACT_DEBUG_TRACING_MODE_TYPE = 0xeae1;
 	    var REACT_LEGACY_HIDDEN_TYPE = 0xeae3;
-
 	    if (typeof Symbol === 'function' && Symbol.for) {
 	      var symbolFor = Symbol.for;
 	      REACT_ELEMENT_TYPE = symbolFor('react.element');
@@ -164,28 +149,22 @@
 	      symbolFor('react.offscreen');
 	      REACT_LEGACY_HIDDEN_TYPE = symbolFor('react.legacy_hidden');
 	    }
-
 	    var MAYBE_ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
 	    var FAUX_ITERATOR_SYMBOL = '@@iterator';
-
 	    function getIteratorFn(maybeIterable) {
 	      if (maybeIterable === null || typeof maybeIterable !== 'object') {
 	        return null;
 	      }
-
 	      var maybeIterator = MAYBE_ITERATOR_SYMBOL && maybeIterable[MAYBE_ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL];
-
 	      if (typeof maybeIterator === 'function') {
 	        return maybeIterator;
 	      }
-
 	      return null;
 	    }
+
 	    /**
 	     * Keeps track of the current dispatcher.
 	     */
-
-
 	    var ReactCurrentDispatcher = {
 	      /**
 	       * @internal
@@ -193,21 +172,21 @@
 	       */
 	      current: null
 	    };
+
 	    /**
 	     * Keeps track of the current batch's configuration such as how long an update
 	     * should suspend for if it needs to.
 	     */
-
 	    var ReactCurrentBatchConfig = {
 	      transition: 0
 	    };
+
 	    /**
 	     * Keeps track of the current owner.
 	     *
 	     * The current owner is the component who should own any components that are
 	     * currently being constructed.
 	     */
-
 	    var ReactCurrentOwner = {
 	      /**
 	       * @internal
@@ -217,13 +196,11 @@
 	    };
 	    var ReactDebugCurrentFrame = {};
 	    var currentExtraStackFrame = null;
-
 	    function setExtraStackFrame(stack) {
 	      {
 	        currentExtraStackFrame = stack;
 	      }
 	    }
-
 	    {
 	      ReactDebugCurrentFrame.setExtraStackFrame = function (stack) {
 	        {
@@ -231,9 +208,7 @@
 	        }
 	      }; // Stack implementation injected by the current renderer.
 
-
 	      ReactDebugCurrentFrame.getCurrentStack = null;
-
 	      ReactDebugCurrentFrame.getStackAddendum = function () {
 	        var stack = ''; // Add an extra top frame while an element is being validated
 
@@ -241,20 +216,17 @@
 	          stack += currentExtraStackFrame;
 	        } // Delegate to the injected renderer-specific implementation
 
-
 	        var impl = ReactDebugCurrentFrame.getCurrentStack;
-
 	        if (impl) {
 	          stack += impl() || '';
 	        }
-
 	        return stack;
 	      };
 	    }
+
 	    /**
 	     * Used by act() to track whether you're inside an act() scope.
 	     */
-
 	    var IsSomeRendererActing = {
 	      current: false
 	    };
@@ -268,7 +240,9 @@
 	    };
 	    {
 	      ReactSharedInternals.ReactDebugCurrentFrame = ReactDebugCurrentFrame;
-	    } // by calls to these methods by a Babel plugin.
+	    }
+
+	    // by calls to these methods by a Babel plugin.
 	    //
 	    // In PROD (or in packages without access to React internals),
 	    // they are left as they are instead.
@@ -278,33 +252,27 @@
 	        for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
 	          args[_key - 1] = arguments[_key];
 	        }
-
 	        printWarning('warn', format, args);
 	      }
 	    }
-
 	    function error(format) {
 	      {
 	        for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
 	          args[_key2 - 1] = arguments[_key2];
 	        }
-
 	        printWarning('error', format, args);
 	      }
 	    }
-
 	    function printWarning(level, format, args) {
 	      // When changing this logic, you might want to also
 	      // update consoleWithStackDev.www.js as well.
 	      {
 	        var ReactDebugCurrentFrame = ReactSharedInternals.ReactDebugCurrentFrame;
 	        var stack = ReactDebugCurrentFrame.getStackAddendum();
-
 	        if (stack !== '') {
 	          format += '%s';
 	          args = args.concat([stack]);
 	        }
-
 	        var argsWithFormat = args.map(function (item) {
 	          return '' + item;
 	        }); // Careful: RN currently depends on this prefix
@@ -316,19 +284,15 @@
 	        Function.prototype.apply.call(console[level], console, argsWithFormat);
 	      }
 	    }
-
 	    var didWarnStateUpdateForUnmountedComponent = {};
-
 	    function warnNoop(publicInstance, callerName) {
 	      {
 	        var _constructor = publicInstance.constructor;
 	        var componentName = _constructor && (_constructor.displayName || _constructor.name) || 'ReactClass';
 	        var warningKey = componentName + "." + callerName;
-
 	        if (didWarnStateUpdateForUnmountedComponent[warningKey]) {
 	          return;
 	        }
-
 	        error("Can't call %s on a component that is not yet mounted. " + 'This is a no-op, but it might indicate a bug in your application. ' + 'Instead, assign to `this.state` directly or define a `state = {};` ' + 'class property with the desired state in the %s component.', callerName, componentName);
 	        didWarnStateUpdateForUnmountedComponent[warningKey] = true;
 	      }
@@ -336,7 +300,6 @@
 	    /**
 	     * This is the abstract API for an update queue.
 	     */
-
 
 	    var ReactNoopUpdateQueue = {
 	      /**
@@ -349,7 +312,6 @@
 	      isMounted: function (publicInstance) {
 	        return false;
 	      },
-
 	      /**
 	       * Forces an update. This should only be invoked when it is known with
 	       * certainty that we are **not** in a DOM transaction.
@@ -368,7 +330,6 @@
 	      enqueueForceUpdate: function (publicInstance, callback, callerName) {
 	        warnNoop(publicInstance, 'forceUpdate');
 	      },
-
 	      /**
 	       * Replaces all of the state. Always use this or `setState` to mutate state.
 	       * You should treat `this.state` as immutable.
@@ -385,7 +346,6 @@
 	      enqueueReplaceState: function (publicInstance, completeState, callback, callerName) {
 	        warnNoop(publicInstance, 'replaceState');
 	      },
-
 	      /**
 	       * Sets a subset of the state. This only exists because _pendingState is
 	       * internal. This provides a merging strategy that is not available to deep
@@ -419,7 +379,6 @@
 
 	      this.updater = updater || ReactNoopUpdateQueue;
 	    }
-
 	    Component.prototype.isReactComponent = {};
 	    /**
 	     * Sets a subset of the state. Always use this to mutate
@@ -453,7 +412,6 @@
 	          throw Error("setState(...): takes an object of state variables to update or a function which returns an object of state variables.");
 	        }
 	      }
-
 	      this.updater.enqueueSetState(this, partialState, callback, 'setState');
 	    };
 	    /**
@@ -471,7 +429,6 @@
 	     * @protected
 	     */
 
-
 	    Component.prototype.forceUpdate = function (callback) {
 	      this.updater.enqueueForceUpdate(this, callback, 'forceUpdate');
 	    };
@@ -481,13 +438,11 @@
 	     * modern base class. Instead, we define a getter that warns if it's accessed.
 	     */
 
-
 	    {
 	      var deprecatedAPIs = {
 	        isMounted: ['isMounted', 'Instead, make sure to clean up subscriptions and pending requests in ' + 'componentWillUnmount to prevent memory leaks.'],
 	        replaceState: ['replaceState', 'Refactor your code to use setState instead (see ' + 'https://github.com/facebook/react/issues/3236).']
 	      };
-
 	      var defineDeprecationWarning = function (methodName, info) {
 	        Object.defineProperty(Component.prototype, methodName, {
 	          get: function () {
@@ -496,16 +451,13 @@
 	          }
 	        });
 	      };
-
 	      for (var fnName in deprecatedAPIs) {
 	        if (deprecatedAPIs.hasOwnProperty(fnName)) {
 	          defineDeprecationWarning(fnName, deprecatedAPIs[fnName]);
 	        }
 	      }
 	    }
-
 	    function ComponentDummy() {}
-
 	    ComponentDummy.prototype = Component.prototype;
 	    /**
 	     * Convenience component with default shallow equality check for sCU.
@@ -518,14 +470,13 @@
 	      this.refs = emptyObject;
 	      this.updater = updater || ReactNoopUpdateQueue;
 	    }
-
 	    var pureComponentPrototype = PureComponent.prototype = new ComponentDummy();
 	    pureComponentPrototype.constructor = PureComponent; // Avoid an extra prototype jump for these methods.
 
 	    _assign(pureComponentPrototype, Component.prototype);
+	    pureComponentPrototype.isPureReactComponent = true;
 
-	    pureComponentPrototype.isPureReactComponent = true; // an immutable object with a single mutable value
-
+	    // an immutable object with a single mutable value
 	    function createRef() {
 	      var refObject = {
 	        current: null
@@ -535,81 +486,62 @@
 	      }
 	      return refObject;
 	    }
-
 	    function getWrappedName(outerType, innerType, wrapperName) {
 	      var functionName = innerType.displayName || innerType.name || '';
 	      return outerType.displayName || (functionName !== '' ? wrapperName + "(" + functionName + ")" : wrapperName);
 	    }
-
 	    function getContextName(type) {
 	      return type.displayName || 'Context';
 	    }
-
 	    function getComponentName(type) {
 	      if (type == null) {
 	        // Host root, text node or just invalid type.
 	        return null;
 	      }
-
 	      {
 	        if (typeof type.tag === 'number') {
 	          error('Received an unexpected object in getComponentName(). ' + 'This is likely a bug in React. Please file an issue.');
 	        }
 	      }
-
 	      if (typeof type === 'function') {
 	        return type.displayName || type.name || null;
 	      }
-
 	      if (typeof type === 'string') {
 	        return type;
 	      }
-
 	      switch (type) {
 	        case exports.Fragment:
 	          return 'Fragment';
-
 	        case REACT_PORTAL_TYPE:
 	          return 'Portal';
-
 	        case exports.Profiler:
 	          return 'Profiler';
-
 	        case exports.StrictMode:
 	          return 'StrictMode';
-
 	        case exports.Suspense:
 	          return 'Suspense';
-
 	        case REACT_SUSPENSE_LIST_TYPE:
 	          return 'SuspenseList';
 	      }
-
 	      if (typeof type === 'object') {
 	        switch (type.$$typeof) {
 	          case REACT_CONTEXT_TYPE:
 	            var context = type;
 	            return getContextName(context) + '.Consumer';
-
 	          case REACT_PROVIDER_TYPE:
 	            var provider = type;
 	            return getContextName(provider._context) + '.Provider';
-
 	          case REACT_FORWARD_REF_TYPE:
 	            return getWrappedName(type, type.render, 'ForwardRef');
-
 	          case REACT_MEMO_TYPE:
 	            return getComponentName(type.type);
-
 	          case REACT_BLOCK_TYPE:
 	            return getComponentName(type._render);
-
 	          case REACT_LAZY_TYPE:
 	            {
 	              var lazyComponent = type;
 	              var payload = lazyComponent._payload;
 	              var init = lazyComponent._init;
-
 	              try {
 	                return getComponentName(init(payload));
 	              } catch (x) {
@@ -618,10 +550,8 @@
 	            }
 	        }
 	      }
-
 	      return null;
 	    }
-
 	    var hasOwnProperty = Object.prototype.hasOwnProperty;
 	    var RESERVED_PROPS = {
 	      key: true,
@@ -633,12 +563,10 @@
 	    {
 	      didWarnAboutStringRefs = {};
 	    }
-
 	    function hasValidRef(config) {
 	      {
 	        if (hasOwnProperty.call(config, 'ref')) {
 	          var getter = Object.getOwnPropertyDescriptor(config, 'ref').get;
-
 	          if (getter && getter.isReactWarning) {
 	            return false;
 	          }
@@ -646,12 +574,10 @@
 	      }
 	      return config.ref !== undefined;
 	    }
-
 	    function hasValidKey(config) {
 	      {
 	        if (hasOwnProperty.call(config, 'key')) {
 	          var getter = Object.getOwnPropertyDescriptor(config, 'key').get;
-
 	          if (getter && getter.isReactWarning) {
 	            return false;
 	          }
@@ -659,7 +585,6 @@
 	      }
 	      return config.key !== undefined;
 	    }
-
 	    function defineKeyPropWarningGetter(props, displayName) {
 	      var warnAboutAccessingKey = function () {
 	        {
@@ -669,14 +594,12 @@
 	          }
 	        }
 	      };
-
 	      warnAboutAccessingKey.isReactWarning = true;
 	      Object.defineProperty(props, 'key', {
 	        get: warnAboutAccessingKey,
 	        configurable: true
 	      });
 	    }
-
 	    function defineRefPropWarningGetter(props, displayName) {
 	      var warnAboutAccessingRef = function () {
 	        {
@@ -686,19 +609,16 @@
 	          }
 	        }
 	      };
-
 	      warnAboutAccessingRef.isReactWarning = true;
 	      Object.defineProperty(props, 'ref', {
 	        get: warnAboutAccessingRef,
 	        configurable: true
 	      });
 	    }
-
 	    function warnIfStringRefCannotBeAutoConverted(config) {
 	      {
 	        if (typeof config.ref === 'string' && ReactCurrentOwner.current && config.__self && ReactCurrentOwner.current.stateNode !== config.__self) {
 	          var componentName = getComponentName(ReactCurrentOwner.current.type);
-
 	          if (!didWarnAboutStringRefs[componentName]) {
 	            error('Component "%s" contains the string ref "%s". ' + 'Support for string refs will be removed in a future major release. ' + 'This case cannot be automatically converted to an arrow function. ' + 'We ask you to manually fix this case by using useRef() or createRef() instead. ' + 'Learn more about using refs safely here: ' + 'https://reactjs.org/link/strict-mode-string-ref', componentName, config.ref);
 	            didWarnAboutStringRefs[componentName] = true;
@@ -726,7 +646,6 @@
 	     * indicating filename, line number, and/or other information.
 	     * @internal
 	     */
-
 
 	    var ReactElement = function (type, key, ref, self, source, owner, props) {
 	      var element = {
@@ -771,7 +690,6 @@
 	          writable: false,
 	          value: source
 	        });
-
 	        if (Object.freeze) {
 	          Object.freeze(element.props);
 	          Object.freeze(element);
@@ -784,7 +702,6 @@
 	     * See https://reactjs.org/docs/react-api.html#createelement
 	     */
 
-
 	    function createElement(type, config, children) {
 	      var propName; // Reserved names are extracted
 
@@ -793,7 +710,6 @@
 	      var ref = null;
 	      var self = null;
 	      var source = null;
-
 	      if (config != null) {
 	        if (hasValidRef(config)) {
 	          ref = config.ref;
@@ -801,11 +717,9 @@
 	            warnIfStringRefCannotBeAutoConverted(config);
 	          }
 	        }
-
 	        if (hasValidKey(config)) {
 	          key = '' + config.key;
 	        }
-
 	        self = config.__self === undefined ? null : config.__self;
 	        source = config.__source === undefined ? null : config.__source; // Remaining properties are added to a new props object
 
@@ -817,18 +731,14 @@
 	      } // Children can be more than one argument, and those are transferred onto
 	      // the newly allocated props object.
 
-
 	      var childrenLength = arguments.length - 2;
-
 	      if (childrenLength === 1) {
 	        props.children = children;
 	      } else if (childrenLength > 1) {
 	        var childArray = Array(childrenLength);
-
 	        for (var i = 0; i < childrenLength; i++) {
 	          childArray[i] = arguments[i + 2];
 	        }
-
 	        {
 	          if (Object.freeze) {
 	            Object.freeze(childArray);
@@ -837,25 +747,20 @@
 	        props.children = childArray;
 	      } // Resolve default props
 
-
 	      if (type && type.defaultProps) {
 	        var defaultProps = type.defaultProps;
-
 	        for (propName in defaultProps) {
 	          if (props[propName] === undefined) {
 	            props[propName] = defaultProps[propName];
 	          }
 	        }
 	      }
-
 	      {
 	        if (key || ref) {
 	          var displayName = typeof type === 'function' ? type.displayName || type.name || 'Unknown' : type;
-
 	          if (key) {
 	            defineKeyPropWarningGetter(props, displayName);
 	          }
-
 	          if (ref) {
 	            defineRefPropWarningGetter(props, displayName);
 	          }
@@ -863,7 +768,6 @@
 	      }
 	      return ReactElement(type, key, ref, self, source, ReactCurrentOwner.current, props);
 	    }
-
 	    function cloneAndReplaceKey(oldElement, newKey) {
 	      var newElement = ReactElement(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
 	      return newElement;
@@ -873,18 +777,15 @@
 	     * See https://reactjs.org/docs/react-api.html#cloneelement
 	     */
 
-
 	    function cloneElement(element, config, children) {
 	      if (!!(element === null || element === undefined)) {
 	        {
 	          throw Error("React.cloneElement(...): The argument must be a React element, but you passed " + element + ".");
 	        }
 	      }
-
 	      var propName; // Original props are copied
 
 	      var props = _assign({}, element.props); // Reserved names are extracted
-
 
 	      var key = element.key;
 	      var ref = element.ref; // Self is preserved since the owner is preserved.
@@ -896,25 +797,20 @@
 	      var source = element._source; // Owner will be preserved, unless ref is overridden
 
 	      var owner = element._owner;
-
 	      if (config != null) {
 	        if (hasValidRef(config)) {
 	          // Silently steal the ref from the parent.
 	          ref = config.ref;
 	          owner = ReactCurrentOwner.current;
 	        }
-
 	        if (hasValidKey(config)) {
 	          key = '' + config.key;
 	        } // Remaining properties override existing props
 
-
 	        var defaultProps;
-
 	        if (element.type && element.type.defaultProps) {
 	          defaultProps = element.type.defaultProps;
 	        }
-
 	        for (propName in config) {
 	          if (hasOwnProperty.call(config, propName) && !RESERVED_PROPS.hasOwnProperty(propName)) {
 	            if (config[propName] === undefined && defaultProps !== undefined) {
@@ -928,21 +824,16 @@
 	      } // Children can be more than one argument, and those are transferred onto
 	      // the newly allocated props object.
 
-
 	      var childrenLength = arguments.length - 2;
-
 	      if (childrenLength === 1) {
 	        props.children = children;
 	      } else if (childrenLength > 1) {
 	        var childArray = Array(childrenLength);
-
 	        for (var i = 0; i < childrenLength; i++) {
 	          childArray[i] = arguments[i + 2];
 	        }
-
 	        props.children = childArray;
 	      }
-
 	      return ReactElement(element.type, key, ref, self, source, owner, props);
 	    }
 	    /**
@@ -953,11 +844,9 @@
 	     * @final
 	     */
 
-
 	    function isValidElement(object) {
 	      return typeof object === 'object' && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
 	    }
-
 	    var SEPARATOR = '.';
 	    var SUBSEPARATOR = ':';
 	    /**
@@ -983,10 +872,8 @@
 	     * pattern.
 	     */
 
-
 	    var didWarnAboutMaps = false;
 	    var userProvidedKeyEscapeRegex = /\/+/g;
-
 	    function escapeUserProvidedKey(text) {
 	      return text.replace(userProvidedKeyEscapeRegex, '$&/');
 	    }
@@ -998,7 +885,6 @@
 	     * @return {string}
 	     */
 
-
 	    function getElementKey(element, index) {
 	      // Do some typechecking here since we call this blindly. We want to ensure
 	      // that we don't block potential future ES APIs.
@@ -1007,20 +893,15 @@
 	        return escape('' + element.key);
 	      } // Implicit key determined by the index in the set
 
-
 	      return index.toString(36);
 	    }
-
 	    function mapIntoArray(children, array, escapedPrefix, nameSoFar, callback) {
 	      var type = typeof children;
-
 	      if (type === 'undefined' || type === 'boolean') {
 	        // All of the above are perceived as null.
 	        children = null;
 	      }
-
 	      var invokeCallback = false;
-
 	      if (children === null) {
 	        invokeCallback = true;
 	      } else {
@@ -1029,55 +910,48 @@
 	          case 'number':
 	            invokeCallback = true;
 	            break;
-
 	          case 'object':
 	            switch (children.$$typeof) {
 	              case REACT_ELEMENT_TYPE:
 	              case REACT_PORTAL_TYPE:
 	                invokeCallback = true;
 	            }
-
 	        }
 	      }
-
 	      if (invokeCallback) {
 	        var _child = children;
 	        var mappedChild = callback(_child); // If it's the only child, treat the name as if it was wrapped in an array
 	        // so that it's consistent if the number of children grows:
 
 	        var childKey = nameSoFar === '' ? SEPARATOR + getElementKey(_child, 0) : nameSoFar;
-
 	        if (Array.isArray(mappedChild)) {
 	          var escapedChildKey = '';
-
 	          if (childKey != null) {
 	            escapedChildKey = escapeUserProvidedKey(childKey) + '/';
 	          }
-
 	          mapIntoArray(mappedChild, array, escapedChildKey, '', function (c) {
 	            return c;
 	          });
 	        } else if (mappedChild != null) {
 	          if (isValidElement(mappedChild)) {
-	            mappedChild = cloneAndReplaceKey(mappedChild, // Keep both the (mapped) and old keys if they differ, just as
+	            mappedChild = cloneAndReplaceKey(mappedChild,
+	            // Keep both the (mapped) and old keys if they differ, just as
 	            // traverseAllChildren used to do for objects as children
-	            escapedPrefix + ( // $FlowFixMe Flow incorrectly thinks React.Portal doesn't have a key
-	            mappedChild.key && (!_child || _child.key !== mappedChild.key) ? // $FlowFixMe Flow incorrectly thinks existing element's key can be a number
+	            escapedPrefix + (
+	            // $FlowFixMe Flow incorrectly thinks React.Portal doesn't have a key
+	            mappedChild.key && (!_child || _child.key !== mappedChild.key) ?
+	            // $FlowFixMe Flow incorrectly thinks existing element's key can be a number
 	            escapeUserProvidedKey('' + mappedChild.key) + '/' : '') + childKey);
 	          }
-
 	          array.push(mappedChild);
 	        }
-
 	        return 1;
 	      }
-
 	      var child;
 	      var nextName;
 	      var subtreeCount = 0; // Count of children found in the current subtree.
 
 	      var nextNamePrefix = nameSoFar === '' ? SEPARATOR : nameSoFar + SUBSEPARATOR;
-
 	      if (Array.isArray(children)) {
 	        for (var i = 0; i < children.length; i++) {
 	          child = children[i];
@@ -1086,7 +960,6 @@
 	        }
 	      } else {
 	        var iteratorFn = getIteratorFn(children);
-
 	        if (typeof iteratorFn === 'function') {
 	          var iterableChildren = children;
 	          {
@@ -1095,14 +968,12 @@
 	              if (!didWarnAboutMaps) {
 	                warn('Using Maps as children is not supported. ' + 'Use an array of keyed ReactElements instead.');
 	              }
-
 	              didWarnAboutMaps = true;
 	            }
 	          }
 	          var iterator = iteratorFn.call(iterableChildren);
 	          var step;
 	          var ii = 0;
-
 	          while (!(step = iterator.next()).done) {
 	            child = step.value;
 	            nextName = nextNamePrefix + getElementKey(child, ii++);
@@ -1117,9 +988,9 @@
 	          }
 	        }
 	      }
-
 	      return subtreeCount;
 	    }
+
 	    /**
 	     * Maps children that are typically specified as `props.children`.
 	     *
@@ -1133,13 +1004,10 @@
 	     * @param {*} context Context for mapFunction.
 	     * @return {object} Object containing the ordered map of results.
 	     */
-
-
 	    function mapChildren(children, func, context) {
 	      if (children == null) {
 	        return children;
 	      }
-
 	      var result = [];
 	      var count = 0;
 	      mapIntoArray(children, result, '', '', function (child) {
@@ -1157,14 +1025,15 @@
 	     * @return {number} The number of children.
 	     */
 
-
 	    function countChildren(children) {
 	      var n = 0;
 	      mapChildren(children, function () {
 	        n++; // Don't return anything
 	      });
+
 	      return n;
 	    }
+
 	    /**
 	     * Iterates through children that are typically specified as `props.children`.
 	     *
@@ -1177,8 +1046,6 @@
 	     * @param {function(*, int)} forEachFunc
 	     * @param {*} forEachContext Context for forEachContext.
 	     */
-
-
 	    function forEachChildren(children, forEachFunc, forEachContext) {
 	      mapChildren(children, function () {
 	        forEachFunc.apply(this, arguments); // Don't return anything.
@@ -1190,7 +1057,6 @@
 	     *
 	     * See https://reactjs.org/docs/react-api.html#reactchildrentoarray
 	     */
-
 
 	    function toArray(children) {
 	      return mapChildren(children, function (child) {
@@ -1212,17 +1078,14 @@
 	     * structure.
 	     */
 
-
 	    function onlyChild(children) {
 	      if (!isValidElement(children)) {
 	        {
 	          throw Error("React.Children.only expected to receive a single React element child.");
 	        }
 	      }
-
 	      return children;
 	    }
-
 	    function createContext(defaultValue, calculateChangedBits) {
 	      if (calculateChangedBits === undefined) {
 	        calculateChangedBits = null;
@@ -1233,7 +1096,6 @@
 	          }
 	        }
 	      }
-
 	      var context = {
 	        $$typeof: REACT_CONTEXT_TYPE,
 	        _calculateChangedBits: calculateChangedBits,
@@ -1275,7 +1137,6 @@
 	                hasWarnedAboutUsingConsumerProvider = true;
 	                error('Rendering <Context.Consumer.Provider> is not supported and will be removed in ' + 'a future major release. Did you mean to render <Context.Provider> instead?');
 	              }
-
 	              return context.Provider;
 	            },
 	            set: function (_Provider) {
@@ -1312,7 +1173,6 @@
 	                hasWarnedAboutUsingNestedContextConsumers = true;
 	                error('Rendering <Context.Consumer.Consumer> is not supported and will be removed in ' + 'a future major release. Did you mean to render <Context.Consumer> instead?');
 	              }
-
 	              return context.Consumer;
 	            }
 	          },
@@ -1337,12 +1197,10 @@
 	      }
 	      return context;
 	    }
-
 	    var Uninitialized = -1;
 	    var Pending = 0;
 	    var Resolved = 1;
 	    var Rejected = 2;
-
 	    function lazyInitializer(payload) {
 	      if (payload._status === Uninitialized) {
 	        var ctor = payload._result;
@@ -1356,7 +1214,8 @@
 	            var defaultExport = moduleObject.default;
 	            {
 	              if (defaultExport === undefined) {
-	                error('lazy: Expected the result of a dynamic import() call. ' + 'Instead received: %s\n\nYour code should look like: \n  ' + // Break up imports to avoid accidentally parsing them as dependencies.
+	                error('lazy: Expected the result of a dynamic import() call. ' + 'Instead received: %s\n\nYour code should look like: \n  ' +
+	                // Break up imports to avoid accidentally parsing them as dependencies.
 	                'const MyComponent = lazy(() => imp' + "ort('./MyComponent'))", moduleObject);
 	              }
 	            } // Transition to the next state.
@@ -1374,14 +1233,12 @@
 	          }
 	        });
 	      }
-
 	      if (payload._status === Resolved) {
 	        return payload._result;
 	      } else {
 	        throw payload._result;
 	      }
 	    }
-
 	    function lazy(ctor) {
 	      var payload = {
 	        // We use these fields to store the result.
@@ -1433,7 +1290,6 @@
 	      }
 	      return lazyType;
 	    }
-
 	    function forwardRef(render) {
 	      {
 	        if (render != null && render.$$typeof === REACT_MEMO_TYPE) {
@@ -1445,7 +1301,6 @@
 	            error('forwardRef render functions accept exactly two parameters: props and ref. %s', render.length === 1 ? 'Did you forget to use the ref parameter?' : 'Any additional parameter will be undefined.');
 	          }
 	        }
-
 	        if (render != null) {
 	          if (render.defaultProps != null || render.propTypes != null) {
 	            error('forwardRef render functions do not support propTypes or defaultProps. ' + 'Did you accidentally pass a React component?');
@@ -1466,7 +1321,6 @@
 	          },
 	          set: function (name) {
 	            ownName = name;
-
 	            if (render.displayName == null) {
 	              render.displayName = name;
 	            }
@@ -1474,8 +1328,9 @@
 	        });
 	      }
 	      return elementType;
-	    } // Filter certain DOM attributes (e.g. src, href) if their values are empty strings.
+	    }
 
+	    // Filter certain DOM attributes (e.g. src, href) if their values are empty strings.
 
 	    var enableScopeAPI = false; // Experimental Create Event Handle API.
 
@@ -1484,20 +1339,16 @@
 	        return true;
 	      } // Note: typeof might be other than 'symbol' or 'number' (e.g. if it's a polyfill).
 
-
 	      if (type === exports.Fragment || type === exports.Profiler || type === REACT_DEBUG_TRACING_MODE_TYPE || type === exports.StrictMode || type === exports.Suspense || type === REACT_SUSPENSE_LIST_TYPE || type === REACT_LEGACY_HIDDEN_TYPE || enableScopeAPI) {
 	        return true;
 	      }
-
 	      if (typeof type === 'object' && type !== null) {
 	        if (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || type.$$typeof === REACT_FUNDAMENTAL_TYPE || type.$$typeof === REACT_BLOCK_TYPE || type[0] === REACT_SERVER_BLOCK_TYPE) {
 	          return true;
 	        }
 	      }
-
 	      return false;
 	    }
-
 	    function memo(type, compare) {
 	      {
 	        if (!isValidElementType(type)) {
@@ -1519,7 +1370,6 @@
 	          },
 	          set: function (name) {
 	            ownName = name;
-
 	            if (type.displayName == null) {
 	              type.displayName = name;
 	            }
@@ -1528,26 +1378,21 @@
 	      }
 	      return elementType;
 	    }
-
 	    function resolveDispatcher() {
 	      var dispatcher = ReactCurrentDispatcher.current;
-
 	      if (!(dispatcher !== null)) {
 	        {
 	          throw Error("Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:\n1. You might have mismatching versions of React and the renderer (such as React DOM)\n2. You might be breaking the Rules of Hooks\n3. You might have more than one copy of React in the same app\nSee https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.");
 	        }
 	      }
-
 	      return dispatcher;
 	    }
-
 	    function useContext(Context, unstable_observedBits) {
 	      var dispatcher = resolveDispatcher();
 	      {
 	        if (unstable_observedBits !== undefined) {
 	          error('useContext() second argument is reserved for future ' + 'use in React. Passing it is not supported. ' + 'You passed: %s.%s', unstable_observedBits, typeof unstable_observedBits === 'number' && Array.isArray(arguments[2]) ? '\n\nDid you call array.map(useContext)? ' + 'Calling Hooks inside a loop is not supported. ' + 'Learn more at https://reactjs.org/link/rules-of-hooks' : '');
 	        } // TODO: add a more generic warning for invalid values.
-
 
 	        if (Context._context !== undefined) {
 	          var realContext = Context._context; // Don't deduplicate because this legitimately causes bugs
@@ -1562,58 +1407,49 @@
 	      }
 	      return dispatcher.useContext(Context, unstable_observedBits);
 	    }
-
 	    function useState(initialState) {
 	      var dispatcher = resolveDispatcher();
 	      return dispatcher.useState(initialState);
 	    }
-
 	    function useReducer(reducer, initialArg, init) {
 	      var dispatcher = resolveDispatcher();
 	      return dispatcher.useReducer(reducer, initialArg, init);
 	    }
-
 	    function useRef(initialValue) {
 	      var dispatcher = resolveDispatcher();
 	      return dispatcher.useRef(initialValue);
 	    }
-
 	    function useEffect(create, deps) {
 	      var dispatcher = resolveDispatcher();
 	      return dispatcher.useEffect(create, deps);
 	    }
-
 	    function useLayoutEffect(create, deps) {
 	      var dispatcher = resolveDispatcher();
 	      return dispatcher.useLayoutEffect(create, deps);
 	    }
-
 	    function useCallback(callback, deps) {
 	      var dispatcher = resolveDispatcher();
 	      return dispatcher.useCallback(callback, deps);
 	    }
-
 	    function useMemo(create, deps) {
 	      var dispatcher = resolveDispatcher();
 	      return dispatcher.useMemo(create, deps);
 	    }
-
 	    function useImperativeHandle(ref, create, deps) {
 	      var dispatcher = resolveDispatcher();
 	      return dispatcher.useImperativeHandle(ref, create, deps);
 	    }
-
 	    function useDebugValue(value, formatterFn) {
 	      {
 	        var dispatcher = resolveDispatcher();
 	        return dispatcher.useDebugValue(value, formatterFn);
 	      }
-	    } // Helpers to patch console.logs to avoid logging during side-effect free
+	    }
+
+	    // Helpers to patch console.logs to avoid logging during side-effect free
 	    // replaying on render function. This currently only patches the object
 	    // lazily which won't cover if the log function was extracted eagerly.
 	    // We could also eagerly patch the method.
-
-
 	    var disabledDepth = 0;
 	    var prevLog;
 	    var prevInfo;
@@ -1622,11 +1458,8 @@
 	    var prevGroup;
 	    var prevGroupCollapsed;
 	    var prevGroupEnd;
-
 	    function disabledLog() {}
-
 	    disabledLog.__reactDisabledLog = true;
-
 	    function disableLogs() {
 	      {
 	        if (disabledDepth === 0) {
@@ -1661,11 +1494,9 @@
 	        disabledDepth++;
 	      }
 	    }
-
 	    function reenableLogs() {
 	      {
 	        disabledDepth--;
-
 	        if (disabledDepth === 0) {
 	          /* eslint-disable react-internal/no-production-logging */
 	          var props = {
@@ -1705,10 +1536,8 @@
 	        }
 	      }
 	    }
-
 	    var ReactCurrentDispatcher$1 = ReactSharedInternals.ReactCurrentDispatcher;
 	    var prefix;
-
 	    function describeBuiltInComponentFrame(name, source, ownerFn) {
 	      {
 	        if (prefix === undefined) {
@@ -1721,27 +1550,22 @@
 	          }
 	        } // We use the prefix to ensure our stacks line up with native stack frames.
 
-
 	        return '\n' + prefix + name;
 	      }
 	    }
-
 	    var reentry = false;
 	    var componentFrameCache;
 	    {
 	      var PossiblyWeakMap = typeof WeakMap === 'function' ? WeakMap : Map;
 	      componentFrameCache = new PossiblyWeakMap();
 	    }
-
 	    function describeNativeComponentFrame(fn, construct) {
 	      // If something asked for a stack inside a fake render, it should get ignored.
 	      if (!fn || reentry) {
 	        return '';
 	      }
-
 	      {
 	        var frame = componentFrameCache.get(fn);
-
 	        if (frame !== undefined) {
 	          return frame;
 	        }
@@ -1759,7 +1583,6 @@
 	        ReactCurrentDispatcher$1.current = null;
 	        disableLogs();
 	      }
-
 	      try {
 	        // This should throw.
 	        if (construct) {
@@ -1768,7 +1591,6 @@
 	            throw Error();
 	          }; // $FlowFixMe
 
-
 	          Object.defineProperty(Fake.prototype, 'props', {
 	            set: function () {
 	              // We use a throwing setter instead of frozen or non-writable props
@@ -1776,7 +1598,6 @@
 	              throw Error();
 	            }
 	          });
-
 	          if (typeof Reflect === 'object' && Reflect.construct) {
 	            // We construct a different control for this case to include any extra
 	            // frames added by the construct call.
@@ -1785,7 +1606,6 @@
 	            } catch (x) {
 	              control = x;
 	            }
-
 	            Reflect.construct(fn, [], Fake);
 	          } else {
 	            try {
@@ -1793,7 +1613,6 @@
 	            } catch (x) {
 	              control = x;
 	            }
-
 	            fn.call(Fake.prototype);
 	          }
 	        } else {
@@ -1802,7 +1621,6 @@
 	          } catch (x) {
 	            control = x;
 	          }
-
 	          fn();
 	        }
 	      } catch (sample) {
@@ -1814,7 +1632,6 @@
 	          var controlLines = control.stack.split('\n');
 	          var s = sampleLines.length - 1;
 	          var c = controlLines.length - 1;
-
 	          while (s >= 1 && c >= 0 && sampleLines[s] !== controlLines[c]) {
 	            // We expect at least one stack frame to be shared.
 	            // Typically this will be the root most one. However, stack frames may be
@@ -1824,7 +1641,6 @@
 	            // the sample somewhere in the control.
 	            c--;
 	          }
-
 	          for (; s >= 1 && c >= 0; s--, c--) {
 	            // Next we find the first one that isn't the same which should be the
 	            // frame that called our sample function and the control.
@@ -1843,7 +1659,6 @@
 	                  if (c < 0 || sampleLines[s] !== controlLines[c]) {
 	                    // V8 adds a "new" prefix for native classes. Let's remove it to make it prettier.
 	                    var _frame = '\n' + sampleLines[s].replace(' at new ', ' at ');
-
 	                    {
 	                      if (typeof fn === 'function') {
 	                        componentFrameCache.set(fn, _frame);
@@ -1854,7 +1669,6 @@
 	                  }
 	                } while (s >= 1 && c >= 0);
 	              }
-
 	              break;
 	            }
 	          }
@@ -1868,7 +1682,6 @@
 	        Error.prepareStackTrace = previousPrepareStackTrace;
 	      } // Fallback to just using the name if we couldn't make it throw.
 
-
 	      var name = fn ? fn.displayName || fn.name : '';
 	      var syntheticFrame = name ? describeBuiltInComponentFrame(name) : '';
 	      {
@@ -1878,59 +1691,47 @@
 	      }
 	      return syntheticFrame;
 	    }
-
 	    function describeFunctionComponentFrame(fn, source, ownerFn) {
 	      {
 	        return describeNativeComponentFrame(fn, false);
 	      }
 	    }
-
 	    function shouldConstruct(Component) {
 	      var prototype = Component.prototype;
 	      return !!(prototype && prototype.isReactComponent);
 	    }
-
 	    function describeUnknownElementTypeFrameInDEV(type, source, ownerFn) {
 	      if (type == null) {
 	        return '';
 	      }
-
 	      if (typeof type === 'function') {
 	        {
 	          return describeNativeComponentFrame(type, shouldConstruct(type));
 	        }
 	      }
-
 	      if (typeof type === 'string') {
 	        return describeBuiltInComponentFrame(type);
 	      }
-
 	      switch (type) {
 	        case exports.Suspense:
 	          return describeBuiltInComponentFrame('Suspense');
-
 	        case REACT_SUSPENSE_LIST_TYPE:
 	          return describeBuiltInComponentFrame('SuspenseList');
 	      }
-
 	      if (typeof type === 'object') {
 	        switch (type.$$typeof) {
 	          case REACT_FORWARD_REF_TYPE:
 	            return describeFunctionComponentFrame(type.render);
-
 	          case REACT_MEMO_TYPE:
 	            // Memo may contain any component type so we recursively resolve it.
 	            return describeUnknownElementTypeFrameInDEV(type.type, source, ownerFn);
-
 	          case REACT_BLOCK_TYPE:
 	            return describeFunctionComponentFrame(type._render);
-
 	          case REACT_LAZY_TYPE:
 	            {
 	              var lazyComponent = type;
 	              var payload = lazyComponent._payload;
 	              var init = lazyComponent._init;
-
 	              try {
 	                // Lazy may contain any component type so we recursively resolve it.
 	                return describeUnknownElementTypeFrameInDEV(init(payload), source, ownerFn);
@@ -1938,13 +1739,10 @@
 	            }
 	        }
 	      }
-
 	      return '';
 	    }
-
 	    var loggedTypeFailures = {};
 	    var ReactDebugCurrentFrame$1 = ReactSharedInternals.ReactDebugCurrentFrame;
-
 	    function setCurrentlyValidatingElement(element) {
 	      {
 	        if (element) {
@@ -1956,12 +1754,10 @@
 	        }
 	      }
 	    }
-
 	    function checkPropTypes(typeSpecs, values, location, componentName, element) {
 	      {
 	        // $FlowFixMe This is okay but Flow doesn't know it.
 	        var has = Function.call.bind(Object.prototype.hasOwnProperty);
-
 	        for (var typeSpecName in typeSpecs) {
 	          if (has(typeSpecs, typeSpecName)) {
 	            var error$1 = void 0; // Prop type validation may throw. In case they do, we don't want to
@@ -1976,18 +1772,15 @@
 	                err.name = 'Invariant Violation';
 	                throw err;
 	              }
-
 	              error$1 = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED');
 	            } catch (ex) {
 	              error$1 = ex;
 	            }
-
 	            if (error$1 && !(error$1 instanceof Error)) {
 	              setCurrentlyValidatingElement(element);
 	              error('%s: type specification of %s' + ' `%s` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a %s. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).', componentName || 'React class', location, typeSpecName, typeof error$1);
 	              setCurrentlyValidatingElement(null);
 	            }
-
 	            if (error$1 instanceof Error && !(error$1.message in loggedTypeFailures)) {
 	              // Only monitor this failure once because there tends to be a lot of the
 	              // same error.
@@ -2000,7 +1793,6 @@
 	        }
 	      }
 	    }
-
 	    function setCurrentlyValidatingElement$1(element) {
 	      {
 	        if (element) {
@@ -2012,39 +1804,31 @@
 	        }
 	      }
 	    }
-
 	    var propTypesMisspellWarningShown;
 	    {
 	      propTypesMisspellWarningShown = false;
 	    }
-
 	    function getDeclarationErrorAddendum() {
 	      if (ReactCurrentOwner.current) {
 	        var name = getComponentName(ReactCurrentOwner.current.type);
-
 	        if (name) {
 	          return '\n\nCheck the render method of `' + name + '`.';
 	        }
 	      }
-
 	      return '';
 	    }
-
 	    function getSourceInfoErrorAddendum(source) {
 	      if (source !== undefined) {
 	        var fileName = source.fileName.replace(/^.*[\\\/]/, '');
 	        var lineNumber = source.lineNumber;
 	        return '\n\nCheck your code at ' + fileName + ':' + lineNumber + '.';
 	      }
-
 	      return '';
 	    }
-
 	    function getSourceInfoErrorAddendumForProps(elementProps) {
 	      if (elementProps !== null && elementProps !== undefined) {
 	        return getSourceInfoErrorAddendum(elementProps.__source);
 	      }
-
 	      return '';
 	    }
 	    /**
@@ -2053,20 +1837,15 @@
 	     * updates.
 	     */
 
-
 	    var ownerHasKeyUseWarning = {};
-
 	    function getCurrentComponentErrorInfo(parentType) {
 	      var info = getDeclarationErrorAddendum();
-
 	      if (!info) {
 	        var parentName = typeof parentType === 'string' ? parentType : parentType.displayName || parentType.name;
-
 	        if (parentName) {
 	          info = "\n\nCheck the top-level render call using <" + parentName + ">.";
 	        }
 	      }
-
 	      return info;
 	    }
 	    /**
@@ -2081,30 +1860,24 @@
 	     * @param {*} parentType element's parent's type.
 	     */
 
-
 	    function validateExplicitKey(element, parentType) {
 	      if (!element._store || element._store.validated || element.key != null) {
 	        return;
 	      }
-
 	      element._store.validated = true;
 	      var currentComponentErrorInfo = getCurrentComponentErrorInfo(parentType);
-
 	      if (ownerHasKeyUseWarning[currentComponentErrorInfo]) {
 	        return;
 	      }
-
 	      ownerHasKeyUseWarning[currentComponentErrorInfo] = true; // Usually the current owner is the offender, but if it accepts children as a
 	      // property, it may be the creator of the child that's responsible for
 	      // assigning it a key.
 
 	      var childOwner = '';
-
 	      if (element && element._owner && element._owner !== ReactCurrentOwner.current) {
 	        // Give the component that originally created this child.
 	        childOwner = " It was passed a child from " + getComponentName(element._owner.type) + ".";
 	      }
-
 	      {
 	        setCurrentlyValidatingElement$1(element);
 	        error('Each child in a list should have a unique "key" prop.' + '%s%s See https://reactjs.org/link/warning-keys for more information.', currentComponentErrorInfo, childOwner);
@@ -2121,16 +1894,13 @@
 	     * @param {*} parentType node's parent's type.
 	     */
 
-
 	    function validateChildKeys(node, parentType) {
 	      if (typeof node !== 'object') {
 	        return;
 	      }
-
 	      if (Array.isArray(node)) {
 	        for (var i = 0; i < node.length; i++) {
 	          var child = node[i];
-
 	          if (isValidElement(child)) {
 	            validateExplicitKey(child, parentType);
 	          }
@@ -2142,14 +1912,12 @@
 	        }
 	      } else if (node) {
 	        var iteratorFn = getIteratorFn(node);
-
 	        if (typeof iteratorFn === 'function') {
 	          // Entry iterators used to provide implicit keys,
 	          // but now we print a separate warning for them later.
 	          if (iteratorFn !== node.entries) {
 	            var iterator = iteratorFn.call(node);
 	            var step;
-
 	            while (!(step = iterator.next()).done) {
 	              if (isValidElement(step.value)) {
 	                validateExplicitKey(step.value, parentType);
@@ -2166,27 +1934,23 @@
 	     * @param {ReactElement} element
 	     */
 
-
 	    function validatePropTypes(element) {
 	      {
 	        var type = element.type;
-
 	        if (type === null || type === undefined || typeof type === 'string') {
 	          return;
 	        }
-
 	        var propTypes;
-
 	        if (typeof type === 'function') {
 	          propTypes = type.propTypes;
-	        } else if (typeof type === 'object' && (type.$$typeof === REACT_FORWARD_REF_TYPE || // Note: Memo only checks outer props here.
+	        } else if (typeof type === 'object' && (type.$$typeof === REACT_FORWARD_REF_TYPE ||
+	        // Note: Memo only checks outer props here.
 	        // Inner props are checked in the reconciler.
 	        type.$$typeof === REACT_MEMO_TYPE)) {
 	          propTypes = type.propTypes;
 	        } else {
 	          return;
 	        }
-
 	        if (propTypes) {
 	          // Intentionally inside to avoid triggering lazy initializers:
 	          var name = getComponentName(type);
@@ -2195,10 +1959,8 @@
 	          propTypesMisspellWarningShown = true; // Intentionally inside to avoid triggering lazy initializers:
 
 	          var _name = getComponentName(type);
-
 	          error('Component %s declared `PropTypes` instead of `propTypes`. Did you misspell the property assignment?', _name || 'Unknown');
 	        }
-
 	        if (typeof type.getDefaultProps === 'function' && !type.getDefaultProps.isReactClassApproved) {
 	          error('getDefaultProps is only used on classic React.createClass ' + 'definitions. Use a static property named `defaultProps` instead.');
 	        }
@@ -2209,14 +1971,11 @@
 	     * @param {ReactElement} fragment
 	     */
 
-
 	    function validateFragmentProps(fragment) {
 	      {
 	        var keys = Object.keys(fragment.props);
-
 	        for (var i = 0; i < keys.length; i++) {
 	          var key = keys[i];
-
 	          if (key !== 'children' && key !== 'key') {
 	            setCurrentlyValidatingElement$1(fragment);
 	            error('Invalid prop `%s` supplied to `React.Fragment`. ' + 'React.Fragment can only have `key` and `children` props.', key);
@@ -2224,7 +1983,6 @@
 	            break;
 	          }
 	        }
-
 	        if (fragment.ref !== null) {
 	          setCurrentlyValidatingElement$1(fragment);
 	          error('Invalid attribute `ref` supplied to `React.Fragment`.');
@@ -2232,28 +1990,22 @@
 	        }
 	      }
 	    }
-
 	    function createElementWithValidation(type, props, children) {
 	      var validType = isValidElementType(type); // We warn in this case but don't throw. We expect the element creation to
 	      // succeed and there will likely be errors in render.
 
 	      if (!validType) {
 	        var info = '';
-
 	        if (type === undefined || typeof type === 'object' && type !== null && Object.keys(type).length === 0) {
 	          info += ' You likely forgot to export your component from the file ' + "it's defined in, or you might have mixed up default and named imports.";
 	        }
-
 	        var sourceInfo = getSourceInfoErrorAddendumForProps(props);
-
 	        if (sourceInfo) {
 	          info += sourceInfo;
 	        } else {
 	          info += getDeclarationErrorAddendum();
 	        }
-
 	        var typeString;
-
 	        if (type === null) {
 	          typeString = 'null';
 	        } else if (Array.isArray(type)) {
@@ -2264,12 +2016,10 @@
 	        } else {
 	          typeString = typeof type;
 	        }
-
 	        {
 	          error('React.createElement: type is invalid -- expected a string (for ' + 'built-in components) or a class/function (for composite ' + 'components) but got: %s.%s', typeString, info);
 	        }
 	      }
-
 	      var element = createElement.apply(this, arguments); // The result can be nullish if a mock or a custom function is used.
 	      // TODO: Drop this when these are no longer allowed as the type argument.
 
@@ -2281,24 +2031,19 @@
 	      // (Rendering will throw with a helpful message and as soon as the type is
 	      // fixed, the key warnings will appear.)
 
-
 	      if (validType) {
 	        for (var i = 2; i < arguments.length; i++) {
 	          validateChildKeys(arguments[i], type);
 	        }
 	      }
-
 	      if (type === exports.Fragment) {
 	        validateFragmentProps(element);
 	      } else {
 	        validatePropTypes(element);
 	      }
-
 	      return element;
 	    }
-
 	    var didWarnAboutDeprecatedCreateFactory = false;
-
 	    function createFactoryWithValidation(type) {
 	      var validatedFactory = createElementWithValidation.bind(null, type);
 	      validatedFactory.type = type;
@@ -2307,7 +2052,6 @@
 	          didWarnAboutDeprecatedCreateFactory = true;
 	          warn('React.createFactory() is deprecated and will be removed in ' + 'a future major release. Consider using JSX ' + 'or use React.createElement() directly instead.');
 	        } // Legacy hook: remove it
-
 
 	        Object.defineProperty(validatedFactory, 'type', {
 	          enumerable: false,
@@ -2322,18 +2066,14 @@
 	      }
 	      return validatedFactory;
 	    }
-
 	    function cloneElementWithValidation(element, props, children) {
 	      var newElement = cloneElement.apply(this, arguments);
-
 	      for (var i = 2; i < arguments.length; i++) {
 	        validateChildKeys(arguments[i], newElement.type);
 	      }
-
 	      validatePropTypes(newElement);
 	      return newElement;
 	    }
-
 	    {
 	      try {
 	        var frozenObject = Object.freeze({});
@@ -2417,39 +2157,34 @@
 	    var cancelHostTimeout;
 	    var requestPaint;
 	    var hasPerformanceNow = typeof performance === 'object' && typeof performance.now === 'function';
-
 	    if (hasPerformanceNow) {
 	      var localPerformance = performance;
-
 	      exports.unstable_now = function () {
 	        return localPerformance.now();
 	      };
 	    } else {
 	      var localDate = Date;
 	      var initialTime = localDate.now();
-
 	      exports.unstable_now = function () {
 	        return localDate.now() - initialTime;
 	      };
 	    }
-
-	    if ( // If Scheduler runs in a non-DOM environment, it falls back to a naive
+	    if (
+	    // If Scheduler runs in a non-DOM environment, it falls back to a naive
 	    // implementation using setTimeout.
-	    typeof window === 'undefined' || // Check if MessageChannel is supported, too.
+	    typeof window === 'undefined' ||
+	    // Check if MessageChannel is supported, too.
 	    typeof MessageChannel !== 'function') {
 	      // If this accidentally gets imported in a non-browser environment, e.g. JavaScriptCore,
 	      // fallback to a naive implementation.
 	      var _callback = null;
 	      var _timeoutID = null;
-
 	      var _flushCallback = function () {
 	        if (_callback !== null) {
 	          try {
 	            var currentTime = exports.unstable_now();
 	            var hasRemainingTime = true;
-
 	            _callback(hasRemainingTime, currentTime);
-
 	            _callback = null;
 	          } catch (e) {
 	            setTimeout(_flushCallback, 0);
@@ -2457,7 +2192,6 @@
 	          }
 	        }
 	      };
-
 	      requestHostCallback = function (cb) {
 	        if (_callback !== null) {
 	          // Protect against re-entrancy.
@@ -2467,43 +2201,35 @@
 	          setTimeout(_flushCallback, 0);
 	        }
 	      };
-
 	      requestHostTimeout = function (cb, ms) {
 	        _timeoutID = setTimeout(cb, ms);
 	      };
-
 	      cancelHostTimeout = function () {
 	        clearTimeout(_timeoutID);
 	      };
-
 	      exports.unstable_shouldYield = function () {
 	        return false;
 	      };
-
 	      requestPaint = exports.unstable_forceFrameRate = function () {};
 	    } else {
 	      // Capture local references to native APIs, in case a polyfill overrides them.
 	      var _setTimeout = window.setTimeout;
 	      var _clearTimeout = window.clearTimeout;
-
 	      if (typeof console !== 'undefined') {
 	        // TODO: Scheduler no longer requires these methods to be polyfilled. But
 	        // maybe we want to continue warning if they don't exist, to preserve the
 	        // option to rely on it in the future?
 	        var requestAnimationFrame = window.requestAnimationFrame;
 	        var cancelAnimationFrame = window.cancelAnimationFrame;
-
 	        if (typeof requestAnimationFrame !== 'function') {
 	          // Using console['error'] to evade Babel and ESLint
 	          console['error']("This browser doesn't support requestAnimationFrame. " + 'Make sure that you load a ' + 'polyfill in older browsers. https://reactjs.org/link/react-polyfills');
 	        }
-
 	        if (typeof cancelAnimationFrame !== 'function') {
 	          // Using console['error'] to evade Babel and ESLint
 	          console['error']("This browser doesn't support cancelAnimationFrame. " + 'Make sure that you load a ' + 'polyfill in older browsers. https://reactjs.org/link/react-polyfills');
 	        }
 	      }
-
 	      var isMessageLoopRunning = false;
 	      var scheduledHostCallback = null;
 	      var taskTimeoutID = -1; // Scheduler periodically yields in case there is other work on the main
@@ -2521,17 +2247,14 @@
 	          return exports.unstable_now() >= deadline;
 	        }; // Since we yield every frame regardless, `requestPaint` has no effect.
 
-
 	        requestPaint = function () {};
 	      }
-
 	      exports.unstable_forceFrameRate = function (fps) {
 	        if (fps < 0 || fps > 125) {
 	          // Using console['error'] to evade Babel and ESLint
 	          console['error']('forceFrameRate takes a positive int between 0 and 125, ' + 'forcing frame rates higher than 125 fps is not supported');
 	          return;
 	        }
-
 	        if (fps > 0) {
 	          yieldInterval = Math.floor(1000 / fps);
 	        } else {
@@ -2539,7 +2262,6 @@
 	          yieldInterval = 5;
 	        }
 	      };
-
 	      var performWorkUntilDeadline = function () {
 	        if (scheduledHostCallback !== null) {
 	          var currentTime = exports.unstable_now(); // Yield after `yieldInterval` ms, regardless of where we are in the vsync
@@ -2548,10 +2270,8 @@
 
 	          deadline = currentTime + yieldInterval;
 	          var hasTimeRemaining = true;
-
 	          try {
 	            var hasMoreWork = scheduledHostCallback(hasTimeRemaining, currentTime);
-
 	            if (!hasMoreWork) {
 	              isMessageLoopRunning = false;
 	              scheduledHostCallback = null;
@@ -2569,70 +2289,55 @@
 	        } else {
 	          isMessageLoopRunning = false;
 	        } // Yielding to the browser will give it a chance to paint, so we can
-
 	      };
 
 	      var channel = new MessageChannel();
 	      var port = channel.port2;
 	      channel.port1.onmessage = performWorkUntilDeadline;
-
 	      requestHostCallback = function (callback) {
 	        scheduledHostCallback = callback;
-
 	        if (!isMessageLoopRunning) {
 	          isMessageLoopRunning = true;
 	          port.postMessage(null);
 	        }
 	      };
-
 	      requestHostTimeout = function (callback, ms) {
 	        taskTimeoutID = _setTimeout(function () {
 	          callback(exports.unstable_now());
 	        }, ms);
 	      };
-
 	      cancelHostTimeout = function () {
 	        _clearTimeout(taskTimeoutID);
-
 	        taskTimeoutID = -1;
 	      };
 	    }
-
 	    function push(heap, node) {
 	      var index = heap.length;
 	      heap.push(node);
 	      siftUp(heap, node, index);
 	    }
-
 	    function peek(heap) {
 	      var first = heap[0];
 	      return first === undefined ? null : first;
 	    }
-
 	    function pop(heap) {
 	      var first = heap[0];
-
 	      if (first !== undefined) {
 	        var last = heap.pop();
-
 	        if (last !== first) {
 	          heap[0] = last;
 	          siftDown(heap, last, 0);
 	        }
-
 	        return first;
 	      } else {
 	        return null;
 	      }
 	    }
-
 	    function siftUp(heap, node, i) {
 	      var index = i;
-
 	      while (true) {
 	        var parentIndex = index - 1 >>> 1;
 	        var parent = heap[parentIndex];
-
 	        if (parent !== undefined && compare(parent, node) > 0) {
 	          // The parent is larger. Swap positions.
 	          heap[parentIndex] = node;
@@ -2644,11 +2349,9 @@
 	        }
 	      }
 	    }
-
 	    function siftDown(heap, node, i) {
 	      var index = i;
 	      var length = heap.length;
-
 	      while (index < length) {
 	        var leftIndex = (index + 1) * 2 - 1;
 	        var left = heap[leftIndex];
@@ -2675,25 +2378,23 @@
 	        }
 	      }
 	    }
-
 	    function compare(a, b) {
 	      // Compare sort index first, then task id.
 	      var diff = a.sortIndex - b.sortIndex;
 	      return diff !== 0 ? diff : a.id - b.id;
-	    } // TODO: Use symbols?
+	    }
 
-
+	    // TODO: Use symbols?
 	    var ImmediatePriority = 1;
 	    var UserBlockingPriority = 2;
 	    var NormalPriority = 3;
 	    var LowPriority = 4;
 	    var IdlePriority = 5;
-
 	    function markTaskErrored(task, ms) {}
+
 	    /* eslint-disable no-var */
 	    // Math.pow(2, 30) - 1
 	    // 0b111111111111111111111111111111
-
 
 	    var maxSigned31BitInt = 1073741823; // Times out immediately
 
@@ -2709,18 +2410,15 @@
 	    var timerQueue = []; // Incrementing id counter. Used to maintain insertion order.
 
 	    var taskIdCounter = 1; // Pausing the scheduler is useful for debugging.
-
 	    var currentTask = null;
 	    var currentPriorityLevel = NormalPriority; // This is set while performing work, to prevent re-entrancy.
 
 	    var isPerformingWork = false;
 	    var isHostCallbackScheduled = false;
 	    var isHostTimeoutScheduled = false;
-
 	    function advanceTimers(currentTime) {
 	      // Check for tasks that are no longer delayed and add them to the queue.
 	      var timer = peek(timerQueue);
-
 	      while (timer !== null) {
 	        if (timer.callback === null) {
 	          // Timer was cancelled.
@@ -2734,41 +2432,33 @@
 	          // Remaining timers are pending.
 	          return;
 	        }
-
 	        timer = peek(timerQueue);
 	      }
 	    }
-
 	    function handleTimeout(currentTime) {
 	      isHostTimeoutScheduled = false;
 	      advanceTimers(currentTime);
-
 	      if (!isHostCallbackScheduled) {
 	        if (peek(taskQueue) !== null) {
 	          isHostCallbackScheduled = true;
 	          requestHostCallback(flushWork);
 	        } else {
 	          var firstTimer = peek(timerQueue);
-
 	          if (firstTimer !== null) {
 	            requestHostTimeout(handleTimeout, firstTimer.startTime - currentTime);
 	          }
 	        }
 	      }
 	    }
-
 	    function flushWork(hasTimeRemaining, initialTime) {
 	      isHostCallbackScheduled = false;
-
 	      if (isHostTimeoutScheduled) {
 	        // We scheduled a timeout but it's no longer needed. Cancel it.
 	        isHostTimeoutScheduled = false;
 	        cancelHostTimeout();
 	      }
-
 	      isPerformingWork = true;
 	      var previousPriorityLevel = currentPriorityLevel;
-
 	      try {
 	        var currentTime; if (enableProfiling) ; else {
 	          // No catch in prod code path.
@@ -2780,27 +2470,22 @@
 	        isPerformingWork = false;
 	      }
 	    }
-
 	    function workLoop(hasTimeRemaining, initialTime) {
 	      var currentTime = initialTime;
 	      advanceTimers(currentTime);
 	      currentTask = peek(taskQueue);
-
 	      while (currentTask !== null && !enableSchedulerDebugging) {
 	        if (currentTask.expirationTime > currentTime && (!hasTimeRemaining || exports.unstable_shouldYield())) {
 	          // This currentTask hasn't expired, and we've reached the deadline.
 	          break;
 	        }
-
 	        var callback = currentTask.callback;
-
 	        if (typeof callback === 'function') {
 	          currentTask.callback = null;
 	          currentPriorityLevel = currentTask.priorityLevel;
 	          var didUserCallbackTimeout = currentTask.expirationTime <= currentTime;
 	          var continuationCallback = callback(didUserCallbackTimeout);
 	          currentTime = exports.unstable_now();
-
 	          if (typeof continuationCallback === 'function') {
 	            currentTask.callback = continuationCallback;
 	          } else {
@@ -2808,29 +2493,23 @@
 	              pop(taskQueue);
 	            }
 	          }
-
 	          advanceTimers(currentTime);
 	        } else {
 	          pop(taskQueue);
 	        }
-
 	        currentTask = peek(taskQueue);
 	      } // Return whether there's additional work
-
 
 	      if (currentTask !== null) {
 	        return true;
 	      } else {
 	        var firstTimer = peek(timerQueue);
-
 	        if (firstTimer !== null) {
 	          requestHostTimeout(handleTimeout, firstTimer.startTime - currentTime);
 	        }
-
 	        return false;
 	      }
 	    }
-
 	    function unstable_runWithPriority(priorityLevel, eventHandler) {
 	      switch (priorityLevel) {
 	        case ImmediatePriority:
@@ -2839,24 +2518,19 @@
 	        case LowPriority:
 	        case IdlePriority:
 	          break;
-
 	        default:
 	          priorityLevel = NormalPriority;
 	      }
-
 	      var previousPriorityLevel = currentPriorityLevel;
 	      currentPriorityLevel = priorityLevel;
-
 	      try {
 	        return eventHandler();
 	      } finally {
 	        currentPriorityLevel = previousPriorityLevel;
 	      }
 	    }
-
 	    function unstable_next(eventHandler) {
 	      var priorityLevel;
-
 	      switch (currentPriorityLevel) {
 	        case ImmediatePriority:
 	        case UserBlockingPriority:
@@ -2864,30 +2538,25 @@
 	          // Shift down to normal priority
 	          priorityLevel = NormalPriority;
 	          break;
-
 	        default:
 	          // Anything lower than normal priority should remain at the current level.
 	          priorityLevel = currentPriorityLevel;
 	          break;
 	      }
-
 	      var previousPriorityLevel = currentPriorityLevel;
 	      currentPriorityLevel = priorityLevel;
-
 	      try {
 	        return eventHandler();
 	      } finally {
 	        currentPriorityLevel = previousPriorityLevel;
 	      }
 	    }
-
 	    function unstable_wrapCallback(callback) {
 	      var parentPriorityLevel = currentPriorityLevel;
 	      return function () {
 	        // This is a fork of runWithPriority, inlined for performance.
 	        var previousPriorityLevel = currentPriorityLevel;
 	        currentPriorityLevel = parentPriorityLevel;
-
 	        try {
 	          return callback.apply(this, arguments);
 	        } finally {
@@ -2895,14 +2564,11 @@
 	        }
 	      };
 	    }
-
 	    function unstable_scheduleCallback(priorityLevel, callback, options) {
 	      var currentTime = exports.unstable_now();
 	      var startTime;
-
 	      if (typeof options === 'object' && options !== null) {
 	        var delay = options.delay;
-
 	        if (typeof delay === 'number' && delay > 0) {
 	          startTime = currentTime + delay;
 	        } else {
@@ -2911,32 +2577,25 @@
 	      } else {
 	        startTime = currentTime;
 	      }
-
 	      var timeout;
-
 	      switch (priorityLevel) {
 	        case ImmediatePriority:
 	          timeout = IMMEDIATE_PRIORITY_TIMEOUT;
 	          break;
-
 	        case UserBlockingPriority:
 	          timeout = USER_BLOCKING_PRIORITY_TIMEOUT;
 	          break;
-
 	        case IdlePriority:
 	          timeout = IDLE_PRIORITY_TIMEOUT;
 	          break;
-
 	        case LowPriority:
 	          timeout = LOW_PRIORITY_TIMEOUT;
 	          break;
-
 	        case NormalPriority:
 	        default:
 	          timeout = NORMAL_PRIORITY_TIMEOUT;
 	          break;
 	      }
-
 	      var expirationTime = startTime + timeout;
 	      var newTask = {
 	        id: taskIdCounter++,
@@ -2946,12 +2605,10 @@
 	        expirationTime: expirationTime,
 	        sortIndex: -1
 	      };
-
 	      if (startTime > currentTime) {
 	        // This is a delayed task.
 	        newTask.sortIndex = startTime;
 	        push(timerQueue, newTask);
-
 	        if (peek(taskQueue) === null && newTask === peek(timerQueue)) {
 	          // All tasks are delayed, and this is the task with the earliest delay.
 	          if (isHostTimeoutScheduled) {
@@ -2961,45 +2618,39 @@
 	            isHostTimeoutScheduled = true;
 	          } // Schedule a timeout.
 
-
 	          requestHostTimeout(handleTimeout, startTime - currentTime);
 	        }
 	      } else {
 	        newTask.sortIndex = expirationTime;
-	        push(taskQueue, newTask); // wait until the next time we yield.
+	        push(taskQueue, newTask);
+	        // wait until the next time we yield.
 
 	        if (!isHostCallbackScheduled && !isPerformingWork) {
 	          isHostCallbackScheduled = true;
 	          requestHostCallback(flushWork);
 	        }
 	      }
-
 	      return newTask;
 	    }
-
 	    function unstable_pauseExecution() {}
-
 	    function unstable_continueExecution() {
 	      if (!isHostCallbackScheduled && !isPerformingWork) {
 	        isHostCallbackScheduled = true;
 	        requestHostCallback(flushWork);
 	      }
 	    }
-
 	    function unstable_getFirstCallbackNode() {
 	      return peek(taskQueue);
 	    }
-
 	    function unstable_cancelCallback(task) {
 	      // remove from the queue because you can't remove arbitrary nodes from an
 	      // array based heap, only the first one.)
+
 	      task.callback = null;
 	    }
-
 	    function unstable_getCurrentPriorityLevel() {
 	      return currentPriorityLevel;
 	    }
-
 	    var unstable_requestPaint = requestPaint;
 	    var unstable_Profiling = null;
 	    exports.unstable_IdlePriority = IdlePriority;
@@ -3063,28 +2714,23 @@
 	        current: null
 	      };
 	    }
-
 	    function unstable_clear(callback) {
 	      var prevInteractions = exports.__interactionsRef.current;
 	      exports.__interactionsRef.current = new Set();
-
 	      try {
 	        return callback();
 	      } finally {
 	        exports.__interactionsRef.current = prevInteractions;
 	      }
 	    }
-
 	    function unstable_getCurrent() {
 	      {
 	        return exports.__interactionsRef.current;
 	      }
 	    }
-
 	    function unstable_getThreadID() {
 	      return ++threadIDCounter;
 	    }
-
 	    function unstable_trace(name, timestamp, callback) {
 	      var threadID = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : DEFAULT_THREAD_ID;
 	      var interaction = {
@@ -3102,7 +2748,6 @@
 	      exports.__interactionsRef.current = interactions;
 	      var subscriber = exports.__subscriberRef.current;
 	      var returnValue;
-
 	      try {
 	        if (subscriber !== null) {
 	          subscriber.onInteractionTraced(interaction);
@@ -3117,7 +2762,6 @@
 	            returnValue = callback();
 	          } finally {
 	            exports.__interactionsRef.current = prevInteractions;
-
 	            try {
 	              if (subscriber !== null) {
 	                subscriber.onWorkStopped(interactions, threadID);
@@ -3133,34 +2777,27 @@
 	          }
 	        }
 	      }
-
 	      return returnValue;
 	    }
-
 	    function unstable_wrap(callback) {
 	      var threadID = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : DEFAULT_THREAD_ID;
 	      var wrappedInteractions = exports.__interactionsRef.current;
 	      var subscriber = exports.__subscriberRef.current;
-
 	      if (subscriber !== null) {
 	        subscriber.onWorkScheduled(wrappedInteractions, threadID);
 	      } // Update the pending async work count for the current interactions.
 	      // Update after calling subscribers in case of error.
 
-
 	      wrappedInteractions.forEach(function (interaction) {
 	        interaction.__count++;
 	      });
 	      var hasRun = false;
-
 	      function wrapped() {
 	        var prevInteractions = exports.__interactionsRef.current;
 	        exports.__interactionsRef.current = wrappedInteractions;
 	        subscriber = exports.__subscriberRef.current;
-
 	        try {
 	          var returnValue;
-
 	          try {
 	            if (subscriber !== null) {
 	              subscriber.onWorkStarted(wrappedInteractions, threadID);
@@ -3170,13 +2807,11 @@
 	              returnValue = callback.apply(undefined, arguments);
 	            } finally {
 	              exports.__interactionsRef.current = prevInteractions;
-
 	              if (subscriber !== null) {
 	                subscriber.onWorkStopped(wrappedInteractions, threadID);
 	              }
 	            }
 	          }
-
 	          return returnValue;
 	        } finally {
 	          if (!hasRun) {
@@ -3189,7 +2824,6 @@
 
 	            wrappedInteractions.forEach(function (interaction) {
 	              interaction.__count--;
-
 	              if (subscriber !== null && interaction.__count === 0) {
 	                subscriber.onInteractionScheduledWorkCompleted(interaction);
 	              }
@@ -3197,10 +2831,8 @@
 	          }
 	        }
 	      }
-
 	      wrapped.cancel = function cancel() {
 	        subscriber = exports.__subscriberRef.current;
-
 	        try {
 	          if (subscriber !== null) {
 	            subscriber.onWorkCanceled(wrappedInteractions, threadID);
@@ -3211,26 +2843,21 @@
 	          // Mark them as completed.
 	          wrappedInteractions.forEach(function (interaction) {
 	            interaction.__count--;
-
 	            if (subscriber && interaction.__count === 0) {
 	              subscriber.onInteractionScheduledWorkCompleted(interaction);
 	            }
 	          });
 	        }
 	      };
-
 	      return wrapped;
 	    }
-
 	    var subscribers = null;
 	    {
 	      subscribers = new Set();
 	    }
-
 	    function unstable_subscribe(subscriber) {
 	      {
 	        subscribers.add(subscriber);
-
 	        if (subscribers.size === 1) {
 	          exports.__subscriberRef.current = {
 	            onInteractionScheduledWorkCompleted: onInteractionScheduledWorkCompleted,
@@ -3243,17 +2870,14 @@
 	        }
 	      }
 	    }
-
 	    function unstable_unsubscribe(subscriber) {
 	      {
 	        subscribers.delete(subscriber);
-
 	        if (subscribers.size === 0) {
 	          exports.__subscriberRef.current = null;
 	        }
 	      }
 	    }
-
 	    function onInteractionTraced(interaction) {
 	      var didCatchError = false;
 	      var caughtError = null;
@@ -3267,12 +2891,10 @@
 	          }
 	        }
 	      });
-
 	      if (didCatchError) {
 	        throw caughtError;
 	      }
 	    }
-
 	    function onInteractionScheduledWorkCompleted(interaction) {
 	      var didCatchError = false;
 	      var caughtError = null;
@@ -3286,12 +2908,10 @@
 	          }
 	        }
 	      });
-
 	      if (didCatchError) {
 	        throw caughtError;
 	      }
 	    }
-
 	    function onWorkScheduled(interactions, threadID) {
 	      var didCatchError = false;
 	      var caughtError = null;
@@ -3305,12 +2925,10 @@
 	          }
 	        }
 	      });
-
 	      if (didCatchError) {
 	        throw caughtError;
 	      }
 	    }
-
 	    function onWorkStarted(interactions, threadID) {
 	      var didCatchError = false;
 	      var caughtError = null;
@@ -3324,12 +2942,10 @@
 	          }
 	        }
 	      });
-
 	      if (didCatchError) {
 	        throw caughtError;
 	      }
 	    }
-
 	    function onWorkStopped(interactions, threadID) {
 	      var didCatchError = false;
 	      var caughtError = null;
@@ -3343,12 +2959,10 @@
 	          }
 	        }
 	      });
-
 	      if (didCatchError) {
 	        throw caughtError;
 	      }
 	    }
-
 	    function onWorkCanceled(interactions, threadID) {
 	      var didCatchError = false;
 	      var caughtError = null;
@@ -3362,12 +2976,10 @@
 	          }
 	        }
 	      });
-
 	      if (didCatchError) {
 	        throw caughtError;
 	      }
 	    }
-
 	    exports.unstable_clear = unstable_clear;
 	    exports.unstable_getCurrent = unstable_getCurrent;
 	    exports.unstable_getThreadID = unstable_getThreadID;
@@ -7675,19 +7287,43 @@
 
 	var ReactDOM = reactDom.exports;
 
+	function _iterableToArrayLimit(arr, i) {
+	  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
+	  if (null != _i) {
+	    var _s,
+	      _e,
+	      _x,
+	      _r,
+	      _arr = [],
+	      _n = !0,
+	      _d = !1;
+	    try {
+	      if (_x = (_i = _i.call(arr)).next, 0 === i) {
+	        if (Object(_i) !== _i) return;
+	        _n = !1;
+	      } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);
+	    } catch (err) {
+	      _d = !0, _e = err;
+	    } finally {
+	      try {
+	        if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r)) return;
+	      } finally {
+	        if (_d) throw _e;
+	      }
+	    }
+	    return _arr;
+	  }
+	}
 	function ownKeys(object, enumerableOnly) {
 	  var keys = Object.keys(object);
-
 	  if (Object.getOwnPropertySymbols) {
 	    var symbols = Object.getOwnPropertySymbols(object);
 	    enumerableOnly && (symbols = symbols.filter(function (sym) {
 	      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
 	    })), keys.push.apply(keys, symbols);
 	  }
-
 	  return keys;
 	}
-
 	function _objectSpread2(target) {
 	  for (var i = 1; i < arguments.length; i++) {
 	    var source = null != arguments[i] ? arguments[i] : {};
@@ -7697,11 +7333,10 @@
 	      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
 	    });
 	  }
-
 	  return target;
 	}
-
 	function _defineProperty(obj, key, value) {
+	  key = _toPropertyKey(key);
 	  if (key in obj) {
 	    Object.defineProperty(obj, key, {
 	      value: value,
@@ -7712,60 +7347,23 @@
 	  } else {
 	    obj[key] = value;
 	  }
-
 	  return obj;
 	}
-
 	function _slicedToArray(arr, i) {
 	  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
 	}
-
 	function _toConsumableArray(arr) {
 	  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
 	}
-
 	function _arrayWithoutHoles(arr) {
 	  if (Array.isArray(arr)) return _arrayLikeToArray(arr);
 	}
-
 	function _arrayWithHoles(arr) {
 	  if (Array.isArray(arr)) return arr;
 	}
-
 	function _iterableToArray(iter) {
 	  if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
 	}
-
-	function _iterableToArrayLimit(arr, i) {
-	  var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
-
-	  if (_i == null) return;
-	  var _arr = [];
-	  var _n = true;
-	  var _d = false;
-
-	  var _s, _e;
-
-	  try {
-	    for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
-	      _arr.push(_s.value);
-
-	      if (i && _arr.length === i) break;
-	    }
-	  } catch (err) {
-	    _d = true;
-	    _e = err;
-	  } finally {
-	    try {
-	      if (!_n && _i["return"] != null) _i["return"]();
-	    } finally {
-	      if (_d) throw _e;
-	    }
-	  }
-
-	  return _arr;
-	}
-
 	function _unsupportedIterableToArray(o, minLen) {
 	  if (!o) return;
 	  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
@@ -7774,37 +7372,45 @@
 	  if (n === "Map" || n === "Set") return Array.from(o);
 	  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
 	}
-
 	function _arrayLikeToArray(arr, len) {
 	  if (len == null || len > arr.length) len = arr.length;
-
 	  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
-
 	  return arr2;
 	}
-
 	function _nonIterableSpread() {
 	  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 	}
-
 	function _nonIterableRest() {
 	  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+	}
+	function _toPrimitive(input, hint) {
+	  if (typeof input !== "object" || input === null) return input;
+	  var prim = input[Symbol.toPrimitive];
+	  if (prim !== undefined) {
+	    var res = prim.call(input, hint || "default");
+	    if (typeof res !== "object") return res;
+	    throw new TypeError("@@toPrimitive must return a primitive value.");
+	  }
+	  return (hint === "string" ? String : Number)(input);
+	}
+	function _toPropertyKey(arg) {
+	  var key = _toPrimitive(arg, "string");
+	  return typeof key === "symbol" ? key : String(key);
 	}
 
 	function Header(_ref) {
 	  var currentAsset = _ref.currentAsset,
-	      hasPrev = _ref.hasPrev,
-	      hasNext = _ref.hasNext,
-	      projectId = _ref.projectId,
-	      setSelectedListing = _ref.setSelectedListing,
-	      setSelectedImageIdx = _ref.setSelectedImageIdx;
+	    hasPrev = _ref.hasPrev,
+	    hasNext = _ref.hasNext,
+	    projectId = _ref.projectId,
+	    setSelectedListing = _ref.setSelectedListing,
+	    setSelectedImageIdx = _ref.setSelectedImageIdx;
 	  var handleGoHome = react.exports.useCallback(function () {
 	    window.location.href = 'https://app.labelbox.com/projects/' + projectId;
 	  }, [projectId]);
 	  var handleGoBack = react.exports.useCallback(function () {
 	    setSelectedListing();
 	    setSelectedImageIdx();
-
 	    if (hasPrev) {
 	      Labelbox.setLabelAsCurrentAsset(currentAsset.previous);
 	    }
@@ -7812,7 +7418,6 @@
 	  var handleGoNext = react.exports.useCallback(function () {
 	    setSelectedListing();
 	    setSelectedImageIdx();
-
 	    if (hasNext) {
 	      Labelbox.setLabelAsCurrentAsset(currentAsset.next);
 	    }
@@ -7836,9 +7441,9 @@
 
 	function ListingDetailsHeader(_ref) {
 	  var attribute = _ref.attribute,
-	      qualityTier = _ref.qualityTier,
-	      _ref$selectedListing = _ref.selectedListing,
-	      selectedListing = _ref$selectedListing === void 0 ? {} : _ref$selectedListing;
+	    qualityTier = _ref.qualityTier,
+	    _ref$selectedListing = _ref.selectedListing,
+	    selectedListing = _ref$selectedListing === void 0 ? {} : _ref$selectedListing;
 	  return /*#__PURE__*/React.createElement("div", {
 	    className: "header sticky"
 	  }, /*#__PURE__*/React.createElement("div", {
@@ -7860,19 +7465,25 @@
 	  }, "PDP Link")))));
 	}
 
-	function getResizedImageUrl(photoLink) {
-	  return photoLink !== null && photoLink !== void 0 && photoLink.includes('?') ? "".concat(photoLink) : "".concat(photoLink, "?im_w=480");
+	function getEffectiveImageUrl(photoLink) {
+	  var _effectiveImgUrl;
+	  var effectiveImgUrl = photoLink;
+	  if (!photoLink.includes('/im/')) {
+	    var originalUrl = new URL(photoLink);
+	    effectiveImgUrl = "".concat(originalUrl.origin, "/im").concat(originalUrl.pathname).concat(originalUrl.search);
+	  }
+	  return (_effectiveImgUrl = effectiveImgUrl) !== null && _effectiveImgUrl !== void 0 && _effectiveImgUrl.includes('?') ? "".concat(effectiveImgUrl) : "".concat(effectiveImgUrl, "?im_w=480");
 	}
 
 	function DefaultImage(_ref) {
 	  var hasQualityTierChanged = _ref.hasQualityTierChanged,
-	      imgObj = _ref.imgObj,
-	      idx = _ref.idx,
-	      isEdited = _ref.isEdited,
-	      isSelected = _ref.isSelected,
-	      onClickImage = _ref.onClickImage;
+	    imgObj = _ref.imgObj,
+	    idx = _ref.idx,
+	    isEdited = _ref.isEdited,
+	    isSelected = _ref.isSelected,
+	    onClickImage = _ref.onClickImage;
 	  var listingId = imgObj.listingId;
-	  var imageUrl = getResizedImageUrl(imgObj.photoLink);
+	  var imageUrl = getEffectiveImageUrl(imgObj.photoLink);
 	  return /*#__PURE__*/React.createElement("div", {
 	    className: "image-container",
 	    onClick: function onClick() {
@@ -7887,10 +7498,10 @@
 
 	function ImageGrid(_ref) {
 	  var images = _ref.images,
-	      _onClickImage = _ref.onClickImage,
-	      photoEdits = _ref.photoEdits,
-	      qualityTier = _ref.qualityTier,
-	      selectedImageIdx = _ref.selectedImageIdx;
+	    _onClickImage = _ref.onClickImage,
+	    photoEdits = _ref.photoEdits,
+	    qualityTier = _ref.qualityTier,
+	    selectedImageIdx = _ref.selectedImageIdx;
 	  return /*#__PURE__*/React.createElement("div", {
 	    className: "photo-grid"
 	  }, images.map(function (imgObj, idx) {
@@ -7914,34 +7525,28 @@
 
 	function getUpdateReason(edit, originalDefaultPhotoId, originalPhotoQualityTier) {
 	  var defaultPhotoId = edit.defaultPhotoId,
-	      photoQualityTier = edit.photoQualityTier;
+	    photoQualityTier = edit.photoQualityTier;
 	  var defaultPhotoIdChanged = !!defaultPhotoId && defaultPhotoId !== originalDefaultPhotoId;
 	  var photoQualityTierChanged = !!photoQualityTier && photoQualityTier !== originalPhotoQualityTier;
-
 	  if (photoQualityTierChanged && photoQualityTier === 'Remove') {
 	    return 'remove category';
 	  }
-
 	  if (defaultPhotoIdChanged && photoQualityTierChanged) {
 	    return 'update photo + quality';
 	  }
-
 	  if (photoQualityTierChanged) {
 	    return 'update quality';
 	  }
-
 	  if (defaultPhotoIdChanged) {
 	    return 'update photo';
 	  }
-
 	  return '';
 	}
-
 	function formatEditDataForSubmission(photoEdits, attribute, originalPhotoQualityTier, gridImages) {
 	  var formatted = photoEdits.map(function (edit) {
 	    var listingId = edit.listingId,
-	        defaultPhotoId = edit.defaultPhotoId,
-	        photoQualityTier = edit.photoQualityTier;
+	      defaultPhotoId = edit.defaultPhotoId,
+	      photoQualityTier = edit.photoQualityTier;
 	    var listingInfo = gridImages.find(function (listing) {
 	      return listing.listingId === listingId;
 	    });
@@ -7960,14 +7565,14 @@
 
 	function Content(_ref) {
 	  var assetData = _ref.assetData,
-	      gridImages = _ref.gridImages,
-	      onClickImage = _ref.onClickImage,
-	      photoEdits = _ref.photoEdits,
-	      selectedListing = _ref.selectedListing,
-	      selectedImageIdx = _ref.selectedImageIdx,
-	      setSelectedListing = _ref.setSelectedListing,
-	      setSelectedImageIdx = _ref.setSelectedImageIdx,
-	      setPhotoEdits = _ref.setPhotoEdits;
+	    gridImages = _ref.gridImages,
+	    onClickImage = _ref.onClickImage,
+	    photoEdits = _ref.photoEdits,
+	    selectedListing = _ref.selectedListing,
+	    selectedImageIdx = _ref.selectedImageIdx,
+	    setSelectedListing = _ref.setSelectedListing,
+	    setSelectedImageIdx = _ref.setSelectedImageIdx,
+	    setPhotoEdits = _ref.setPhotoEdits;
 	  react.exports.useEffect(function () {
 	    document.querySelector('.content').scrollTo(0, 0);
 	  }, [assetData]);
@@ -8019,43 +7624,38 @@
 
 	function LeftPanel(_ref) {
 	  var assetData = _ref.assetData,
-	      newDefaultPhotoId = _ref.newDefaultPhotoId,
-	      photoEdits = _ref.photoEdits,
-	      selectedListing = _ref.selectedListing,
-	      setNewDefaultPhotoId = _ref.setNewDefaultPhotoId,
-	      setPhotoEdits = _ref.setPhotoEdits;
+	    newDefaultPhotoId = _ref.newDefaultPhotoId,
+	    photoEdits = _ref.photoEdits,
+	    selectedListing = _ref.selectedListing,
+	    setNewDefaultPhotoId = _ref.setNewDefaultPhotoId,
+	    setPhotoEdits = _ref.setPhotoEdits;
 	  var originalPhotoQualityTier = assetData.qualityTier;
 	  var originalDefaultPhotoId = selectedListing.photoId;
 	  var updatedDefaultPhotoInfo = getUpdatedDefaultPhotoInfo(photoEdits, selectedListing);
 	  var updatedDefaultPhotoId = updatedDefaultPhotoInfo === null || updatedDefaultPhotoInfo === void 0 ? void 0 : updatedDefaultPhotoInfo.defaultPhotoId;
 	  var updatedDefaultPhotoQualityTier = updatedDefaultPhotoInfo === null || updatedDefaultPhotoInfo === void 0 ? void 0 : updatedDefaultPhotoInfo.photoQualityTier;
-
 	  var _useState = react.exports.useState(updatedDefaultPhotoQualityTier || originalPhotoQualityTier),
-	      _useState2 = _slicedToArray(_useState, 2),
-	      photoQualityTier = _useState2[0],
-	      setPhotoQualityTier = _useState2[1];
-
+	    _useState2 = _slicedToArray(_useState, 2),
+	    photoQualityTier = _useState2[0],
+	    setPhotoQualityTier = _useState2[1];
 	  react.exports.useEffect(function () {
 	    setPhotoQualityTier(updatedDefaultPhotoQualityTier || originalPhotoQualityTier);
 	  }, [selectedListing]);
-
 	  function handlePhotoQualityChange(e) {
 	    setPhotoQualityTier(e.target.value);
 	  }
-
 	  function clearUnsavedChanges() {
 	    setNewDefaultPhotoId('');
 	    setPhotoQualityTier(assetData.qualityTier);
 	  }
-
 	  function handleResetChanges() {
-	    clearUnsavedChanges(); // delete saved change entry from photoEdits
+	    clearUnsavedChanges();
 
+	    // delete saved change entry from photoEdits
 	    setPhotoEdits(function (prevEdits) {
 	      var prevChangeIndex = prevEdits.findIndex(function (edit) {
 	        return edit.listingId === selectedListing.listingId;
 	      });
-
 	      if (prevChangeIndex !== -1) {
 	        return [].concat(_toConsumableArray(prevEdits.slice(0, prevChangeIndex)), _toConsumableArray(prevEdits.slice(prevChangeIndex + 1)));
 	      } else {
@@ -8063,33 +7663,29 @@
 	      }
 	    });
 	  }
-
 	  function handleSubmit(e) {
-	    e.preventDefault(); // photo id and quality tier both same as original data
-
+	    e.preventDefault();
+	    // photo id and quality tier both same as original data
 	    if ((!newDefaultPhotoId || newDefaultPhotoId === originalDefaultPhotoId) && photoQualityTier === originalPhotoQualityTier) {
 	      return setPhotoEdits(function (prevEdits) {
 	        var prevChangeIndex = prevEdits.findIndex(function (edit) {
 	          return edit.listingId === selectedListing.listingId;
 	        });
-
 	        if (prevChangeIndex !== -1) {
 	          // delete previous edit
 	          return [].concat(_toConsumableArray(prevEdits.slice(0, prevChangeIndex)), _toConsumableArray(prevEdits.slice(prevChangeIndex + 1)));
 	        }
-
 	        return prevEdits;
 	      });
-	    } // change in photo id
+	    }
 
-
+	    // change in photo id
 	    if (!!newDefaultPhotoId) {
 	      if (newDefaultPhotoId !== originalDefaultPhotoId) {
 	        setPhotoEdits(function (prevEdits) {
 	          var prevChangeIndex = prevEdits.findIndex(function (edit) {
 	            return edit.listingId === selectedListing.listingId;
 	          });
-
 	          if (prevChangeIndex !== -1) {
 	            // override previous edit
 	            return [].concat(_toConsumableArray(prevEdits.slice(0, prevChangeIndex)), [Object.assign({}, prevEdits[prevChangeIndex], {
@@ -8109,26 +7705,23 @@
 	          var prevChangeIndex = prevEdits.findIndex(function (edit) {
 	            return edit.listingId === selectedListing.listingId;
 	          });
-
 	          if (prevChangeIndex !== -1) {
 	            var copy = Object.assign({}, prevEdits[prevChangeIndex], {
 	              defaultPhotoId: newDefaultPhotoId
 	            });
 	            return [].concat(_toConsumableArray(prevEdits.slice(0, prevChangeIndex)), [copy], _toConsumableArray(prevEdits.slice(prevChangeIndex + 1)));
 	          }
-
 	          return prevEdits;
 	        });
 	      }
-	    } // change photo quality tier
+	    }
 
-
+	    // change photo quality tier
 	    if (photoQualityTier !== originalPhotoQualityTier) {
 	      setPhotoEdits(function (prevEdits) {
 	        var prevChangeIndex = prevEdits.findIndex(function (edit) {
 	          return edit.listingId === selectedListing.listingId;
 	        });
-
 	        if (prevChangeIndex !== -1) {
 	          return [].concat(_toConsumableArray(prevEdits.slice(0, prevChangeIndex)), [Object.assign({}, prevEdits[prevChangeIndex], {
 	            photoQualityTier: photoQualityTier
@@ -8147,18 +7740,15 @@
 	        var prevChangeIndex = prevEdits.findIndex(function (edit) {
 	          return edit.listingId === selectedListing.listingId;
 	        });
-
 	        if (prevChangeIndex !== -1) {
 	          return [].concat(_toConsumableArray(prevEdits.slice(0, prevChangeIndex)), [Object.assign({}, prevEdits[prevChangeIndex], {
 	            photoQualityTier: photoQualityTier
 	          })], _toConsumableArray(prevEdits.slice(prevChangeIndex + 1)));
 	        }
-
 	        return prevEdits;
 	      });
 	    }
 	  }
-
 	  return /*#__PURE__*/React.createElement("form", {
 	    onSubmit: handleSubmit
 	  }, /*#__PURE__*/React.createElement("label", null, "Photo id:", /*#__PURE__*/React.createElement("input", {
@@ -8197,9 +7787,9 @@
 
 	function AdditionalImage(_ref) {
 	  var isSelected = _ref.isSelected,
-	      listingImage = _ref.listingImage,
-	      _onClick = _ref.onClick;
-	  var imageUrl = getResizedImageUrl(listingImage.photoLink);
+	    listingImage = _ref.listingImage,
+	    _onClick = _ref.onClick;
+	  var imageUrl = getEffectiveImageUrl(listingImage.photoLink);
 	  return /*#__PURE__*/React.createElement("div", {
 	    className: "additional-image-wrapper"
 	  }, /*#__PURE__*/React.createElement("div", null, "Photo ID: ", listingImage.photoId), /*#__PURE__*/React.createElement("button", {
@@ -8215,8 +7805,8 @@
 
 	function AdditionalPhotos(_ref) {
 	  var selectedListing = _ref.selectedListing,
-	      onClickImage = _ref.onClickImage,
-	      newDefaultPhotoId = _ref.newDefaultPhotoId;
+	    onClickImage = _ref.onClickImage,
+	    newDefaultPhotoId = _ref.newDefaultPhotoId;
 	  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h5", null, "Other pictures"), selectedListing.listingImages.map(function (image) {
 	    return /*#__PURE__*/React.createElement(AdditionalImage, {
 	      key: image.photoId,
@@ -8229,21 +7819,22 @@
 
 	function RightPanel(_ref) {
 	  var selectedListing = _ref.selectedListing,
-	      newDefaultPhotoId = _ref.newDefaultPhotoId,
-	      onClickImage = _ref.onClickImage;
+	    newDefaultPhotoId = _ref.newDefaultPhotoId,
+	    onClickImage = _ref.onClickImage;
 	  var scrollToTop = react.exports.useCallback(function (node) {
 	    node === null || node === void 0 ? void 0 : node.scrollTo(0, 0);
 	  }, [selectedListing]);
 	  if (!selectedListing) return null;
 	  var title = selectedListing.listingTitle,
-	      description = selectedListing.listingDescription,
-	      location = selectedListing.listingLocation,
-	      where = selectedListing.listingNeighborhood,
-	      lat = selectedListing.lat,
-	      lng = selectedListing.lng; // https://www.google.com/maps/search/?api=1&query={lat}%2C{lng}
+	    description = selectedListing.listingDescription,
+	    location = selectedListing.listingLocation,
+	    where = selectedListing.listingNeighborhood,
+	    lat = selectedListing.lat,
+	    lng = selectedListing.lng;
+
+	  // https://www.google.com/maps/search/?api=1&query={lat}%2C{lng}
 	  // src="https://maps.google.com/maps?q=${lat},${lng}&hl=es&z=14&amp;output=embed"
 	  // href="https://maps.google.com/maps?q=${lat},${lng};z=14&amp;output=embed"
-
 	  return /*#__PURE__*/React.createElement("div", {
 	    className: "flex-column right-side-panel",
 	    ref: scrollToTop
@@ -8296,7 +7887,6 @@
 	  var updatedGridImages = gridImages.map(function (imgObj) {
 	    if (listingIdsWithUpdatedDefaultPhoto.includes(imgObj.listingId)) {
 	      var _imgObj$listingImages;
-
 	      var updatedPhotoId = changes.find(function (edit) {
 	        return edit.listingId === imgObj.listingId;
 	      }).defaultPhotoId;
@@ -8307,31 +7897,24 @@
 	        photoLink: updatedPhotoLink
 	      });
 	    }
-
 	    return imgObj;
 	  });
 	  return updatedGridImages;
 	}
-
 	function getEffectiveGridImages(assetData, photoEdits, selectedImageIdx, newDefaultPhotoId) {
 	  if (!assetData) return [];
-
 	  var gridImagesCopy = _toConsumableArray(assetData.gridImages);
-
 	  if (photoEdits.length) {
 	    gridImagesCopy = overrideGridImages(photoEdits, gridImagesCopy);
 	  }
-
 	  if (typeof selectedImageIdx === 'number' && !!newDefaultPhotoId) {
 	    var _gridImagesCopy$selec;
-
 	    return [].concat(_toConsumableArray(gridImagesCopy.slice(0, selectedImageIdx)), [Object.assign({}, gridImagesCopy[selectedImageIdx], {
 	      photoLink: (_gridImagesCopy$selec = gridImagesCopy[selectedImageIdx].listingImages.find(function (photo) {
 	        return photo.photoId === newDefaultPhotoId;
 	      })) === null || _gridImagesCopy$selec === void 0 ? void 0 : _gridImagesCopy$selec.photoLink
 	    })], _toConsumableArray(gridImagesCopy.slice(selectedImageIdx + 1)));
 	  }
-
 	  return gridImagesCopy;
 	}
 
@@ -8341,12 +7924,13 @@
 	//   defaultPhotoId: 345,
 	//   photoQualityTier: 'High',
 	// }]
+
 	function convertLabelToPhotoEditFormat(labels) {
 	  if (!Array.isArray(labels)) return [];
 	  return labels.map(function (label) {
 	    var id_listing = label.id_listing,
-	        photo_id = label.photo_id,
-	        photo_quality = label.photo_quality;
+	      photo_id = label.photo_id,
+	      photo_quality = label.photo_quality;
 	    return _objectSpread2(_objectSpread2({
 	      listingId: id_listing
 	    }, photo_id ? {
@@ -8360,45 +7944,39 @@
 	var EMPTY_ARR = [];
 	function App() {
 	  var projectId = new URL(window.location.href).searchParams.get('project');
-
 	  var _useState = react.exports.useState(),
-	      _useState2 = _slicedToArray(_useState, 2),
-	      currentAsset = _useState2[0],
-	      setCurrentAsset = _useState2[1];
-
+	    _useState2 = _slicedToArray(_useState, 2),
+	    currentAsset = _useState2[0],
+	    setCurrentAsset = _useState2[1];
 	  var _useState3 = react.exports.useState(),
-	      _useState4 = _slicedToArray(_useState3, 2),
-	      assetData = _useState4[0],
-	      setAssetData = _useState4[1];
-
+	    _useState4 = _slicedToArray(_useState3, 2),
+	    assetData = _useState4[0],
+	    setAssetData = _useState4[1];
 	  var _useState5 = react.exports.useState(),
-	      _useState6 = _slicedToArray(_useState5, 2),
-	      selectedListing = _useState6[0],
-	      setSelectedListing = _useState6[1];
-
+	    _useState6 = _slicedToArray(_useState5, 2),
+	    selectedListing = _useState6[0],
+	    setSelectedListing = _useState6[1];
 	  var _useState7 = react.exports.useState(),
-	      _useState8 = _slicedToArray(_useState7, 2),
-	      selectedImageIdx = _useState8[0],
-	      setSelectedImageIdx = _useState8[1];
-
+	    _useState8 = _slicedToArray(_useState7, 2),
+	    selectedImageIdx = _useState8[0],
+	    setSelectedImageIdx = _useState8[1];
 	  var _useState9 = react.exports.useState(''),
-	      _useState10 = _slicedToArray(_useState9, 2),
-	      newDefaultPhotoId = _useState10[0],
-	      setNewDefaultPhotoId = _useState10[1];
-
+	    _useState10 = _slicedToArray(_useState9, 2),
+	    newDefaultPhotoId = _useState10[0],
+	    setNewDefaultPhotoId = _useState10[1];
 	  var assetNext = react.exports.useRef();
-	  var assetPrev = react.exports.useRef(); // photoEdits data structure
+	  var assetPrev = react.exports.useRef();
+
+	  // photoEdits data structure
 	  // [{
 	  //   listingId: 123,
 	  //   defaultPhotoId: 345,
 	  //   photoQualityTier: 'High',
 	  // }]
-
 	  var _useState11 = react.exports.useState(EMPTY_ARR),
-	      _useState12 = _slicedToArray(_useState11, 2),
-	      photoEdits = _useState12[0],
-	      setPhotoEdits = _useState12[1];
-
+	    _useState12 = _slicedToArray(_useState11, 2),
+	    photoEdits = _useState12[0],
+	    setPhotoEdits = _useState12[1];
 	  var effectiveGridImages = getEffectiveGridImages(assetData, photoEdits, selectedImageIdx, newDefaultPhotoId);
 	  var handleAssetChange = react.exports.useCallback(function (asset) {
 	    if (asset) {
@@ -8413,19 +7991,17 @@
 	        setCurrentAsset(asset);
 	        setAssetData(parsedAssetData);
 	      }
-
 	      if (asset.label) {
 	        if (asset.label === 'Skip') return;
 	        var labels = [];
-
 	        try {
 	          labels = JSON.parse(asset.label);
 	        } catch (e) {
 	          console.error(e);
 	        }
+	        var formattedLabels = convertLabelToPhotoEditFormat(labels);
 
-	        var formattedLabels = convertLabelToPhotoEditFormat(labels); // store labels in photoEdits mutable data structure
-
+	        // store labels in photoEdits mutable data structure
 	        setPhotoEdits(formattedLabels);
 	      }
 	    }

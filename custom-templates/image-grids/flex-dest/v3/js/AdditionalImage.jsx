@@ -1,8 +1,8 @@
 import React from 'react';
-import getResizedImageUrl from './getResizedImageUrl';
+import getEffectiveImageUrl from './getEffectiveImageUrl';
 
 export default function AdditionalImage({ isSelected, listingImage, onClick }) {
-  const imageUrl = getResizedImageUrl(listingImage.photoLink);
+  const imageUrl = getEffectiveImageUrl(listingImage.photoLink);
 
   return (
     <div className="additional-image-wrapper">

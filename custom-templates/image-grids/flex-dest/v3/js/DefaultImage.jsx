@@ -1,5 +1,5 @@
 import React from 'react';
-import getResizedImageUrl from './getResizedImageUrl';
+import getEffectiveImageUrl from './getEffectiveImageUrl';
 
 export default function DefaultImage({
   hasQualityTierChanged,
@@ -10,7 +10,7 @@ export default function DefaultImage({
   onClickImage,
 }) {
   const listingId = imgObj.listingId;
-  const imageUrl = getResizedImageUrl(imgObj.photoLink);
+  const imageUrl = getEffectiveImageUrl(imgObj.photoLink);
 
   return (
     <div
