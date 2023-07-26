@@ -89,7 +89,7 @@ export function parseHtmlInput(input) {
 
 export function parseHtmlAssetData(assetDataStr) {
     // first, split the string by lines
-    const htmlSplit = assetDataStr.split('\n')
+    return assetDataStr.split('\n')
     // filter empty strings
     .filter(i => i.length)
     // return first 7 metadata

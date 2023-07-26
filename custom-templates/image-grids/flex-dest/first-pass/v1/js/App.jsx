@@ -54,7 +54,6 @@ export default function App() {
           assetPrev.current = asset.previous;
           const assetDataStr = get(asset.data);
           const parsedAssetData = parseHtmlAssetData(assetDataStr);
-          console.log(parsedAssetData)
           const assetImagesStr = get(asset.metadata[0].metaValue);
           const parsedAssetImages = parseHtmlInput(assetImagesStr);
 

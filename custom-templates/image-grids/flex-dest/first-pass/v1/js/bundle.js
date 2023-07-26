@@ -7438,7 +7438,7 @@
 	}
 	function parseHtmlAssetData(assetDataStr) {
 	  // first, split the string by lines
-	  assetDataStr.split('\n')
+	  return assetDataStr.split('\n')
 	  // filter empty strings
 	  .filter(function (i) {
 	    return i.length;
@@ -8694,8 +8694,7 @@
 	        assetNext.current = asset.next;
 	        assetPrev.current = asset.previous;
 	        var assetDataStr = get(asset.data);
-	        var parsedAssetData = parseHtmlAssetData(assetDataStr);
-	        console.log(parsedAssetData);
+	        parseHtmlAssetData(assetDataStr);
 	        var assetImagesStr = get(asset.metadata[0].metaValue);
 	        var parsedAssetImages = parseHtmlInput(assetImagesStr);
 
