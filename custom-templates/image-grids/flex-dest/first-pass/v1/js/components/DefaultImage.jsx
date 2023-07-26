@@ -8,8 +8,8 @@ export default function DefaultImage({
   onClickImage,
 }) {
   let effectiveImgUrl = imgObj.imgSrc;
-  if (!imgObj.imageSrc.includes('/im/')) {
-    const originalUrl = new URL (imgObj.imgSrc);
+  if (imgObj.imageSrc && !imgObj.imageSrc.includes('/im/')) {
+    const originalUrl = encodeURIComponent(imgObj.imgSrc);
     effectiveImgUrl = `${originalUrl.hostname}/im/${originalUrl.pathname}`;
   }
   const imageUrl = getResizedImageUrl(effectiveImgUrl);

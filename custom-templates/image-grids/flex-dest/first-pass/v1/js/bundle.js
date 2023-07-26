@@ -7458,8 +7458,8 @@
 	    isSelected = _ref.isSelected,
 	    onClickImage = _ref.onClickImage;
 	  var effectiveImgUrl = imgObj.imgSrc;
-	  if (!imgObj.imageSrc.includes('/im/')) {
-	    var originalUrl = new URL(imgObj.imgSrc);
+	  if (imgObj.imageSrc && !imgObj.imageSrc.includes('/im/')) {
+	    var originalUrl = encodeURIComponent(imgObj.imgSrc);
 	    effectiveImgUrl = "".concat(originalUrl.hostname, "/im/").concat(originalUrl.pathname);
 	  }
 	  var imageUrl = getResizedImageUrl(effectiveImgUrl);
