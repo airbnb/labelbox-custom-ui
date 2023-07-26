@@ -7436,6 +7436,16 @@
 	    };
 	  });
 	}
+	function parseHtmlAssetData(assetDataStr) {
+	  // first, split the string by lines
+	  assetDataStr.split('\n')
+	  // filter empty strings
+	  .filter(function (i) {
+	    return i.length;
+	  })
+	  // return first 7 metadata
+	  .slice(0, 7);
+	}
 
 	// TODO: double check that im_w is okay too
 	function getResizedImageUrl(photoLink) {
