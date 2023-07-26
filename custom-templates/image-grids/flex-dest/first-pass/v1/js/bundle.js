@@ -7453,7 +7453,7 @@
 	    var originalUrl = new URL(photoLink);
 	    effectiveImgUrl = "".concat(originalUrl.origin, "/im").concat(originalUrl.pathname).concat(originalUrl.search);
 	  }
-	  return (_effectiveImgUrl = effectiveImgUrl) !== null && _effectiveImgUrl !== void 0 && _effectiveImgUrl.includes('?') ? "".concat(photoLink) : "".concat(photoLink, "?im_w=480");
+	  return (_effectiveImgUrl = effectiveImgUrl) !== null && _effectiveImgUrl !== void 0 && _effectiveImgUrl.includes('?') ? "".concat(effectiveImgUrl) : "".concat(effectiveImgUrl, "?im_w=480");
 	}
 
 	function DefaultImage(_ref) {

@@ -102,5 +102,5 @@ export function getEffectiveImageUrl(photoLink) {
     const originalUrl = new URL(photoLink);
     effectiveImgUrl = `${originalUrl.origin}/im${originalUrl.pathname}${originalUrl.search}`;
   }
-  return effectiveImgUrl?.includes('?') ? `${photoLink}` : `${photoLink}?im_w=480`;
+  return effectiveImgUrl?.includes('?') ? `${effectiveImgUrl}` : `${effectiveImgUrl}?im_w=480`;
 }
