@@ -7447,7 +7447,12 @@
 	    idx = _ref.idx,
 	    isSelected = _ref.isSelected,
 	    onClickImage = _ref.onClickImage;
-	  var imageUrl = getResizedImageUrl(imgObj.imageSrc);
+	  var effectiveImgUrl = imgObj.imgSrc;
+	  if (!imgObj.imageSrc.includes('/im/')) {
+	    var originalUrl = new URL(imgObj.imgSrc);
+	    effectiveImgUrl = "".concat(originalUrl.hostname, "/im/").concat(originalUrl.pathname);
+	  }
+	  var imageUrl = getResizedImageUrl(effectiveImgUrl);
 	  return /*#__PURE__*/React.createElement("div", {
 	    className: "image-container",
 	    onClick: function onClick() {
