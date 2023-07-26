@@ -7460,7 +7460,7 @@
 	  var effectiveImgUrl = imgObj.imageSrc;
 	  if (imgObj.imageSrc && !imgObj.imageSrc.includes('/im/')) {
 	    var originalUrl = new URL(imgObj.imageSrc);
-	    effectiveImgUrl = "".concat(originalUrl.hostname, "/im/").concat(originalUrl.pathname);
+	    effectiveImgUrl = "".concat(originalUrl.origin, "/im").concat(originalUrl.pathname);
 	  }
 	  var imageUrl = getResizedImageUrl(effectiveImgUrl);
 	  return /*#__PURE__*/React.createElement("div", {
