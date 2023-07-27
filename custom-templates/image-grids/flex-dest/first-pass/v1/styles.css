@@ -266,7 +266,7 @@ select:focus {
   width: calc(100% - 360px) !important;
 }
 
-.keyboard-shortcuts {
+.inline-list {
   padding: 10px 0; 
   margin-left: 20px;
 }

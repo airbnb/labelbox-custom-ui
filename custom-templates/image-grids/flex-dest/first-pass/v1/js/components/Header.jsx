@@ -52,16 +52,17 @@ export default function Header({
           keyboard_arrow_right
         </i>
       </div>
-      <div className="metadata-section">
+      <div className="inline-list">
           {listingInfo.map((info, idx) => {
             const [metadataKey, metadataValue] = info.split(':');
-            return (
-              <span key={idx} className="bold-text">{metadataKey}:{' '}{metadataValue}{' '}</span>
+            return (<>
+              <span key={idx} className="bold-text">{metadataKey}:</span><span>{' '}{metadataValue}{' '}</span>
+            </>
               )
             }
           )}
       </div>
-      <div className="keyboard-shortcuts">
+      <div className="inline-list">
         <span className="bold-text">Select Photo:</span> Arrows |{' '}
         <span className="bold-text">View Photo:</span> Space |{' '}
         <span className="bold-text">Close Photo:</span> Esc |{' '}
