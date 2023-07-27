@@ -7461,7 +7461,7 @@
 
 	  // retrieve pdp + google map links
 	  .slice(2, 4);
-	  linkStr.map(function (linkStr) {
+	  return linkStr.map(function (linkStr) {
 	    var linkNode = document.createElement('span');
 	    linkNode.innerHTML = linkStr;
 	    linkNode.firstChild.target = "_blank";

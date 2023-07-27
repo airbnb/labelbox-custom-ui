@@ -108,7 +108,7 @@ export function parseHtmlLinks(inputStr) {
     // retrieve pdp + google map links
     .slice(2, 4)
   
-    linkStr.map(linkStr => {
+    return linkStr.map(linkStr => {
       const linkNode = document.createElement('span');
       linkNode.innerHTML = linkStr;
       linkNode.firstChild.target = "_blank";
