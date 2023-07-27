@@ -8617,12 +8617,13 @@
 	    onClick: hasNext || !hasNext && hasLabel ? handleGoNext : undefined
 	  }, "keyboard_arrow_right")), /*#__PURE__*/React.createElement("div", {
 	    className: "metadata-section"
-	  }, listingInfo.map(function (info) {
+	  }, listingInfo.map(function (info, idx) {
 	    var _info$split = info.split(':'),
 	      _info$split2 = _slicedToArray(_info$split, 2),
 	      metadataKey = _info$split2[0],
 	      metadataValue = _info$split2[1];
 	    return /*#__PURE__*/React.createElement("span", {
+	      key: idx,
 	      className: "bold-text"
 	    }, metadataKey, ":", ' ', metadataValue, ' ');
 	  })), /*#__PURE__*/React.createElement("div", {

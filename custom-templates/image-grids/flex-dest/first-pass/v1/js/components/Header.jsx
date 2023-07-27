@@ -53,10 +53,10 @@ export default function Header({
         </i>
       </div>
       <div className="metadata-section">
-          {listingInfo.map(info => {
+          {listingInfo.map((info, idx) => {
             const [metadataKey, metadataValue] = info.split(':');
             return (
-              <span className="bold-text">{metadataKey}:{' '}{metadataValue}{' '}</span>
+              <span key={idx} className="bold-text">{metadataKey}:{' '}{metadataValue}{' '}</span>
               )
             }
           )}
