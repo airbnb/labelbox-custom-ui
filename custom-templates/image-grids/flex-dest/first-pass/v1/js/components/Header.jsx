@@ -4,6 +4,7 @@ export default function Header({
   currentAsset,
   hasPrev,
   hasNext,
+  listingInfo,
   projectId,
   hasLabel,
 }) {
@@ -50,6 +51,10 @@ export default function Header({
         >
           keyboard_arrow_right
         </i>
+      </div>
+      <div className="metadata-section">
+          {listingInfo.map(info => (<span>{info}</span>)
+          )}
       </div>
       <div className="keyboard-shortcuts">
         <span className="bold-text">Select Photo:</span> Arrows |{' '}

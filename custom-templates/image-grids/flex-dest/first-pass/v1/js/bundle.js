@@ -8583,6 +8583,7 @@
 	  var currentAsset = _ref.currentAsset,
 	    hasPrev = _ref.hasPrev,
 	    hasNext = _ref.hasNext,
+	    listingInfo = _ref.listingInfo,
 	    projectId = _ref.projectId,
 	    hasLabel = _ref.hasLabel;
 	  var handleGoHome = react.exports.useCallback(function () {
@@ -8615,6 +8616,10 @@
 	    className: "material-icons next-icon ".concat(hasNext || !hasNext && hasLabel ? 'button-default' : ''),
 	    onClick: hasNext || !hasNext && hasLabel ? handleGoNext : undefined
 	  }, "keyboard_arrow_right")), /*#__PURE__*/React.createElement("div", {
+	    className: "metadata-section"
+	  }, listingInfo.map(function (info) {
+	    return /*#__PURE__*/React.createElement("span", null, info);
+	  })), /*#__PURE__*/React.createElement("div", {
 	    className: "keyboard-shortcuts"
 	  }, /*#__PURE__*/React.createElement("span", {
 	    className: "bold-text"
@@ -8646,9 +8651,9 @@
 	    imageObjs = _useState6[0],
 	    setImageObjs = _useState6[1];
 	  var _useState7 = react.exports.useState([]),
-	    _useState8 = _slicedToArray(_useState7, 2);
-	    _useState8[0];
-	    var setListingInfo = _useState8[1];
+	    _useState8 = _slicedToArray(_useState7, 2),
+	    listingInfo = _useState8[0],
+	    setListingInfo = _useState8[1];
 	  var _useState9 = react.exports.useState(),
 	    _useState10 = _slicedToArray(_useState9, 2),
 	    selectedImageIdx = _useState10[0],
@@ -8759,6 +8764,7 @@
 	    className: "flex-grow flex-column"
 	  }, /*#__PURE__*/React.createElement(Header, {
 	    currentAsset: currentAsset,
+	    listingInfo: listingInfo,
 	    hasNext: !!(currentAsset !== null && currentAsset !== void 0 && currentAsset.next),
 	    hasPrev: !!(currentAsset !== null && currentAsset !== void 0 && currentAsset.previous),
 	    projectId: projectId,

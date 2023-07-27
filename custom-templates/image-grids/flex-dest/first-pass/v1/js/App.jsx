@@ -141,6 +141,7 @@ export default function App() {
       <div className="flex-grow flex-column">
         <Header
           currentAsset={currentAsset}
+          listingInfo={listingInfo}
           hasNext={!!currentAsset?.next}
           hasPrev={!!currentAsset?.previous}
           projectId={projectId}
