@@ -127,6 +127,7 @@ export default function App() {
     });
   }, [handleAssetChange]);
 
+  console.log('linkNodes', linkNodes)
   return (
     <>
       <div className="flex-column left-side-panel">
@@ -144,7 +145,7 @@ export default function App() {
         <Header
           currentAsset={currentAsset}
           listingInfo={listingInfo}
-          pdpAndGMaplinks={linkNodes}
+          pdpAndGMapLinkNodes={linkNodes}
           hasNext={!!currentAsset?.next}
           hasPrev={!!currentAsset?.previous}
           projectId={projectId}

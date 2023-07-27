@@ -8606,7 +8606,7 @@
 	    hasPrev = _ref.hasPrev,
 	    hasNext = _ref.hasNext,
 	    listingInfo = _ref.listingInfo,
-	    pdpAndGMaplinks = _ref.pdpAndGMaplinks,
+	    pdpAndGMapLinkNodes = _ref.pdpAndGMapLinkNodes,
 	    projectId = _ref.projectId,
 	    hasLabel = _ref.hasLabel;
 	  var handleGoHome = react.exports.useCallback(function () {
@@ -8665,7 +8665,7 @@
 	    }, metadataKey, ":"), /*#__PURE__*/React.createElement("span", {
 	      key: idx
 	    }, ' ', metadataValue, ' '));
-	  }), pdpAndGMaplinks.map(function (link) {
+	  }), pdpAndGMapLinkNodes.map(function (link) {
 	    return /*#__PURE__*/React.createElement(React.Fragment, null, link, ' ');
 	  })));
 	}
@@ -8792,6 +8792,7 @@
 	      handleAssetChange(asset);
 	    });
 	  }, [handleAssetChange]);
+	  console.log('linkNodes', linkNodes);
 	  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
 	    className: "flex-column left-side-panel"
 	  }, /*#__PURE__*/React.createElement(LeftPanel, {
@@ -8805,7 +8806,7 @@
 	  }, /*#__PURE__*/React.createElement(Header, {
 	    currentAsset: currentAsset,
 	    listingInfo: listingInfo,
-	    pdpAndGMaplinks: linkNodes,
+	    pdpAndGMapLinkNodes: linkNodes,
 	    hasNext: !!(currentAsset !== null && currentAsset !== void 0 && currentAsset.next),
 	    hasPrev: !!(currentAsset !== null && currentAsset !== void 0 && currentAsset.previous),
 	    projectId: projectId,

@@ -5,7 +5,7 @@ export default function Header({
   hasPrev,
   hasNext,
   listingInfo,
-  pdpAndGMaplinks,
+  pdpAndGMapLinkNodes,
   projectId,
   hasLabel,
 }) {
@@ -70,7 +70,7 @@ export default function Header({
               )
             }
           )}
-          {pdpAndGMaplinks.map(link => <>{link}{' '}</>)}
+          {pdpAndGMapLinkNodes.map(link => <>{link}{' '}</>)}
       </div>
     </>
   );
