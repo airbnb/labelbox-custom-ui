@@ -8617,17 +8617,6 @@
 	    onClick: hasNext || !hasNext && hasLabel ? handleGoNext : undefined
 	  }, "keyboard_arrow_right")), /*#__PURE__*/React.createElement("div", {
 	    className: "inline-list"
-	  }, listingInfo.map(function (info, idx) {
-	    var _info$split = info.split(':'),
-	      _info$split2 = _slicedToArray(_info$split, 2),
-	      metadataKey = _info$split2[0],
-	      metadataValue = _info$split2[1];
-	    return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("span", {
-	      key: idx,
-	      className: "bold-text"
-	    }, metadataKey, ":"), /*#__PURE__*/React.createElement("span", null, ' ', metadataValue, ' '));
-	  })), /*#__PURE__*/React.createElement("div", {
-	    className: "inline-list"
 	  }, /*#__PURE__*/React.createElement("span", {
 	    className: "bold-text"
 	  }, "Select Photo:"), " Arrows |", ' ', /*#__PURE__*/React.createElement("span", {
@@ -8640,7 +8629,18 @@
 	    className: "bold-text"
 	  }, "Submit:"), " Enter |", ' ', /*#__PURE__*/React.createElement("span", {
 	    className: "bold-text"
-	  }, "Skip:"), " s"));
+	  }, "Skip:"), " s"), /*#__PURE__*/React.createElement("div", {
+	    className: "inline-list"
+	  }, listingInfo.map(function (info, idx) {
+	    var _info$split = info.split(':'),
+	      _info$split2 = _slicedToArray(_info$split, 2),
+	      metadataKey = _info$split2[0],
+	      metadataValue = _info$split2[1];
+	    return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("span", {
+	      key: idx,
+	      className: "bold-text"
+	    }, metadataKey, ":"), /*#__PURE__*/React.createElement("span", null, ' ', metadataValue, ' '));
+	  })));
 	}
 
 	function App() {
