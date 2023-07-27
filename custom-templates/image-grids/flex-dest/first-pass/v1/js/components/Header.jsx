@@ -64,10 +64,12 @@ export default function Header({
       <div className="inline-list">
           {listingInfo.map((info, idx) => {
             const [metadataKey, metadataValue] = info.split(':');
-            return (<>
-              <span key={metadataKey} className="bold-text">{metadataKey}:</span><span key={metadataValue}>{' '}{metadataValue}{' '}</span>
-            </>
-              )
+            return (
+              <React.Fragment key={metadataKey}>
+                <span className="bold-text">{metadataKey}:</span>
+                <span>{' '}{metadataValue}{' '}</span>
+              </React.Fragment>
+              );
             }
           )}
           {pdpAndGMapLinkNodes.map(link => <React.Fragment key={link.href}>{link}{' '}</React.Fragment>)}

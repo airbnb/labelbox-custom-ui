@@ -14962,12 +14962,11 @@
 	      _info$split2 = _slicedToArray$1(_info$split, 2),
 	      metadataKey = _info$split2[0],
 	      metadataValue = _info$split2[1];
-	    return /*#__PURE__*/React$2.createElement(React$2.Fragment, null, /*#__PURE__*/React$2.createElement("span", {
-	      key: metadataKey,
+	    return /*#__PURE__*/React$2.createElement(React$2.Fragment, {
+	      key: metadataKey
+	    }, /*#__PURE__*/React$2.createElement("span", {
 	      className: "bold-text"
-	    }, metadataKey, ":"), /*#__PURE__*/React$2.createElement("span", {
-	      key: metadataValue
-	    }, ' ', metadataValue, ' '));
+	    }, metadataKey, ":"), /*#__PURE__*/React$2.createElement("span", null, ' ', metadataValue, ' '));
 	  }), pdpAndGMapLinkNodes.map(function (link) {
 	    return /*#__PURE__*/React$2.createElement(React$2.Fragment, {
 	      key: link.href
