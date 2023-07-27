@@ -70,7 +70,7 @@ export default function Header({
               )
             }
           )}
-          {pdpAndGMaplinks.map(linkStr => <div key={linkStr} dangerouslySetInnerHTML={{ __html: linkStr }} />)}
+          {pdpAndGMaplinks.map(linkStr => <span key={linkStr} dangerouslySetInnerHTML={{ __html: linkStr }} />)}
       </div>
     </>
   );
