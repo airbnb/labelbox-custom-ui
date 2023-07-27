@@ -70,7 +70,7 @@ export default function Header({
               )
             }
           )}
-          {pdpAndGMapLinkNodes.map(link => <>{link}{' '}</>)}
+          {pdpAndGMapLinkNodes.map(link => <React.Fragment key={link.href}>{link}{' '}</React.Fragment>)}
       </div>
     </>
   );

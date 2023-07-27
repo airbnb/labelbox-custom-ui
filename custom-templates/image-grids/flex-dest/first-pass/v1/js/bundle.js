@@ -14969,7 +14969,9 @@
 	      key: metadataValue
 	    }, ' ', metadataValue, ' '));
 	  }), pdpAndGMapLinkNodes.map(function (link) {
-	    return /*#__PURE__*/React$2.createElement(React$2.Fragment, null, link, ' ');
+	    return /*#__PURE__*/React$2.createElement(React$2.Fragment, {
+	      key: link.href
+	    }, link, ' ');
 	  })));
 	}
 
