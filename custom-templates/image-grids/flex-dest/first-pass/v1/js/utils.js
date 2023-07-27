@@ -1,3 +1,5 @@
+import parse from 'html-react-parser';
+
 export function get(url) {
   var Httpreq = new XMLHttpRequest();
   Httpreq.open('GET', url, false);
@@ -109,10 +111,10 @@ export function parseHtmlLinks(inputStr) {
     .slice(2, 4)
   
     return linkStr.map(linkStr => {
-      const linkNode = document.createElement('span');
-      linkNode.innerHTML = linkStr;
-      linkNode.firstChild.target = "_blank";
-      return linkNode;
+      const linkNode = parse(linkStr);
+      linkNode.target = "_blank";
+      const linkComponent = React.createElement(linkNode);
+      return linkComponent;
     })
 
 }
