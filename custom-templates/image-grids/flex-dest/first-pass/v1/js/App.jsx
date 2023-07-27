@@ -57,7 +57,6 @@ export default function App() {
           const parsedAssetData = parseHtmlAssetData(assetDataStr);
           const assetImagesStr = get(asset.metadata[0].metaValue);
           const links = parseHtmlLinks(assetImagesStr);
-          console.log(links)
           const parsedAssetImages = parseHtmlInput(assetImagesStr);
 
           // Full match will be first element, listing ID will be second

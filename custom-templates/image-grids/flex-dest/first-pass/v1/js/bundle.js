@@ -8728,8 +8728,7 @@
 	        var assetDataStr = get(asset.data);
 	        var parsedAssetData = parseHtmlAssetData(assetDataStr);
 	        var assetImagesStr = get(asset.metadata[0].metaValue);
-	        var links = parseHtmlLinks(assetImagesStr);
-	        console.log(links);
+	        parseHtmlLinks(assetImagesStr);
 	        var parsedAssetImages = parseHtmlInput(assetImagesStr);
 
 	        // Full match will be first element, listing ID will be second
