@@ -13766,8 +13766,9 @@
 	  .slice(2, 4);
 	  return linkStr.map(function (linkStr) {
 	    var linkNode = htmlReactParser(linkStr);
-	    linkNode.target = "_blank";
-	    var linkComponent = React.createElement(linkNode);
+	    var linkComponent = React.createElement(linkNode, {
+	      target: '_blank'
+	    });
 	    return linkComponent;
 	  });
 	}

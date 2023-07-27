@@ -112,8 +112,7 @@ export function parseHtmlLinks(inputStr) {
   
     return linkStr.map(linkStr => {
       const linkNode = parse(linkStr);
-      linkNode.target = "_blank";
-      const linkComponent = React.createElement(linkNode);
+      const linkComponent = React.createElement(linkNode, { target: '_blank' });
       return linkComponent;
     })
 
