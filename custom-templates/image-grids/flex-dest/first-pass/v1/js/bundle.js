@@ -14957,7 +14957,7 @@
 	    className: "bold-text"
 	  }, "Skip:"), " s"), /*#__PURE__*/React$2.createElement("div", {
 	    className: "inline-list"
-	  }, listingInfo.map(function (info, idx) {
+	  }, listingInfo.map(function (info) {
 	    var _info$split = info.split(':'),
 	      _info$split2 = _slicedToArray$1(_info$split, 2),
 	      metadataKey = _info$split2[0],

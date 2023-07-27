@@ -62,7 +62,7 @@ export default function Header({
         <span className="bold-text">Skip:</span> s
       </div>
       <div className="inline-list">
-          {listingInfo.map((info, idx) => {
+          {listingInfo.map((info) => {
             const [metadataKey, metadataValue] = info.split(':');
             return (
               <React.Fragment key={metadataKey}>
