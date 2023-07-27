@@ -14963,10 +14963,10 @@
 	      metadataKey = _info$split2[0],
 	      metadataValue = _info$split2[1];
 	    return /*#__PURE__*/React$2.createElement(React$2.Fragment, null, /*#__PURE__*/React$2.createElement("span", {
-	      key: idx,
+	      key: metadataKey,
 	      className: "bold-text"
 	    }, metadataKey, ":"), /*#__PURE__*/React$2.createElement("span", {
-	      key: idx
+	      key: metadataValue
 	    }, ' ', metadataValue, ' '));
 	  }), pdpAndGMapLinkNodes.map(function (link) {
 	    return /*#__PURE__*/React$2.createElement(React$2.Fragment, null, link, ' ');
@@ -15095,7 +15095,6 @@
 	      handleAssetChange(asset);
 	    });
 	  }, [handleAssetChange]);
-	  console.log('linkNodes', linkNodes);
 	  return /*#__PURE__*/React$2.createElement(React$2.Fragment, null, /*#__PURE__*/React$2.createElement("div", {
 	    className: "flex-column left-side-panel"
 	  }, /*#__PURE__*/React$2.createElement(LeftPanel, {

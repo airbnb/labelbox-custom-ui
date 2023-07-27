@@ -65,7 +65,7 @@ export default function Header({
           {listingInfo.map((info, idx) => {
             const [metadataKey, metadataValue] = info.split(':');
             return (<>
-              <span key={idx} className="bold-text">{metadataKey}:</span><span key={idx}>{' '}{metadataValue}{' '}</span>
+              <span key={metadataKey} className="bold-text">{metadataKey}:</span><span key={metadataValue}>{' '}{metadataValue}{' '}</span>
             </>
               )
             }
