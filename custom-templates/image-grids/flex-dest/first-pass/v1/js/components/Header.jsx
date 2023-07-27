@@ -65,12 +65,12 @@ export default function Header({
           {listingInfo.map((info, idx) => {
             const [metadataKey, metadataValue] = info.split(':');
             return (<>
-              <span key={idx} className="bold-text">{metadataKey}:</span><span>{' '}{metadataValue}{' '}</span>
+              <span key={idx} className="bold-text">{metadataKey}:</span><span key={idx}>{' '}{metadataValue}{' '}</span>
             </>
               )
             }
           )}
-          {pdpAndGMaplinks.map(linkStr => <div dangerouslySetInnerHTML={{ __html: linkStr }} />)}
+          {pdpAndGMaplinks.map(linkStr => <div key={linkStr} dangerouslySetInnerHTML={{ __html: linkStr }} />)}
       </div>
     </>
   );

@@ -8656,9 +8656,12 @@
 	    return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("span", {
 	      key: idx,
 	      className: "bold-text"
-	    }, metadataKey, ":"), /*#__PURE__*/React.createElement("span", null, ' ', metadataValue, ' '));
+	    }, metadataKey, ":"), /*#__PURE__*/React.createElement("span", {
+	      key: idx
+	    }, ' ', metadataValue, ' '));
 	  }), pdpAndGMaplinks.map(function (linkStr) {
 	    return /*#__PURE__*/React.createElement("div", {
+	      key: linkStr,
 	      dangerouslySetInnerHTML: {
 	        __html: linkStr
 	      }
