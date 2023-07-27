@@ -12,7 +12,7 @@ export default function App() {
   const [currentAsset, setCurrentAsset] = useState();
   const [imageObjs, setImageObjs] = useState([]);
   const [listingInfo, setListingInfo] = useState([]);
-  const [links, setLinks] = useState([]);
+  const [linkNodes, setLinkNodes] = useState([]);
   const [selectedImageIdx, setSelectedImageIdx] = useState();
   const [selectedPhotoId, setSelectedPhotoId] = useState();
   const [labeledPhotoId, setLabeledPhotoId] = useState();
@@ -70,7 +70,7 @@ export default function App() {
           // default to first image
           setSelectedImageIdx(0);
           setSelectedPhotoId(parsedAssetImages[0].photoId);
-          setLinks(pdpAndGMapLinks);
+          setLinkNodes(pdpAndGMapLinks);
           setCurrentAsset(asset);
           setImageObjs(parsedAssetImages);
           setListingInfo(parsedAssetData);
@@ -144,7 +144,7 @@ export default function App() {
         <Header
           currentAsset={currentAsset}
           listingInfo={listingInfo}
-          pdpAndGMaplinks={links}
+          pdpAndGMaplinks={linkNodes}
           hasNext={!!currentAsset?.next}
           hasPrev={!!currentAsset?.previous}
           projectId={projectId}

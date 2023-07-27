@@ -100,13 +100,21 @@ export function parseHtmlLinks(inputStr) {
     // first, split the string by lines
     const htmlSplit = inputStr.split('\n');
     // remove <br> tags
-   return htmlSplit.map((str) => str.replace(/<br>/g, ' '))
+   const linkStr = htmlSplit.map((str) => str.replace(/<br>/g, ' '))
 
     // remove whitespace at the ends of the lines
     .map((str) => str.trim())
 
     // retrieve pdp + google map links
     .slice(2, 4)
+  
+    linkStr.map(linkStr => {
+      const linkNode = document.createElement('span');
+      linkNode.innerHTML = linkStr;
+      linkNode.firstChild.target = "_blank";
+      return linkNode;
+    })
+
 }
 
 export function getEffectiveImageUrl(photoLink) {

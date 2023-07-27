@@ -7450,7 +7450,7 @@
 	  // first, split the string by lines
 	  var htmlSplit = inputStr.split('\n');
 	  // remove <br> tags
-	  return htmlSplit.map(function (str) {
+	  var linkStr = htmlSplit.map(function (str) {
 	    return str.replace(/<br>/g, ' ');
 	  })
 
@@ -7461,6 +7461,12 @@
 
 	  // retrieve pdp + google map links
 	  .slice(2, 4);
+	  linkStr.map(function (linkStr) {
+	    var linkNode = document.createElement('span');
+	    linkNode.innerHTML = linkStr;
+	    linkNode.firstChild.target = "_blank";
+	    return linkNode;
+	  });
 	}
 	function getEffectiveImageUrl(photoLink) {
 	  var _effectiveImgUrl;
@@ -8659,13 +8665,8 @@
 	    }, metadataKey, ":"), /*#__PURE__*/React.createElement("span", {
 	      key: idx
 	    }, ' ', metadataValue, ' '));
-	  }), pdpAndGMaplinks.map(function (linkStr) {
-	    return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("span", {
-	      key: linkStr,
-	      dangerouslySetInnerHTML: {
-	        __html: linkStr
-	      }
-	    }), ' ');
+	  }), pdpAndGMaplinks.map(function (link) {
+	    return /*#__PURE__*/React.createElement(React.Fragment, null, link, ' ');
 	  })));
 	}
 
@@ -8689,8 +8690,8 @@
 	    setListingInfo = _useState8[1];
 	  var _useState9 = react.exports.useState([]),
 	    _useState10 = _slicedToArray(_useState9, 2),
-	    links = _useState10[0],
-	    setLinks = _useState10[1];
+	    linkNodes = _useState10[0],
+	    setLinkNodes = _useState10[1];
 	  var _useState11 = react.exports.useState(),
 	    _useState12 = _slicedToArray(_useState11, 2),
 	    selectedImageIdx = _useState12[0],
@@ -8751,7 +8752,7 @@
 	        // default to first image
 	        setSelectedImageIdx(0);
 	        setSelectedPhotoId(parsedAssetImages[0].photoId);
-	        setLinks(pdpAndGMapLinks);
+	        setLinkNodes(pdpAndGMapLinks);
 	        setCurrentAsset(asset);
 	        setImageObjs(parsedAssetImages);
 	        setListingInfo(parsedAssetData);
@@ -8804,7 +8805,7 @@
 	  }, /*#__PURE__*/React.createElement(Header, {
 	    currentAsset: currentAsset,
 	    listingInfo: listingInfo,
-	    pdpAndGMaplinks: links,
+	    pdpAndGMaplinks: linkNodes,
 	    hasNext: !!(currentAsset !== null && currentAsset !== void 0 && currentAsset.next),
 	    hasPrev: !!(currentAsset !== null && currentAsset !== void 0 && currentAsset.previous),
 	    projectId: projectId,
