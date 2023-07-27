@@ -112,9 +112,8 @@ export function parseHtmlLinks(inputStr) {
     .slice(2, 4)
   
     return linkStr.map(linkStr => {
-      const linkNode = parse(linkStr);
-      const linkComponent = React.createElement(linkNode, { target: '_blank' });
-      return linkComponent;
+      const linkComponent = parse(linkStr);
+      return React.cloneElement(linkComponent, { target: '_blank' });
     })
 
 }

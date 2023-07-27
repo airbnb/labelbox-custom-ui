@@ -13765,11 +13765,10 @@
 	  // retrieve pdp + google map links
 	  .slice(2, 4);
 	  return linkStr.map(function (linkStr) {
-	    var linkNode = htmlReactParser(linkStr);
-	    var linkComponent = /*#__PURE__*/React$2.createElement(linkNode, {
+	    var linkComponent = htmlReactParser(linkStr);
+	    return /*#__PURE__*/React$2.cloneElement(linkComponent, {
 	      target: '_blank'
 	    });
-	    return linkComponent;
 	  });
 	}
 	function getEffectiveImageUrl(photoLink) {
