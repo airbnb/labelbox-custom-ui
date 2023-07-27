@@ -53,7 +53,12 @@ export default function Header({
         </i>
       </div>
       <div className="metadata-section">
-          {listingInfo.map(info => (<span>{info}</span>)
+          {listingInfo.map(info => {
+            const [metadataKey, metadataValue] = info.split(':');
+            return (
+              <span className="bold-text">{metadataKey}:{' '}{metadataValue}{' '}</span>
+              )
+            }
           )}
       </div>
       <div className="keyboard-shortcuts">
