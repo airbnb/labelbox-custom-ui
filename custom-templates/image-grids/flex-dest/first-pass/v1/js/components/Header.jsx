@@ -5,6 +5,7 @@ export default function Header({
   hasPrev,
   hasNext,
   listingInfo,
+  pdpAndGMaplinks,
   projectId,
   hasLabel,
 }) {
@@ -69,6 +70,7 @@ export default function Header({
               )
             }
           )}
+          {pdpAndGMaplinks.map(linkStr => <div dangerouslySetInnerHTML={{ __html: linkStr }} />)}
       </div>
     </>
   );

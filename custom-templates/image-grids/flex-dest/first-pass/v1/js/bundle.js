@@ -8600,6 +8600,7 @@
 	    hasPrev = _ref.hasPrev,
 	    hasNext = _ref.hasNext,
 	    listingInfo = _ref.listingInfo,
+	    pdpAndGMaplinks = _ref.pdpAndGMaplinks,
 	    projectId = _ref.projectId,
 	    hasLabel = _ref.hasLabel;
 	  var handleGoHome = react.exports.useCallback(function () {
@@ -8656,6 +8657,12 @@
 	      key: idx,
 	      className: "bold-text"
 	    }, metadataKey, ":"), /*#__PURE__*/React.createElement("span", null, ' ', metadataValue, ' '));
+	  }), pdpAndGMaplinks.map(function (linkStr) {
+	    return /*#__PURE__*/React.createElement("div", {
+	      dangerouslySetInnerHTML: {
+	        __html: linkStr
+	      }
+	    });
 	  })));
 	}
 
@@ -8789,6 +8796,7 @@
 	  }, /*#__PURE__*/React.createElement(Header, {
 	    currentAsset: currentAsset,
 	    listingInfo: listingInfo,
+	    pdpAndGMaplinks: pdpAndGMaplinks,
 	    hasNext: !!(currentAsset !== null && currentAsset !== void 0 && currentAsset.next),
 	    hasPrev: !!(currentAsset !== null && currentAsset !== void 0 && currentAsset.previous),
 	    projectId: projectId,

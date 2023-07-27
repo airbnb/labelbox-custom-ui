@@ -56,7 +56,7 @@ export default function App() {
           const assetDataStr = get(asset.data);
           const parsedAssetData = parseHtmlAssetData(assetDataStr);
           const assetImagesStr = get(asset.metadata[0].metaValue);
-          const links = parseHtmlLinks(assetImagesStr);
+          const pdpAndGMaplinks = parseHtmlLinks(assetImagesStr);
           const parsedAssetImages = parseHtmlInput(assetImagesStr);
 
           // Full match will be first element, listing ID will be second
@@ -143,6 +143,7 @@ export default function App() {
         <Header
           currentAsset={currentAsset}
           listingInfo={listingInfo}
+          pdpAndGMaplinks={pdpAndGMaplinks}
           hasNext={!!currentAsset?.next}
           hasPrev={!!currentAsset?.previous}
           projectId={projectId}
