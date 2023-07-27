@@ -8660,12 +8660,12 @@
 	      key: idx
 	    }, ' ', metadataValue, ' '));
 	  }), pdpAndGMaplinks.map(function (linkStr) {
-	    return /*#__PURE__*/React.createElement("span", {
+	    return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("span", {
 	      key: linkStr,
 	      dangerouslySetInnerHTML: {
 	        __html: linkStr
 	      }
-	    });
+	    }), ' ');
 	  })));
 	}
 
