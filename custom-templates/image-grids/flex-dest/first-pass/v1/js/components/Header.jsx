@@ -65,14 +65,14 @@ export default function Header({
           {listingInfo.map((info) => {
             const [metadataKey, metadataValue] = info.split(':');
             return (
-              <React.Fragment key={metadataKey}>
+              <div key={metadataKey}>
                 <span className="bold-text">{metadataKey}:</span>
                 <span>{' '}{metadataValue}{' '}</span>
-              </React.Fragment>
+              </div>
               );
             }
           )}
-          {pdpAndGMapLinkNodes.map(link => <React.Fragment key={link.href}>{link}{' '}</React.Fragment>)}
+          {pdpAndGMapLinkNodes.map(link => <div key={link.href}>{link}{' '}</div>)}
       </div>
     </>
   );
