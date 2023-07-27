@@ -7446,9 +7446,9 @@
 	  // return first 7 metadata
 	  .slice(0, 7);
 	}
-	function parseHtmlLinks(str) {
+	function parseHtmlLinks(inputStr) {
 	  // first, split the string by lines
-	  var htmlSplit = assetDataStr.split('\n');
+	  var htmlSplit = inputStr.split('\n');
 	  // remove <br> tags
 	  return htmlSplit.map(function (str) {
 	    return str.replace(/<br>/g, ' ');
@@ -8728,7 +8728,7 @@
 	        var assetDataStr = get(asset.data);
 	        var parsedAssetData = parseHtmlAssetData(assetDataStr);
 	        var assetImagesStr = get(asset.metadata[0].metaValue);
-	        var links = parseHtmlLinks();
+	        var links = parseHtmlLinks(assetImagesStr);
 	        console.log(links);
 	        var parsedAssetImages = parseHtmlInput(assetImagesStr);
 

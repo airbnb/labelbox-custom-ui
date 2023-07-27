@@ -96,9 +96,9 @@ export function parseHtmlAssetData(assetDataStr) {
     .slice(0, 7);
 }
 
-export function parseHtmlLinks(str) {
+export function parseHtmlLinks(inputStr) {
     // first, split the string by lines
-    const htmlSplit = assetDataStr.split('\n');
+    const htmlSplit = inputStr.split('\n');
     // remove <br> tags
    return htmlSplit.map((str) => str.replace(/<br>/g, ' '))
 
