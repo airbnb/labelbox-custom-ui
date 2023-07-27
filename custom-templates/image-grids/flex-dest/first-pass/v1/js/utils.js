@@ -96,6 +96,19 @@ export function parseHtmlAssetData(assetDataStr) {
     .slice(0, 7);
 }
 
+export function parseHtmlLinks(str) {
+    // first, split the string by lines
+    const htmlSplit = assetDataStr.split('\n');
+    // remove <br> tags
+   return htmlSplit.map((str) => str.replace(/<br>/g, ' '))
+
+    // remove whitespace at the ends of the lines
+    .map((str) => str.trim())
+
+    // retrieve pdp + google map links
+    .slice(2, 4)
+}
+
 export function getEffectiveImageUrl(photoLink) {
   let effectiveImgUrl = photoLink;
   if (!photoLink.includes('/im/')) {

@@ -7446,6 +7446,22 @@
 	  // return first 7 metadata
 	  .slice(0, 7);
 	}
+	function parseHtmlLinks(str) {
+	  // first, split the string by lines
+	  var htmlSplit = assetDataStr.split('\n');
+	  // remove <br> tags
+	  return htmlSplit.map(function (str) {
+	    return str.replace(/<br>/g, ' ');
+	  })
+
+	  // remove whitespace at the ends of the lines
+	  .map(function (str) {
+	    return str.trim();
+	  })
+
+	  // retrieve pdp + google map links
+	  .slice(2, 4);
+	}
 	function getEffectiveImageUrl(photoLink) {
 	  var _effectiveImgUrl;
 	  var effectiveImgUrl = photoLink;
@@ -8712,6 +8728,8 @@
 	        var assetDataStr = get(asset.data);
 	        var parsedAssetData = parseHtmlAssetData(assetDataStr);
 	        var assetImagesStr = get(asset.metadata[0].metaValue);
+	        var links = parseHtmlLinks();
+	        console.log(links);
 	        var parsedAssetImages = parseHtmlInput(assetImagesStr);
 
 	        // Full match will be first element, listing ID will be second
