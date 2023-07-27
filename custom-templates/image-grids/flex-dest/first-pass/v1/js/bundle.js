@@ -8687,32 +8687,36 @@
 	    _useState8 = _slicedToArray(_useState7, 2),
 	    listingInfo = _useState8[0],
 	    setListingInfo = _useState8[1];
-	  var _useState9 = react.exports.useState(),
+	  var _useState9 = react.exports.useState([]),
 	    _useState10 = _slicedToArray(_useState9, 2),
-	    selectedImageIdx = _useState10[0],
-	    setSelectedImageIdx = _useState10[1];
+	    links = _useState10[0],
+	    setLinks = _useState10[1];
 	  var _useState11 = react.exports.useState(),
 	    _useState12 = _slicedToArray(_useState11, 2),
-	    selectedPhotoId = _useState12[0],
-	    setSelectedPhotoId = _useState12[1];
+	    selectedImageIdx = _useState12[0],
+	    setSelectedImageIdx = _useState12[1];
 	  var _useState13 = react.exports.useState(),
 	    _useState14 = _slicedToArray(_useState13, 2),
-	    labeledPhotoId = _useState14[0],
-	    setLabeledPhotoId = _useState14[1];
+	    selectedPhotoId = _useState14[0],
+	    setSelectedPhotoId = _useState14[1];
 	  var _useState15 = react.exports.useState(),
 	    _useState16 = _slicedToArray(_useState15, 2),
-	    labeledPhotoQualityTier = _useState16[0],
-	    setLabeledPhotoQualityTier = _useState16[1];
+	    labeledPhotoId = _useState16[0],
+	    setLabeledPhotoId = _useState16[1];
+	  var _useState17 = react.exports.useState(),
+	    _useState18 = _slicedToArray(_useState17, 2),
+	    labeledPhotoQualityTier = _useState18[0],
+	    setLabeledPhotoQualityTier = _useState18[1];
 	  var assetNext = react.exports.useRef();
 	  var assetPrev = react.exports.useRef();
-	  var _useState17 = react.exports.useState(true),
-	    _useState18 = _slicedToArray(_useState17, 2),
-	    isLoading = _useState18[0],
-	    setIsLoading = _useState18[1];
 	  var _useState19 = react.exports.useState(true),
 	    _useState20 = _slicedToArray(_useState19, 2),
-	    shouldAllowImageSelection = _useState20[0],
-	    setShouldAllowImageSelection = _useState20[1];
+	    isLoading = _useState20[0],
+	    setIsLoading = _useState20[1];
+	  var _useState21 = react.exports.useState(true),
+	    _useState22 = _slicedToArray(_useState21, 2),
+	    shouldAllowImageSelection = _useState22[0],
+	    setShouldAllowImageSelection = _useState22[1];
 	  var resetState = function resetState() {
 	    setLabeledPhotoId();
 	    setLabeledPhotoQualityTier();
@@ -8747,6 +8751,7 @@
 	        // default to first image
 	        setSelectedImageIdx(0);
 	        setSelectedPhotoId(parsedAssetImages[0].photoId);
+	        setLinks(pdpAndGMapLinks);
 	        setCurrentAsset(asset);
 	        setImageObjs(parsedAssetImages);
 	        setListingInfo(parsedAssetData);
@@ -8799,7 +8804,7 @@
 	  }, /*#__PURE__*/React.createElement(Header, {
 	    currentAsset: currentAsset,
 	    listingInfo: listingInfo,
-	    pdpAndGMaplinks: pdpAndGMaplinks,
+	    pdpAndGMaplinks: links,
 	    hasNext: !!(currentAsset !== null && currentAsset !== void 0 && currentAsset.next),
 	    hasPrev: !!(currentAsset !== null && currentAsset !== void 0 && currentAsset.previous),
 	    projectId: projectId,
