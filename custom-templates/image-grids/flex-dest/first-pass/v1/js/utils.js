@@ -1,4 +1,5 @@
 import parse from 'html-react-parser';
+import React from 'react';
 
 export function get(url) {
   var Httpreq = new XMLHttpRequest();

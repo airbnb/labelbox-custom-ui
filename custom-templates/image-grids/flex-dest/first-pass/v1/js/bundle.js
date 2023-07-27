@@ -2128,7 +2128,7 @@
 	  react.exports = react_development;
 	}
 
-	var React$3 = react.exports;
+	var React$2 = react.exports;
 
 	var reactDom = {exports: {}};
 
@@ -13272,7 +13272,7 @@
 	exports["default"] = StyleToJS;
 	}(cjs));
 
-	var React$2 = react.exports;
+	var React$1 = react.exports;
 	var styleToJS = cjs.default;
 
 	/**
@@ -13363,7 +13363,7 @@
 	 * @constant {boolean}
 	 * @see {@link https://reactjs.org/blog/2017/09/08/dom-attributes-in-react-16.html}
 	 */
-	var PRESERVE_CUSTOM_ATTRIBUTES = React$2.version.split('.')[0] >= 16;
+	var PRESERVE_CUSTOM_ATTRIBUTES = React$1.version.split('.')[0] >= 16;
 
 	// Taken from
 	// https://github.com/facebook/react/blob/cae635054e17a6f107a39d328649137b83f25972/packages/react-dom/src/client/validateDOMNesting.js#L213
@@ -13473,7 +13473,7 @@
 	  return reactProperty.possibleStandardNames[attributeName];
 	}
 
-	var React$1 = react.exports;
+	var React = react.exports;
 	var attributesToProps$1 = attributesToProps$2;
 	var utilities = utilities$2;
 	var setStyleProp = utilities.setStyleProp;
@@ -13491,7 +13491,7 @@
 	 */
 	function domToReact$1(nodes, options) {
 	  options = options || {};
-	  var library = options.library || React$1;
+	  var library = options.library || React;
 	  var cloneElement = library.cloneElement;
 	  var createElement = library.createElement;
 	  var isValidElement = library.isValidElement;
@@ -13766,7 +13766,7 @@
 	  .slice(2, 4);
 	  return linkStr.map(function (linkStr) {
 	    var linkNode = htmlReactParser(linkStr);
-	    var linkComponent = React.createElement(linkNode, {
+	    var linkComponent = /*#__PURE__*/React$2.createElement(linkNode, {
 	      target: '_blank'
 	    });
 	    return linkComponent;
@@ -13788,16 +13788,16 @@
 	    isSelected = _ref.isSelected,
 	    onClickImage = _ref.onClickImage;
 	  var imageUrl = getEffectiveImageUrl(imgObj.imageSrc);
-	  return /*#__PURE__*/React$3.createElement("div", {
+	  return /*#__PURE__*/React$2.createElement("div", {
 	    className: "image-container",
 	    onClick: function onClick() {
 	      return onClickImage(idx);
 	    },
 	    id: "image-container-".concat(imgObj.photoId)
-	  }, /*#__PURE__*/React$3.createElement("img", {
+	  }, /*#__PURE__*/React$2.createElement("img", {
 	    src: imageUrl,
 	    className: "default-image ".concat(isSelected ? 'image-selected' : '')
-	  }), /*#__PURE__*/React$3.createElement("span", null, imgObj.caption));
+	  }), /*#__PURE__*/React$2.createElement("span", null, imgObj.caption));
 	}
 
 	function _typeof$2(obj) {
@@ -13943,86 +13943,86 @@
 	  Icons from https://material.io/icons/
 	*/
 	var ZoomInIcon = function ZoomInIcon() {
-	  return /*#__PURE__*/React$3.createElement("svg", {
+	  return /*#__PURE__*/React$2.createElement("svg", {
 	    fill: "#ffffff",
 	    height: "24",
 	    viewBox: "0 0 24 24",
 	    width: "24",
 	    xmlns: "http://www.w3.org/2000/svg"
-	  }, /*#__PURE__*/React$3.createElement("path", {
+	  }, /*#__PURE__*/React$2.createElement("path", {
 	    d: "M0 0h24v24H0z",
 	    fill: "none"
-	  }), /*#__PURE__*/React$3.createElement("path", {
+	  }), /*#__PURE__*/React$2.createElement("path", {
 	    d: "M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"
 	  }));
 	};
 	var ZoomOutIcon = function ZoomOutIcon() {
-	  return /*#__PURE__*/React$3.createElement("svg", {
+	  return /*#__PURE__*/React$2.createElement("svg", {
 	    fill: "#ffffff",
 	    height: "24",
 	    viewBox: "0 0 24 24",
 	    width: "24",
 	    xmlns: "http://www.w3.org/2000/svg"
-	  }, /*#__PURE__*/React$3.createElement("path", {
+	  }, /*#__PURE__*/React$2.createElement("path", {
 	    d: "M0 0h24v24H0z",
 	    fill: "none"
-	  }), /*#__PURE__*/React$3.createElement("path", {
+	  }), /*#__PURE__*/React$2.createElement("path", {
 	    d: "M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"
 	  }));
 	};
 	var DownloadIcon = function DownloadIcon() {
-	  return /*#__PURE__*/React$3.createElement("svg", {
+	  return /*#__PURE__*/React$2.createElement("svg", {
 	    fill: "#ffffff",
 	    height: "24",
 	    viewBox: "0 0 24 24",
 	    width: "24",
 	    xmlns: "http://www.w3.org/2000/svg"
-	  }, /*#__PURE__*/React$3.createElement("path", {
+	  }, /*#__PURE__*/React$2.createElement("path", {
 	    d: "M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"
-	  }), /*#__PURE__*/React$3.createElement("path", {
+	  }), /*#__PURE__*/React$2.createElement("path", {
 	    d: "M0 0h24v24H0z",
 	    fill: "none"
 	  }));
 	};
 	var CloseIcon = function CloseIcon() {
-	  return /*#__PURE__*/React$3.createElement("svg", {
+	  return /*#__PURE__*/React$2.createElement("svg", {
 	    fill: "#ffffff",
 	    height: "24",
 	    viewBox: "0 0 24 24",
 	    width: "24",
 	    xmlns: "http://www.w3.org/2000/svg"
-	  }, /*#__PURE__*/React$3.createElement("path", {
+	  }, /*#__PURE__*/React$2.createElement("path", {
 	    d: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-	  }), /*#__PURE__*/React$3.createElement("path", {
+	  }), /*#__PURE__*/React$2.createElement("path", {
 	    d: "M0 0h24v24H0z",
 	    fill: "none"
 	  }));
 	};
 	var SpinnerIcon = function SpinnerIcon() {
-	  return /*#__PURE__*/React$3.createElement("svg", {
+	  return /*#__PURE__*/React$2.createElement("svg", {
 	    fill: "#ffffff",
 	    height: "48",
 	    viewBox: "0 0 24 24",
 	    width: "48",
 	    xmlns: "http://www.w3.org/2000/svg"
-	  }, /*#__PURE__*/React$3.createElement("path", {
+	  }, /*#__PURE__*/React$2.createElement("path", {
 	    d: "M6 2v6h.01L6 8.01 10 12l-4 4 .01.01H6V22h12v-5.99h-.01L18 16l-4-4 4-3.99-.01-.01H18V2H6zm10 14.5V20H8v-3.5l4-4 4 4zm-4-5l-4-4V4h8v3.5l-4 4z"
-	  }), /*#__PURE__*/React$3.createElement("path", {
+	  }), /*#__PURE__*/React$2.createElement("path", {
 	    d: "M0 0h24v24H0V0z",
 	    fill: "none"
 	  }));
 	};
 	var RotateIcon = function RotateIcon() {
-	  return /*#__PURE__*/React$3.createElement("svg", {
+	  return /*#__PURE__*/React$2.createElement("svg", {
 	    fill: "#ffffff",
 	    width: "24",
 	    height: "24",
 	    viewBox: "0 0 24 24",
 	    xmlns: "http://www.w3.org/2000/svg"
-	  }, /*#__PURE__*/React$3.createElement("path", {
+	  }, /*#__PURE__*/React$2.createElement("path", {
 	    fill: "none",
 	    d: "M0 0h24v24H0V0zm0 0h24v24H0V0z"
-	  }), /*#__PURE__*/React$3.createElement("path", {
+	  }), /*#__PURE__*/React$2.createElement("path", {
 	    d: "M7.47 21.49C4.2 19.93 1.86 16.76 1.5 13H0c.51 6.16 5.66 11 11.95 11 .23 0 .44-.02.66-.03L8.8 20.15l-1.33 1.34zM12.05 0c-.23 0-.44.02-.66.04l3.81 3.81 1.33-1.33C19.8 4.07 22.14 7.24 22.5 11H24c-.51-6.16-5.66-11-11.95-11zM16 14h2V8c0-1.11-.9-2-2-2h-6v2h6v6zm-8 2V4H6v2H4v2h2v8c0 1.1.89 2 2 2h8v2h2v-2h2v-2H8z"
 	  }));
 	};
@@ -14072,21 +14072,21 @@
 	    enableDownload = _ref.enableDownload,
 	    enableZoom = _ref.enableZoom,
 	    enableRotate = _ref.enableRotate;
-	  return /*#__PURE__*/React$3.createElement("div", {
+	  return /*#__PURE__*/React$2.createElement("div", {
 	    className: "__react_modal_image__header"
-	  }, /*#__PURE__*/React$3.createElement("span", {
+	  }, /*#__PURE__*/React$2.createElement("span", {
 	    className: "__react_modal_image__icon_menu"
-	  }, enableDownload && /*#__PURE__*/React$3.createElement("a", {
+	  }, enableDownload && /*#__PURE__*/React$2.createElement("a", {
 	    href: image,
 	    download: true,
 	    onClick: crossOriginDownload(image)
-	  }, /*#__PURE__*/React$3.createElement(DownloadIcon, null)), enableZoom && /*#__PURE__*/React$3.createElement("a", {
+	  }, /*#__PURE__*/React$2.createElement(DownloadIcon, null)), enableZoom && /*#__PURE__*/React$2.createElement("a", {
 	    onClick: toggleZoom
-	  }, zoomed ? /*#__PURE__*/React$3.createElement(ZoomOutIcon, null) : /*#__PURE__*/React$3.createElement(ZoomInIcon, null)), enableRotate && /*#__PURE__*/React$3.createElement("a", {
+	  }, zoomed ? /*#__PURE__*/React$2.createElement(ZoomOutIcon, null) : /*#__PURE__*/React$2.createElement(ZoomInIcon, null)), enableRotate && /*#__PURE__*/React$2.createElement("a", {
 	    onClick: toggleRotate
-	  }, /*#__PURE__*/React$3.createElement(RotateIcon, null)), /*#__PURE__*/React$3.createElement("a", {
+	  }, /*#__PURE__*/React$2.createElement(RotateIcon, null)), /*#__PURE__*/React$2.createElement("a", {
 	    onClick: onClose
-	  }, /*#__PURE__*/React$3.createElement(CloseIcon, null))), alt && /*#__PURE__*/React$3.createElement("span", {
+	  }, /*#__PURE__*/React$2.createElement(CloseIcon, null))), alt && /*#__PURE__*/React$2.createElement("span", {
 	    className: "__react_modal_image__caption"
 	  }, alt));
 	};
@@ -14235,7 +14235,7 @@
 	        src = _this$props.src,
 	        style = _this$props.style,
 	        handleDoubleClick = _this$props.handleDoubleClick;
-	      return /*#__PURE__*/React$3.createElement("div", null, this.state.loading && /*#__PURE__*/React$3.createElement(SpinnerIcon, null), /*#__PURE__*/React$3.createElement("img", {
+	      return /*#__PURE__*/React$2.createElement("div", null, this.state.loading && /*#__PURE__*/React$2.createElement(SpinnerIcon, null), /*#__PURE__*/React$2.createElement("img", {
 	        id: id,
 	        className: className,
 	        src: src,
@@ -14511,14 +14511,14 @@
 	        move = _this$state.move,
 	        zoomed = _this$state.zoomed,
 	        rotationDeg = _this$state.rotationDeg;
-	      return /*#__PURE__*/React$3.createElement("div", null, /*#__PURE__*/React$3.createElement(StyleInjector, {
+	      return /*#__PURE__*/React$2.createElement("div", null, /*#__PURE__*/React$2.createElement(StyleInjector, {
 	        name: "__react_modal_image__lightbox",
 	        css: lightboxStyles({
 	          imageBackgroundColor: imageBackgroundColor
 	        })
-	      }), /*#__PURE__*/React$3.createElement("div", {
+	      }), /*#__PURE__*/React$2.createElement("div", {
 	        className: "__react_modal_image__modal_container"
-	      }, /*#__PURE__*/React$3.createElement("div", {
+	      }, /*#__PURE__*/React$2.createElement("div", {
 	        className: "__react_modal_image__modal_content",
 	        onMouseDown: this.handleMouseDownOrTouchStart,
 	        onMouseUp: this.handleMouseUpOrTouchEnd,
@@ -14529,7 +14529,7 @@
 	        ref: function ref(el) {
 	          _this2.contentEl = el;
 	        }
-	      }, zoomed && /*#__PURE__*/React$3.createElement(Image, {
+	      }, zoomed && /*#__PURE__*/React$2.createElement(Image, {
 	        id: "react-modal-image-img",
 	        className: "__react_modal_image__large_img",
 	        src: large || medium,
@@ -14539,7 +14539,7 @@
 	          MsTransform: "translate3d(-50%, -50%, 0) translate3d(".concat(move.x, "px, ").concat(move.y, "px, 0) rotate(").concat(rotationDeg, "deg)")
 	        },
 	        handleDoubleClick: this.toggleZoom
-	      }), !zoomed && /*#__PURE__*/React$3.createElement(Image, {
+	      }), !zoomed && /*#__PURE__*/React$2.createElement(Image, {
 	        id: "react-modal-image-img",
 	        className: "__react_modal_image__medium_img",
 	        src: medium || large,
@@ -14550,7 +14550,7 @@
 	          WebkitTransform: "translate3d(-50%, -50%, 0) rotate(".concat(rotationDeg, "deg)"),
 	          MsTransform: "translate3d(-50%, -50%, 0) rotate(".concat(rotationDeg, "deg)")
 	        }
-	      })), /*#__PURE__*/React$3.createElement(Header$1, {
+	      })), /*#__PURE__*/React$2.createElement(Header$1, {
 	        image: large || medium,
 	        alt: alt,
 	        zoomed: zoomed,
@@ -14736,10 +14736,10 @@
 	  var closePhotoViewer = function closePhotoViewer() {
 	    setIsPhotoViewerOpen(false);
 	  };
-	  return /*#__PURE__*/React$3.createElement(React$3.Fragment, null, /*#__PURE__*/React$3.createElement("div", {
+	  return /*#__PURE__*/React$2.createElement(React$2.Fragment, null, /*#__PURE__*/React$2.createElement("div", {
 	    className: "photo-grid"
 	  }, images.map(function (imgObj, idx) {
-	    return /*#__PURE__*/React$3.createElement(DefaultImage, {
+	    return /*#__PURE__*/React$2.createElement(DefaultImage, {
 	      imgObj: imgObj,
 	      idx: idx,
 	      isSelected: selectedImageIdx === idx,
@@ -14748,7 +14748,7 @@
 	        return _onClickImage(photoIdx);
 	      }
 	    });
-	  })), isPhotoViewerOpen && !!images[selectedImageIdx] && /*#__PURE__*/React$3.createElement(Lightbox, {
+	  })), isPhotoViewerOpen && !!images[selectedImageIdx] && /*#__PURE__*/React$2.createElement(Lightbox, {
 	    medium: images[selectedImageIdx].imageSrc,
 	    large: images[selectedImageIdx].imageSrc,
 	    onClose: closePhotoViewer,
@@ -14856,51 +14856,51 @@
 	  react.exports.useEffect(function () {
 	    setPhotoQualityTier('');
 	  }, [listingId]);
-	  return /*#__PURE__*/React$3.createElement("form", null, /*#__PURE__*/React$3.createElement("label", null, "Listing ID:", /*#__PURE__*/React$3.createElement("input", {
+	  return /*#__PURE__*/React$2.createElement("form", null, /*#__PURE__*/React$2.createElement("label", null, "Listing ID:", /*#__PURE__*/React$2.createElement("input", {
 	    type: "text",
 	    name: "listing-id",
 	    readOnly: true,
 	    value: listingId
-	  })), /*#__PURE__*/React$3.createElement("label", null, "Photo ID:", /*#__PURE__*/React$3.createElement("input", {
+	  })), /*#__PURE__*/React$2.createElement("label", null, "Photo ID:", /*#__PURE__*/React$2.createElement("input", {
 	    type: "text",
 	    name: "photo-id",
 	    readOnly: true,
 	    value: photoId
-	  })), /*#__PURE__*/React$3.createElement("label", null, /*#__PURE__*/React$3.createElement("div", {
+	  })), /*#__PURE__*/React$2.createElement("label", null, /*#__PURE__*/React$2.createElement("div", {
 	    className: "label"
-	  }, "Photo Quality:"), /*#__PURE__*/React$3.createElement("select", {
+	  }, "Photo Quality:"), /*#__PURE__*/React$2.createElement("select", {
 	    value: photoQualityTier,
 	    onChange: handlePhotoQualityChange
-	  }, /*#__PURE__*/React$3.createElement("option", {
+	  }, /*#__PURE__*/React$2.createElement("option", {
 	    disabled: true,
 	    value: ""
-	  }, "-- Select a tier --"), /*#__PURE__*/React$3.createElement("option", {
+	  }, "-- Select a tier --"), /*#__PURE__*/React$2.createElement("option", {
 	    value: "Most Inspiring"
-	  }, "Most Inspiring"), /*#__PURE__*/React$3.createElement("option", {
+	  }, "Most Inspiring"), /*#__PURE__*/React$2.createElement("option", {
 	    value: "High"
-	  }, "High"), /*#__PURE__*/React$3.createElement("option", {
+	  }, "High"), /*#__PURE__*/React$2.createElement("option", {
 	    value: "Acceptable"
-	  }, "Acceptable"), /*#__PURE__*/React$3.createElement("option", {
+	  }, "Acceptable"), /*#__PURE__*/React$2.createElement("option", {
 	    value: "Low Quality"
-	  }, "Low Quality"), /*#__PURE__*/React$3.createElement("option", {
+	  }, "Low Quality"), /*#__PURE__*/React$2.createElement("option", {
 	    value: "Unacceptable"
-	  }, "Unacceptable"))), /*#__PURE__*/React$3.createElement("div", {
+	  }, "Unacceptable"))), /*#__PURE__*/React$2.createElement("div", {
 	    className: "left-panel-ctas-wrapper"
-	  }, /*#__PURE__*/React$3.createElement("button", {
+	  }, /*#__PURE__*/React$2.createElement("button", {
 	    disabled: isSkipping || isSaving,
 	    className: "cta skip-cta",
 	    onClick: handleSkip,
 	    type: "button"
-	  }, isSkipping ? 'Skipping...' : 'Skip Listing'), /*#__PURE__*/React$3.createElement("button", {
+	  }, isSkipping ? 'Skipping...' : 'Skip Listing'), /*#__PURE__*/React$2.createElement("button", {
 	    disabled: isSkipping || isSaving || photoQualityTier === '',
 	    className: "cta save-cta",
 	    type: "submit",
 	    onClick: handleSubmit
-	  }, isSaving ? 'Submitting...' : 'Submit')), labeledPhotoId && /*#__PURE__*/React$3.createElement("div", {
+	  }, isSaving ? 'Submitting...' : 'Submit')), labeledPhotoId && /*#__PURE__*/React$2.createElement("div", {
 	    className: "existing-label-container"
-	  }, /*#__PURE__*/React$3.createElement("span", null, /*#__PURE__*/React$3.createElement("span", {
+	  }, /*#__PURE__*/React$2.createElement("span", null, /*#__PURE__*/React$2.createElement("span", {
 	    className: "bold-text"
-	  }, "Labeled Photo ID:"), ' ', labeledPhotoId), /*#__PURE__*/React$3.createElement("span", null, /*#__PURE__*/React$3.createElement("span", {
+	  }, "Labeled Photo ID:"), ' ', labeledPhotoId), /*#__PURE__*/React$2.createElement("span", null, /*#__PURE__*/React$2.createElement("span", {
 	    className: "bold-text"
 	  }, "Labeled Photo Quality:"), ' ', labeledPhotoQualityTier)));
 	}
@@ -14928,49 +14928,49 @@
 	      Labelbox.fetchNextAssetToLabel();
 	    }
 	  }, [currentAsset, hasNext, hasLabel]);
-	  return /*#__PURE__*/React$3.createElement(React$3.Fragment, null, /*#__PURE__*/React$3.createElement("div", {
+	  return /*#__PURE__*/React$2.createElement(React$2.Fragment, null, /*#__PURE__*/React$2.createElement("div", {
 	    className: "header-container"
-	  }, /*#__PURE__*/React$3.createElement("i", {
+	  }, /*#__PURE__*/React$2.createElement("i", {
 	    className: "material-icons home-icon",
 	    onClick: handleGoHome
-	  }, "home"), /*#__PURE__*/React$3.createElement("i", {
+	  }, "home"), /*#__PURE__*/React$2.createElement("i", {
 	    className: "material-icons back-icon ".concat(hasPrev ? 'button-default' : ''),
 	    onClick: handleGoBack
-	  }, "keyboard_arrow_left"), /*#__PURE__*/React$3.createElement("div", {
+	  }, "keyboard_arrow_left"), /*#__PURE__*/React$2.createElement("div", {
 	    className: "header-title",
 	    id: "externalid"
-	  }, "Label this asset"), /*#__PURE__*/React$3.createElement("i", {
+	  }, "Label this asset"), /*#__PURE__*/React$2.createElement("i", {
 	    className: "material-icons next-icon ".concat(hasNext || !hasNext && hasLabel ? 'button-default' : ''),
 	    onClick: hasNext || !hasNext && hasLabel ? handleGoNext : undefined
-	  }, "keyboard_arrow_right")), /*#__PURE__*/React$3.createElement("div", {
+	  }, "keyboard_arrow_right")), /*#__PURE__*/React$2.createElement("div", {
 	    className: "inline-list"
-	  }, /*#__PURE__*/React$3.createElement("span", {
+	  }, /*#__PURE__*/React$2.createElement("span", {
 	    className: "bold-text"
-	  }, "Select Photo:"), " Arrows |", ' ', /*#__PURE__*/React$3.createElement("span", {
+	  }, "Select Photo:"), " Arrows |", ' ', /*#__PURE__*/React$2.createElement("span", {
 	    className: "bold-text"
-	  }, "View Photo:"), " Space |", ' ', /*#__PURE__*/React$3.createElement("span", {
+	  }, "View Photo:"), " Space |", ' ', /*#__PURE__*/React$2.createElement("span", {
 	    className: "bold-text"
-	  }, "Close Photo:"), " Esc |", ' ', /*#__PURE__*/React$3.createElement("span", {
+	  }, "Close Photo:"), " Esc |", ' ', /*#__PURE__*/React$2.createElement("span", {
 	    className: "bold-text"
-	  }, "Set Quality:"), " 1-5 |", ' ', /*#__PURE__*/React$3.createElement("span", {
+	  }, "Set Quality:"), " 1-5 |", ' ', /*#__PURE__*/React$2.createElement("span", {
 	    className: "bold-text"
-	  }, "Submit:"), " Enter |", ' ', /*#__PURE__*/React$3.createElement("span", {
+	  }, "Submit:"), " Enter |", ' ', /*#__PURE__*/React$2.createElement("span", {
 	    className: "bold-text"
-	  }, "Skip:"), " s"), /*#__PURE__*/React$3.createElement("div", {
+	  }, "Skip:"), " s"), /*#__PURE__*/React$2.createElement("div", {
 	    className: "inline-list"
 	  }, listingInfo.map(function (info, idx) {
 	    var _info$split = info.split(':'),
 	      _info$split2 = _slicedToArray$1(_info$split, 2),
 	      metadataKey = _info$split2[0],
 	      metadataValue = _info$split2[1];
-	    return /*#__PURE__*/React$3.createElement(React$3.Fragment, null, /*#__PURE__*/React$3.createElement("span", {
+	    return /*#__PURE__*/React$2.createElement(React$2.Fragment, null, /*#__PURE__*/React$2.createElement("span", {
 	      key: idx,
 	      className: "bold-text"
-	    }, metadataKey, ":"), /*#__PURE__*/React$3.createElement("span", {
+	    }, metadataKey, ":"), /*#__PURE__*/React$2.createElement("span", {
 	      key: idx
 	    }, ' ', metadataValue, ' '));
 	  }), pdpAndGMapLinkNodes.map(function (link) {
-	    return /*#__PURE__*/React$3.createElement(React$3.Fragment, null, link, ' ');
+	    return /*#__PURE__*/React$2.createElement(React$2.Fragment, null, link, ' ');
 	  })));
 	}
 
@@ -15097,17 +15097,17 @@
 	    });
 	  }, [handleAssetChange]);
 	  console.log('linkNodes', linkNodes);
-	  return /*#__PURE__*/React$3.createElement(React$3.Fragment, null, /*#__PURE__*/React$3.createElement("div", {
+	  return /*#__PURE__*/React$2.createElement(React$2.Fragment, null, /*#__PURE__*/React$2.createElement("div", {
 	    className: "flex-column left-side-panel"
-	  }, /*#__PURE__*/React$3.createElement(LeftPanel, {
+	  }, /*#__PURE__*/React$2.createElement(LeftPanel, {
 	    listingId: listingId,
 	    photoId: selectedPhotoId,
 	    labeledPhotoId: labeledPhotoId,
 	    labeledPhotoQualityTier: labeledPhotoQualityTier,
 	    onSubmitOrSkip: onSubmitOrSkip
-	  })), /*#__PURE__*/React$3.createElement("div", {
+	  })), /*#__PURE__*/React$2.createElement("div", {
 	    className: "flex-grow flex-column"
-	  }, /*#__PURE__*/React$3.createElement(Header, {
+	  }, /*#__PURE__*/React$2.createElement(Header, {
 	    currentAsset: currentAsset,
 	    listingInfo: listingInfo,
 	    pdpAndGMapLinkNodes: linkNodes,
@@ -15115,16 +15115,16 @@
 	    hasPrev: !!(currentAsset !== null && currentAsset !== void 0 && currentAsset.previous),
 	    projectId: projectId,
 	    hasLabel: !!labeledPhotoId
-	  }), /*#__PURE__*/React$3.createElement("div", {
+	  }), /*#__PURE__*/React$2.createElement("div", {
 	    className: "content"
-	  }, !isLoading && /*#__PURE__*/React$3.createElement(ImageGrid, {
+	  }, !isLoading && /*#__PURE__*/React$2.createElement(ImageGrid, {
 	    images: imageObjs,
 	    onClickImage: handleClickImage,
 	    selectedImageIdx: selectedImageIdx
-	  }), isLoading && /*#__PURE__*/React$3.createElement("p", null, "Loading..."))));
+	  }), isLoading && /*#__PURE__*/React$2.createElement("p", null, "Loading..."))));
 	}
 
-	ReactDOM.render( /*#__PURE__*/React$3.createElement(App, null), document.getElementById('root'));
+	ReactDOM.render( /*#__PURE__*/React$2.createElement(App, null), document.getElementById('root'));
 
 })();
 //# sourceMappingURL=bundle.js.map
