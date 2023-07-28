@@ -7314,6 +7314,41 @@
 	    return _arr;
 	  }
 	}
+	function ownKeys(object, enumerableOnly) {
+	  var keys = Object.keys(object);
+	  if (Object.getOwnPropertySymbols) {
+	    var symbols = Object.getOwnPropertySymbols(object);
+	    enumerableOnly && (symbols = symbols.filter(function (sym) {
+	      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+	    })), keys.push.apply(keys, symbols);
+	  }
+	  return keys;
+	}
+	function _objectSpread2(target) {
+	  for (var i = 1; i < arguments.length; i++) {
+	    var source = null != arguments[i] ? arguments[i] : {};
+	    i % 2 ? ownKeys(Object(source), !0).forEach(function (key) {
+	      _defineProperty(target, key, source[key]);
+	    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) {
+	      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+	    });
+	  }
+	  return target;
+	}
+	function _defineProperty(obj, key, value) {
+	  key = _toPropertyKey(key);
+	  if (key in obj) {
+	    Object.defineProperty(obj, key, {
+	      value: value,
+	      enumerable: true,
+	      configurable: true,
+	      writable: true
+	    });
+	  } else {
+	    obj[key] = value;
+	  }
+	  return obj;
+	}
 	function _slicedToArray(arr, i) {
 	  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
 	}
@@ -7348,1226 +7383,19 @@
 	function _nonIterableRest() {
 	  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 	}
-
-	function get(url) {
-	  var Httpreq = new XMLHttpRequest();
-	  Httpreq.open('GET', url, false);
-	  Httpreq.send(null);
-	  return Httpreq.responseText;
-	}
-
-	/**
-	 * Input is a string containing an HTML document. Caption text can either be non-existent or span multiple lines
-	 *
-	 *   Example (\n replaced with actual newlines for readability):
-	 *     "<!DOCTYPE html>
-	 *     <html>
-	 *       <a href="https://www.airbnb.com/rooms/750469869902849247">Listing PDP</a>
-	 *       <br><a href="https://www.google.com/maps/search/?api=1&query=50.97%2C-3.58">Google Map</a>
-	 *       <br><br><br><br>1518815987
-	 *       <br><img src="https://a0.muscache.com/pictures/45639af2-64c0-43fc-a64f-83bbb71dccc4.jpg?im_w=480" style="width:450px;" loading="lazy" alt="Image failed to load.">
-	 *       <br>The Hoot has gorgeous lake views - guests can explore the grounds of the farm; sit by the lake, read a book, have a picnic or drink in the surroundings!
-	 *
-	 *       <br><br><br><br>1518815988
-	 *       <br><img src="https://a0.muscache.com/pictures/3d747c6d-4af6-46dc-9738-675ce8ae76d6.jpg?im_w=480" style="width:450px;" loading="lazy" alt="Image failed to load.">
-	 *       <br>Freshly painted bedroom - prefect for lie ins in this secluded location.
-	 *
-	 *     </html>"
-	 *
-	 *   Result:
-	 *     [
-	 *       {
-	 *         "photoId": "1518815987",
-	 *         "imageSrc": "https://a0.muscache.com/pictures/45639af2-64c0-43fc-a64f-83bbb71dccc4.jpg?im_w=480",
-	 *         "caption": "The Hoot has gorgeous lake views - guests can explore the grounds of the farm; sit by the lake, read a book, have a picnic or drink in the surroundings!"
-	 *       },
-	 *       {
-	 *         "photoId": "1518815988",
-	 *         "imageSrc": "https://a0.muscache.com/pictures/3d747c6d-4af6-46dc-9738-675ce8ae76d6.jpg?im_w=480",
-	 *         "caption": "Freshly painted bedroom - prefect for lie ins in this secluded location."
-	 *       },
-	 *     ]
-	 */
-	function parseHtmlInput(input) {
-	  // first, split the string by lines
-	  var htmlSplit = input.split('\n');
-	  return htmlSplit
-	  // remove <br> tags
-	  .map(function (str) {
-	    return str.replace(/<br>/g, ' ');
-	  })
-
-	  // remove whitespace at the ends of the lines
-	  .map(function (str) {
-	    return str.trim();
-	  })
-
-	  // remove first two html tags and listing/map elements (first 4 elements and last element)
-	  .slice(4, htmlSplit.length - 1)
-
-	  // items are grouped in the array by empty strings, with a line each for the photo id and img tag,
-	  // and 0+ lines for the caption. here, actually turn the big array into an array of chunks accordingly.
-	  .reduce(function (groups, item) {
-	    if (item === '') {
-	      groups.push([]);
-	      return groups;
-	    }
-	    var currentGroup = groups[groups.length - 1];
-	    groups[groups.length - 1] = [].concat(_toConsumableArray(currentGroup), [item]);
-	    return groups;
-	  }, [[]])
-
-	  // remove any empty arrays (sometimes there are multiple, empty lines in a row)
-	  .filter(function (group) {
-	    return group.length > 0;
-	  })
-
-	  // finally, turn the array chunks into objects. while doing this, strip out the src url from the image tag
-	  // and join the caption strings together
-	  .map(function (group) {
-	    var imgContainer = document.createElement('div');
-	    imgContainer.innerHTML = group[1];
-	    var img = imgContainer.querySelector('img');
-	    var src = img.src;
-	    return {
-	      photoId: group[0],
-	      imageSrc: src,
-	      caption: group.slice(2).join(' ')
-	    };
-	  });
-	}
-	function getResizedImageUrl(photoLink) {
-	  var _effectiveImgUrl;
-	  var effectiveImgUrl = photoLink;
-	  if (!photoLink.includes('/im/')) {
-	    var originalUrl = new URL(photoLink);
-	    effectiveImgUrl = "".concat(originalUrl.origin, "/im").concat(originalUrl.pathname).concat(originalUrl.search);
+	function _toPrimitive(input, hint) {
+	  if (typeof input !== "object" || input === null) return input;
+	  var prim = input[Symbol.toPrimitive];
+	  if (prim !== undefined) {
+	    var res = prim.call(input, hint || "default");
+	    if (typeof res !== "object") return res;
+	    throw new TypeError("@@toPrimitive must return a primitive value.");
 	  }
-	  return (_effectiveImgUrl = effectiveImgUrl) !== null && _effectiveImgUrl !== void 0 && _effectiveImgUrl.includes('?') ? "".concat(effectiveImgUrl) : "".concat(effectiveImgUrl, "?im_w=480");
+	  return (hint === "string" ? String : Number)(input);
 	}
-
-	function DefaultImage(_ref) {
-	  var imgObj = _ref.imgObj,
-	    idx = _ref.idx,
-	    isSelected = _ref.isSelected,
-	    onClickImage = _ref.onClickImage;
-	  var imageUrl = getResizedImageUrl(imgObj.imageSrc);
-	  return /*#__PURE__*/React.createElement("div", {
-	    className: "image-container",
-	    onClick: function onClick() {
-	      return onClickImage(idx);
-	    },
-	    id: "image-container-".concat(imgObj.photoId)
-	  }, /*#__PURE__*/React.createElement("img", {
-	    src: imageUrl,
-	    className: "default-image ".concat(isSelected ? 'image-selected' : '')
-	  }), /*#__PURE__*/React.createElement("span", null, imgObj.caption));
-	}
-
-	function _typeof$2(obj) {
-	  "@babel/helpers - typeof";
-
-	  return _typeof$2 = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
-	    return typeof obj;
-	  } : function (obj) {
-	    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-	  }, _typeof$2(obj);
-	}
-	function _classCallCheck$2(instance, Constructor) {
-	  if (!(instance instanceof Constructor)) {
-	    throw new TypeError("Cannot call a class as a function");
-	  }
-	}
-	function _defineProperties$2(target, props) {
-	  for (var i = 0; i < props.length; i++) {
-	    var descriptor = props[i];
-	    descriptor.enumerable = descriptor.enumerable || false;
-	    descriptor.configurable = true;
-	    if ("value" in descriptor) descriptor.writable = true;
-	    Object.defineProperty(target, descriptor.key, descriptor);
-	  }
-	}
-	function _createClass$2(Constructor, protoProps, staticProps) {
-	  if (protoProps) _defineProperties$2(Constructor.prototype, protoProps);
-	  if (staticProps) _defineProperties$2(Constructor, staticProps);
-	  Object.defineProperty(Constructor, "prototype", {
-	    writable: false
-	  });
-	  return Constructor;
-	}
-	function _inherits$2(subClass, superClass) {
-	  if (typeof superClass !== "function" && superClass !== null) {
-	    throw new TypeError("Super expression must either be null or a function");
-	  }
-	  subClass.prototype = Object.create(superClass && superClass.prototype, {
-	    constructor: {
-	      value: subClass,
-	      writable: true,
-	      configurable: true
-	    }
-	  });
-	  Object.defineProperty(subClass, "prototype", {
-	    writable: false
-	  });
-	  if (superClass) _setPrototypeOf$2(subClass, superClass);
-	}
-	function _setPrototypeOf$2(o, p) {
-	  _setPrototypeOf$2 = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {
-	    o.__proto__ = p;
-	    return o;
-	  };
-	  return _setPrototypeOf$2(o, p);
-	}
-	function _createSuper$2(Derived) {
-	  var hasNativeReflectConstruct = _isNativeReflectConstruct$2();
-	  return function _createSuperInternal() {
-	    var Super = _getPrototypeOf$2(Derived),
-	      result;
-	    if (hasNativeReflectConstruct) {
-	      var NewTarget = _getPrototypeOf$2(this).constructor;
-	      result = Reflect.construct(Super, arguments, NewTarget);
-	    } else {
-	      result = Super.apply(this, arguments);
-	    }
-	    return _possibleConstructorReturn$2(this, result);
-	  };
-	}
-	function _possibleConstructorReturn$2(self, call) {
-	  if (call && (_typeof$2(call) === "object" || typeof call === "function")) {
-	    return call;
-	  } else if (call !== void 0) {
-	    throw new TypeError("Derived constructors may only return object or undefined");
-	  }
-	  return _assertThisInitialized$2(self);
-	}
-	function _assertThisInitialized$2(self) {
-	  if (self === void 0) {
-	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-	  }
-	  return self;
-	}
-	function _isNativeReflectConstruct$2() {
-	  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-	  if (Reflect.construct.sham) return false;
-	  if (typeof Proxy === "function") return true;
-	  try {
-	    Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-	    return true;
-	  } catch (e) {
-	    return false;
-	  }
-	}
-	function _getPrototypeOf$2(o) {
-	  _getPrototypeOf$2 = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {
-	    return o.__proto__ || Object.getPrototypeOf(o);
-	  };
-	  return _getPrototypeOf$2(o);
-	}
-	function appendStyle(id, css) {
-	  if (!document.head.querySelector("#" + id)) {
-	    var node = document.createElement("style");
-	    node.textContent = css;
-	    node.type = "text/css";
-	    node.id = id;
-	    document.head.appendChild(node);
-	  }
-	}
-	var StyleInjector = /*#__PURE__*/function (_Component) {
-	  _inherits$2(StyleInjector, _Component);
-	  var _super = _createSuper$2(StyleInjector);
-	  function StyleInjector() {
-	    _classCallCheck$2(this, StyleInjector);
-	    return _super.apply(this, arguments);
-	  }
-	  _createClass$2(StyleInjector, [{
-	    key: "componentDidMount",
-	    value: function componentDidMount() {
-	      appendStyle(this.props.name, this.props.css);
-	    }
-	  }, {
-	    key: "componentWillUnmount",
-	    value: function componentWillUnmount() {
-	      var node = document.getElementById(this.props.name);
-	      node.parentNode.removeChild(node);
-	    }
-	  }, {
-	    key: "render",
-	    value: function render() {
-	      return null;
-	    }
-	  }]);
-	  return StyleInjector;
-	}(react.exports.Component);
-	var lightboxStyles = function lightboxStyles(_ref) {
-	  var imageBackgroundColor = _ref.imageBackgroundColor;
-	  return "\n  body {\n    overflow: hidden;\n  }\n\n  .__react_modal_image__modal_container {\n    position: fixed;\n    z-index: 5000;\n    left: 0;\n    top: 0;\n    width: 100%;\n    height: 100%;\n    background-color: rgba(0, 0, 0, 0.8);\n    touch-action: none;\n    overflow: hidden;\n  }\n\n  .__react_modal_image__modal_content {\n    position: relative;\n    height: 100%;\n    width: 100%;\n  }\n\n  .__react_modal_image__modal_content img, \n  .__react_modal_image__modal_content svg {\n    position: absolute;\n    top: 50%;\n    left: 50%;\n    transform: translate3d(-50%, -50%, 0);\n    -webkit-transform: translate3d(-50%, -50%, 0);\n    -ms-transform: translate3d(-50%, -50%, 0);\n    overflow: hidden;\n  }\n\n  .__react_modal_image__medium_img {\n    max-width: 98%;\n    max-height: 98%;\n    background-color: ".concat(imageBackgroundColor, ";\n  }\n\n  .__react_modal_image__large_img {\n    cursor: move;\n    background-color: ").concat(imageBackgroundColor, "\n  }\n\n  .__react_modal_image__icon_menu a {\n    display: inline-block;\n    font-size: 40px;\n    cursor: pointer;\n    line-height: 40px;\n    box-sizing: border-box;\n    border: none;\n    padding: 0px 5px 0px 5px;\n    margin-left: 10px;\n    color: white;\n    background-color: rgba(0, 0, 0, 0);\n  }\n\n  .__react_modal_image__icon_menu {\n    display: inline-block;\n    float: right;\n  }\n\n  .__react_modal_image__caption {\n    display: inline-block;\n    color: white;\n    font-size: 120%;\n    padding: 10px;\n    margin: 0;\n  }\n\n  .__react_modal_image__header {\n    position: absolute;\n    top: 0;\n    width: 100%;\n    background-color: rgba(0, 0, 0, 0.7);\n    overflow: hidden;\n  }\n");
-	};
-
-	/* 
-	  Icons from https://material.io/icons/
-	*/
-	var ZoomInIcon = function ZoomInIcon() {
-	  return /*#__PURE__*/React.createElement("svg", {
-	    fill: "#ffffff",
-	    height: "24",
-	    viewBox: "0 0 24 24",
-	    width: "24",
-	    xmlns: "http://www.w3.org/2000/svg"
-	  }, /*#__PURE__*/React.createElement("path", {
-	    d: "M0 0h24v24H0z",
-	    fill: "none"
-	  }), /*#__PURE__*/React.createElement("path", {
-	    d: "M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"
-	  }));
-	};
-	var ZoomOutIcon = function ZoomOutIcon() {
-	  return /*#__PURE__*/React.createElement("svg", {
-	    fill: "#ffffff",
-	    height: "24",
-	    viewBox: "0 0 24 24",
-	    width: "24",
-	    xmlns: "http://www.w3.org/2000/svg"
-	  }, /*#__PURE__*/React.createElement("path", {
-	    d: "M0 0h24v24H0z",
-	    fill: "none"
-	  }), /*#__PURE__*/React.createElement("path", {
-	    d: "M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"
-	  }));
-	};
-	var DownloadIcon = function DownloadIcon() {
-	  return /*#__PURE__*/React.createElement("svg", {
-	    fill: "#ffffff",
-	    height: "24",
-	    viewBox: "0 0 24 24",
-	    width: "24",
-	    xmlns: "http://www.w3.org/2000/svg"
-	  }, /*#__PURE__*/React.createElement("path", {
-	    d: "M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"
-	  }), /*#__PURE__*/React.createElement("path", {
-	    d: "M0 0h24v24H0z",
-	    fill: "none"
-	  }));
-	};
-	var CloseIcon = function CloseIcon() {
-	  return /*#__PURE__*/React.createElement("svg", {
-	    fill: "#ffffff",
-	    height: "24",
-	    viewBox: "0 0 24 24",
-	    width: "24",
-	    xmlns: "http://www.w3.org/2000/svg"
-	  }, /*#__PURE__*/React.createElement("path", {
-	    d: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-	  }), /*#__PURE__*/React.createElement("path", {
-	    d: "M0 0h24v24H0z",
-	    fill: "none"
-	  }));
-	};
-	var SpinnerIcon = function SpinnerIcon() {
-	  return /*#__PURE__*/React.createElement("svg", {
-	    fill: "#ffffff",
-	    height: "48",
-	    viewBox: "0 0 24 24",
-	    width: "48",
-	    xmlns: "http://www.w3.org/2000/svg"
-	  }, /*#__PURE__*/React.createElement("path", {
-	    d: "M6 2v6h.01L6 8.01 10 12l-4 4 .01.01H6V22h12v-5.99h-.01L18 16l-4-4 4-3.99-.01-.01H18V2H6zm10 14.5V20H8v-3.5l4-4 4 4zm-4-5l-4-4V4h8v3.5l-4 4z"
-	  }), /*#__PURE__*/React.createElement("path", {
-	    d: "M0 0h24v24H0V0z",
-	    fill: "none"
-	  }));
-	};
-	var RotateIcon = function RotateIcon() {
-	  return /*#__PURE__*/React.createElement("svg", {
-	    fill: "#ffffff",
-	    width: "24",
-	    height: "24",
-	    viewBox: "0 0 24 24",
-	    xmlns: "http://www.w3.org/2000/svg"
-	  }, /*#__PURE__*/React.createElement("path", {
-	    fill: "none",
-	    d: "M0 0h24v24H0V0zm0 0h24v24H0V0z"
-	  }), /*#__PURE__*/React.createElement("path", {
-	    d: "M7.47 21.49C4.2 19.93 1.86 16.76 1.5 13H0c.51 6.16 5.66 11 11.95 11 .23 0 .44-.02.66-.03L8.8 20.15l-1.33 1.34zM12.05 0c-.23 0-.44.02-.66.04l3.81 3.81 1.33-1.33C19.8 4.07 22.14 7.24 22.5 11H24c-.51-6.16-5.66-11-11.95-11zM16 14h2V8c0-1.11-.9-2-2-2h-6v2h6v6zm-8 2V4H6v2H4v2h2v8c0 1.1.89 2 2 2h8v2h2v-2h2v-2H8z"
-	  }));
-	};
-
-	function isSameOrigin(href) {
-	  // @ts-ignore
-	  return document.location.hostname !== new URL(href, document.location).hostname;
-	}
-	/**
-	 * Triggers image download from cross origin URLs
-	 * 
-	 * `<a href="..." download>foo</a> works only for same-origin URLs.
-	 * Further info: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#attr-download
-	 */
-
-	var crossOriginDownload = function crossOriginDownload(href) {
-	  return function (event) {
-	    if (!isSameOrigin(href)) {
-	      // native download will be triggered by `download` attribute
-	      return;
-	    } // else proceed to use `fetch` for cross origin image download
-
-	    event.preventDefault();
-	    fetch(href).then(function (res) {
-	      if (!res.ok) {
-	        console.error("Failed to download image, HTTP status " + res.status + " from " + href);
-	      }
-	      return res.blob().then(function (blob) {
-	        var tmpAnchor = document.createElement("a");
-	        tmpAnchor.setAttribute("download", href.split("/").pop());
-	        tmpAnchor.href = URL.createObjectURL(blob);
-	        tmpAnchor.click();
-	      });
-	    })["catch"](function (err) {
-	      console.error(err);
-	      console.error("Failed to download image from " + href);
-	    });
-	  };
-	};
-	var Header$1 = function Header(_ref) {
-	  var image = _ref.image,
-	    alt = _ref.alt,
-	    zoomed = _ref.zoomed,
-	    toggleZoom = _ref.toggleZoom,
-	    toggleRotate = _ref.toggleRotate,
-	    onClose = _ref.onClose,
-	    enableDownload = _ref.enableDownload,
-	    enableZoom = _ref.enableZoom,
-	    enableRotate = _ref.enableRotate;
-	  return /*#__PURE__*/React.createElement("div", {
-	    className: "__react_modal_image__header"
-	  }, /*#__PURE__*/React.createElement("span", {
-	    className: "__react_modal_image__icon_menu"
-	  }, enableDownload && /*#__PURE__*/React.createElement("a", {
-	    href: image,
-	    download: true,
-	    onClick: crossOriginDownload(image)
-	  }, /*#__PURE__*/React.createElement(DownloadIcon, null)), enableZoom && /*#__PURE__*/React.createElement("a", {
-	    onClick: toggleZoom
-	  }, zoomed ? /*#__PURE__*/React.createElement(ZoomOutIcon, null) : /*#__PURE__*/React.createElement(ZoomInIcon, null)), enableRotate && /*#__PURE__*/React.createElement("a", {
-	    onClick: toggleRotate
-	  }, /*#__PURE__*/React.createElement(RotateIcon, null)), /*#__PURE__*/React.createElement("a", {
-	    onClick: onClose
-	  }, /*#__PURE__*/React.createElement(CloseIcon, null))), alt && /*#__PURE__*/React.createElement("span", {
-	    className: "__react_modal_image__caption"
-	  }, alt));
-	};
-
-	function _typeof$1(obj) {
-	  "@babel/helpers - typeof";
-
-	  return _typeof$1 = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
-	    return typeof obj;
-	  } : function (obj) {
-	    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-	  }, _typeof$1(obj);
-	}
-	function _classCallCheck$1(instance, Constructor) {
-	  if (!(instance instanceof Constructor)) {
-	    throw new TypeError("Cannot call a class as a function");
-	  }
-	}
-	function _defineProperties$1(target, props) {
-	  for (var i = 0; i < props.length; i++) {
-	    var descriptor = props[i];
-	    descriptor.enumerable = descriptor.enumerable || false;
-	    descriptor.configurable = true;
-	    if ("value" in descriptor) descriptor.writable = true;
-	    Object.defineProperty(target, descriptor.key, descriptor);
-	  }
-	}
-	function _createClass$1(Constructor, protoProps, staticProps) {
-	  if (protoProps) _defineProperties$1(Constructor.prototype, protoProps);
-	  if (staticProps) _defineProperties$1(Constructor, staticProps);
-	  Object.defineProperty(Constructor, "prototype", {
-	    writable: false
-	  });
-	  return Constructor;
-	}
-	function _inherits$1(subClass, superClass) {
-	  if (typeof superClass !== "function" && superClass !== null) {
-	    throw new TypeError("Super expression must either be null or a function");
-	  }
-	  subClass.prototype = Object.create(superClass && superClass.prototype, {
-	    constructor: {
-	      value: subClass,
-	      writable: true,
-	      configurable: true
-	    }
-	  });
-	  Object.defineProperty(subClass, "prototype", {
-	    writable: false
-	  });
-	  if (superClass) _setPrototypeOf$1(subClass, superClass);
-	}
-	function _setPrototypeOf$1(o, p) {
-	  _setPrototypeOf$1 = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {
-	    o.__proto__ = p;
-	    return o;
-	  };
-	  return _setPrototypeOf$1(o, p);
-	}
-	function _createSuper$1(Derived) {
-	  var hasNativeReflectConstruct = _isNativeReflectConstruct$1();
-	  return function _createSuperInternal() {
-	    var Super = _getPrototypeOf$1(Derived),
-	      result;
-	    if (hasNativeReflectConstruct) {
-	      var NewTarget = _getPrototypeOf$1(this).constructor;
-	      result = Reflect.construct(Super, arguments, NewTarget);
-	    } else {
-	      result = Super.apply(this, arguments);
-	    }
-	    return _possibleConstructorReturn$1(this, result);
-	  };
-	}
-	function _possibleConstructorReturn$1(self, call) {
-	  if (call && (_typeof$1(call) === "object" || typeof call === "function")) {
-	    return call;
-	  } else if (call !== void 0) {
-	    throw new TypeError("Derived constructors may only return object or undefined");
-	  }
-	  return _assertThisInitialized$1(self);
-	}
-	function _assertThisInitialized$1(self) {
-	  if (self === void 0) {
-	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-	  }
-	  return self;
-	}
-	function _isNativeReflectConstruct$1() {
-	  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-	  if (Reflect.construct.sham) return false;
-	  if (typeof Proxy === "function") return true;
-	  try {
-	    Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-	    return true;
-	  } catch (e) {
-	    return false;
-	  }
-	}
-	function _getPrototypeOf$1(o) {
-	  _getPrototypeOf$1 = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {
-	    return o.__proto__ || Object.getPrototypeOf(o);
-	  };
-	  return _getPrototypeOf$1(o);
-	}
-	function _defineProperty$1(obj, key, value) {
-	  if (key in obj) {
-	    Object.defineProperty(obj, key, {
-	      value: value,
-	      enumerable: true,
-	      configurable: true,
-	      writable: true
-	    });
-	  } else {
-	    obj[key] = value;
-	  }
-	  return obj;
-	}
-	var Image = /*#__PURE__*/function (_Component) {
-	  _inherits$1(Image, _Component);
-	  var _super = _createSuper$1(Image);
-	  function Image() {
-	    var _this;
-	    _classCallCheck$1(this, Image);
-	    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
-	    _this = _super.call.apply(_super, [this].concat(args));
-	    _defineProperty$1(_assertThisInitialized$1(_this), "state", {
-	      loading: true
-	    });
-	    _defineProperty$1(_assertThisInitialized$1(_this), "handleOnLoad", function () {
-	      _this.setState({
-	        loading: false
-	      });
-	    });
-	    _defineProperty$1(_assertThisInitialized$1(_this), "handleOnContextMenu", function (event) {
-	      !_this.props.contextMenu && event.preventDefault();
-	    });
-	    return _this;
-	  }
-	  _createClass$1(Image, [{
-	    key: "render",
-	    value: function render() {
-	      var _this$props = this.props,
-	        id = _this$props.id,
-	        className = _this$props.className,
-	        src = _this$props.src,
-	        style = _this$props.style,
-	        handleDoubleClick = _this$props.handleDoubleClick;
-	      return /*#__PURE__*/React.createElement("div", null, this.state.loading && /*#__PURE__*/React.createElement(SpinnerIcon, null), /*#__PURE__*/React.createElement("img", {
-	        id: id,
-	        className: className,
-	        src: src,
-	        style: style,
-	        onLoad: this.handleOnLoad,
-	        onDoubleClick: handleDoubleClick,
-	        onContextMenu: this.handleOnContextMenu
-	      }));
-	    }
-	  }]);
-	  return Image;
-	}(react.exports.Component);
-
-	function _typeof(obj) {
-	  "@babel/helpers - typeof";
-
-	  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
-	    return typeof obj;
-	  } : function (obj) {
-	    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-	  }, _typeof(obj);
-	}
-	function _classCallCheck(instance, Constructor) {
-	  if (!(instance instanceof Constructor)) {
-	    throw new TypeError("Cannot call a class as a function");
-	  }
-	}
-	function _defineProperties(target, props) {
-	  for (var i = 0; i < props.length; i++) {
-	    var descriptor = props[i];
-	    descriptor.enumerable = descriptor.enumerable || false;
-	    descriptor.configurable = true;
-	    if ("value" in descriptor) descriptor.writable = true;
-	    Object.defineProperty(target, descriptor.key, descriptor);
-	  }
-	}
-	function _createClass(Constructor, protoProps, staticProps) {
-	  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-	  if (staticProps) _defineProperties(Constructor, staticProps);
-	  Object.defineProperty(Constructor, "prototype", {
-	    writable: false
-	  });
-	  return Constructor;
-	}
-	function _inherits(subClass, superClass) {
-	  if (typeof superClass !== "function" && superClass !== null) {
-	    throw new TypeError("Super expression must either be null or a function");
-	  }
-	  subClass.prototype = Object.create(superClass && superClass.prototype, {
-	    constructor: {
-	      value: subClass,
-	      writable: true,
-	      configurable: true
-	    }
-	  });
-	  Object.defineProperty(subClass, "prototype", {
-	    writable: false
-	  });
-	  if (superClass) _setPrototypeOf(subClass, superClass);
-	}
-	function _setPrototypeOf(o, p) {
-	  _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {
-	    o.__proto__ = p;
-	    return o;
-	  };
-	  return _setPrototypeOf(o, p);
-	}
-	function _createSuper(Derived) {
-	  var hasNativeReflectConstruct = _isNativeReflectConstruct();
-	  return function _createSuperInternal() {
-	    var Super = _getPrototypeOf(Derived),
-	      result;
-	    if (hasNativeReflectConstruct) {
-	      var NewTarget = _getPrototypeOf(this).constructor;
-	      result = Reflect.construct(Super, arguments, NewTarget);
-	    } else {
-	      result = Super.apply(this, arguments);
-	    }
-	    return _possibleConstructorReturn(this, result);
-	  };
-	}
-	function _possibleConstructorReturn(self, call) {
-	  if (call && (_typeof(call) === "object" || typeof call === "function")) {
-	    return call;
-	  } else if (call !== void 0) {
-	    throw new TypeError("Derived constructors may only return object or undefined");
-	  }
-	  return _assertThisInitialized(self);
-	}
-	function _assertThisInitialized(self) {
-	  if (self === void 0) {
-	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-	  }
-	  return self;
-	}
-	function _isNativeReflectConstruct() {
-	  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-	  if (Reflect.construct.sham) return false;
-	  if (typeof Proxy === "function") return true;
-	  try {
-	    Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-	    return true;
-	  } catch (e) {
-	    return false;
-	  }
-	}
-	function _getPrototypeOf(o) {
-	  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {
-	    return o.__proto__ || Object.getPrototypeOf(o);
-	  };
-	  return _getPrototypeOf(o);
-	}
-	function _defineProperty(obj, key, value) {
-	  if (key in obj) {
-	    Object.defineProperty(obj, key, {
-	      value: value,
-	      enumerable: true,
-	      configurable: true,
-	      writable: true
-	    });
-	  } else {
-	    obj[key] = value;
-	  }
-	  return obj;
-	}
-	var Lightbox = /*#__PURE__*/function (_Component) {
-	  _inherits(Lightbox, _Component);
-	  var _super = _createSuper(Lightbox);
-	  function Lightbox() {
-	    var _this;
-	    _classCallCheck(this, Lightbox);
-	    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
-	    _this = _super.call.apply(_super, [this].concat(args));
-	    _defineProperty(_assertThisInitialized(_this), "state", {
-	      move: {
-	        x: 0,
-	        y: 0
-	      },
-	      moveStart: undefined,
-	      zoomed: false,
-	      rotationDeg: 0
-	    });
-	    _defineProperty(_assertThisInitialized(_this), "handleKeyDown", function (event) {
-	      // ESC or ENTER closes the modal
-	      if (event.keyCode === 27 || event.keyCode === 13) {
-	        _this.props.onClose();
-	      }
-	    });
-	    _defineProperty(_assertThisInitialized(_this), "getCoordinatesIfOverImg", function (event) {
-	      var point = event.changedTouches ? event.changedTouches[0] : event;
-	      if (point.target.id !== "react-modal-image-img") {
-	        // the img was not a target of the coordinates
-	        return;
-	      }
-	      var dim = _this.contentEl.getBoundingClientRect();
-	      var x = point.clientX - dim.left;
-	      var y = point.clientY - dim.top;
-	      return {
-	        x: x,
-	        y: y
-	      };
-	    });
-	    _defineProperty(_assertThisInitialized(_this), "handleMouseDownOrTouchStart", function (event) {
-	      event.preventDefault();
-	      if (event.touches && event.touches.length > 1) {
-	        // more than one finger, ignored
-	        return;
-	      }
-	      var coords = _this.getCoordinatesIfOverImg(event);
-	      if (!coords) {
-	        // click outside the img => close modal
-	        _this.props.onClose();
-	      }
-	      if (!_this.state.zoomed) {
-	        // do not allow drag'n'drop if zoom has not been applied
-	        return;
-	      }
-	      _this.setState(function (prev) {
-	        return {
-	          moveStart: {
-	            x: coords.x - prev.move.x,
-	            y: coords.y - prev.move.y
-	          }
-	        };
-	      });
-	    });
-	    _defineProperty(_assertThisInitialized(_this), "handleMouseMoveOrTouchMove", function (event) {
-	      event.preventDefault();
-	      if (!_this.state.zoomed || !_this.state.moveStart) {
-	        // do not allow drag'n'drop if zoom has not been applied
-	        // or if there has not been a click
-	        return;
-	      }
-	      if (event.touches && event.touches.length > 1) {
-	        // more than one finger, ignored
-	        return;
-	      }
-	      var coords = _this.getCoordinatesIfOverImg(event);
-	      if (!coords) {
-	        return;
-	      }
-	      _this.setState(function (prev) {
-	        return {
-	          move: {
-	            x: coords.x - prev.moveStart.x,
-	            y: coords.y - prev.moveStart.y
-	          }
-	        };
-	      });
-	    });
-	    _defineProperty(_assertThisInitialized(_this), "handleMouseUpOrTouchEnd", function (event) {
-	      _this.setState({
-	        moveStart: undefined
-	      });
-	    });
-	    _defineProperty(_assertThisInitialized(_this), "toggleZoom", function (event) {
-	      event.preventDefault();
-	      _this.setState(function (prev) {
-	        return {
-	          zoomed: !prev.zoomed,
-	          // reset position if zoomed out
-	          move: prev.zoomed ? {
-	            x: 0,
-	            y: 0
-	          } : prev.move
-	        };
-	      });
-	    });
-	    _defineProperty(_assertThisInitialized(_this), "toggleRotate", function (event) {
-	      event.preventDefault();
-	      var rotationDeg = _this.state.rotationDeg;
-	      if (rotationDeg === 360) {
-	        _this.setState({
-	          rotationDeg: 90
-	        });
-	        return;
-	      }
-	      _this.setState(function (prevState) {
-	        return {
-	          rotationDeg: prevState.rotationDeg += 90
-	        };
-	      });
-	    });
-	    return _this;
-	  }
-	  _createClass(Lightbox, [{
-	    key: "componentDidMount",
-	    value: function componentDidMount() {
-	      document.addEventListener("keydown", this.handleKeyDown, false);
-	    }
-	  }, {
-	    key: "componentWillUnmount",
-	    value: function componentWillUnmount() {
-	      document.removeEventListener("keydown", this.handleKeyDown, false);
-	    }
-	  }, {
-	    key: "render",
-	    value: function render() {
-	      var _this2 = this;
-	      var _this$props = this.props,
-	        medium = _this$props.medium,
-	        large = _this$props.large,
-	        alt = _this$props.alt,
-	        onClose = _this$props.onClose,
-	        hideDownload = _this$props.hideDownload,
-	        hideZoom = _this$props.hideZoom,
-	        showRotate = _this$props.showRotate,
-	        _this$props$imageBack = _this$props.imageBackgroundColor,
-	        imageBackgroundColor = _this$props$imageBack === void 0 ? "black" : _this$props$imageBack;
-	      var _this$state = this.state,
-	        move = _this$state.move,
-	        zoomed = _this$state.zoomed,
-	        rotationDeg = _this$state.rotationDeg;
-	      return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(StyleInjector, {
-	        name: "__react_modal_image__lightbox",
-	        css: lightboxStyles({
-	          imageBackgroundColor: imageBackgroundColor
-	        })
-	      }), /*#__PURE__*/React.createElement("div", {
-	        className: "__react_modal_image__modal_container"
-	      }, /*#__PURE__*/React.createElement("div", {
-	        className: "__react_modal_image__modal_content",
-	        onMouseDown: this.handleMouseDownOrTouchStart,
-	        onMouseUp: this.handleMouseUpOrTouchEnd,
-	        onMouseMove: this.handleMouseMoveOrTouchMove,
-	        onTouchStart: this.handleMouseDownOrTouchStart,
-	        onTouchEnd: this.handleMouseUpOrTouchEnd,
-	        onTouchMove: this.handleMouseMoveOrTouchMove,
-	        ref: function ref(el) {
-	          _this2.contentEl = el;
-	        }
-	      }, zoomed && /*#__PURE__*/React.createElement(Image, {
-	        id: "react-modal-image-img",
-	        className: "__react_modal_image__large_img",
-	        src: large || medium,
-	        style: {
-	          transform: "translate3d(-50%, -50%, 0) translate3d(".concat(move.x, "px, ").concat(move.y, "px, 0) rotate(").concat(rotationDeg, "deg)"),
-	          WebkitTransform: "translate3d(-50%, -50%, 0) translate3d(".concat(move.x, "px, ").concat(move.y, "px, 0) rotate(").concat(rotationDeg, "deg)"),
-	          MsTransform: "translate3d(-50%, -50%, 0) translate3d(".concat(move.x, "px, ").concat(move.y, "px, 0) rotate(").concat(rotationDeg, "deg)")
-	        },
-	        handleDoubleClick: this.toggleZoom
-	      }), !zoomed && /*#__PURE__*/React.createElement(Image, {
-	        id: "react-modal-image-img",
-	        className: "__react_modal_image__medium_img",
-	        src: medium || large,
-	        handleDoubleClick: this.toggleZoom,
-	        contextMenu: !medium,
-	        style: {
-	          transform: "translate3d(-50%, -50%, 0) rotate(".concat(rotationDeg, "deg)"),
-	          WebkitTransform: "translate3d(-50%, -50%, 0) rotate(".concat(rotationDeg, "deg)"),
-	          MsTransform: "translate3d(-50%, -50%, 0) rotate(".concat(rotationDeg, "deg)")
-	        }
-	      })), /*#__PURE__*/React.createElement(Header$1, {
-	        image: large || medium,
-	        alt: alt,
-	        zoomed: zoomed,
-	        toggleZoom: this.toggleZoom,
-	        toggleRotate: this.toggleRotate,
-	        onClose: onClose,
-	        enableDownload: !hideDownload,
-	        enableZoom: !hideZoom,
-	        enableRotate: !!showRotate
-	      })));
-	    }
-	  }]);
-	  return Lightbox;
-	}(react.exports.Component);
-
-	function getElement(id) {
-	  var el = document.getElementById(id);
-	  var rect = el.getBoundingClientRect();
-	  var x = rect.left + window.scrollX;
-	  var y = rect.top + window.scrollY;
-	  var top = rect.top;
-	  var bottom = rect.bottom;
-	  return {
-	    el: el,
-	    x: x,
-	    y: y,
-	    top: top,
-	    bottom: bottom
-	  };
-	}
-	function ImageGrid(_ref) {
-	  var images = _ref.images,
-	    _onClickImage = _ref.onClickImage,
-	    selectedImageIdx = _ref.selectedImageIdx;
-	  var _useState = react.exports.useState(false),
-	    _useState2 = _slicedToArray(_useState, 2),
-	    isPhotoViewerOpen = _useState2[0],
-	    setIsPhotoViewerOpen = _useState2[1];
-	  var handleKeydownEvent = function handleKeydownEvent(e) {
-	    if (images.length === 0) {
-	      return;
-	    }
-	    var key = e.key.toLowerCase();
-	    if (selectedImageIdx === undefined) {
-	      if (key === ' ') {
-	        return;
-	      }
-	      if (key === 'arrowright' || key === 'arrowleft' || key === 'arrowup' || key === 'arrowdown') {
-	        _onClickImage(0);
-	      }
-	    }
-	    var currentId = "image-container-".concat(images[selectedImageIdx].photoId);
-	    if (key === 'arrowright') {
-	      e.preventDefault();
-	      var _getElement = getElement(currentId),
-	        el = _getElement.el,
-	        currentY = _getElement.y;
-
-	      // at the last item in the grid/list
-	      if (!el.nextSibling) {
-	        return;
-	      }
-
-	      // if the next item is in the next row and off screen, scroll to it
-	      var _getElement2 = getElement(el.nextSibling.id),
-	        nextSiblingY = _getElement2.y,
-	        bottom = _getElement2.bottom;
-	      if (currentY < nextSiblingY && bottom > window.innerHeight) {
-	        el.nextSibling.scrollIntoView(false);
-	      }
-	      _onClickImage(selectedImageIdx + 1);
-	    } else if (key === 'arrowleft') {
-	      e.preventDefault();
-	      var _getElement3 = getElement(currentId),
-	        _el = _getElement3.el,
-	        _currentY = _getElement3.y;
-
-	      // at the first item in the grid/list
-	      if (!_el.previousSibling) {
-	        return;
-	      }
-
-	      // if the prev item is in the prev row and off screen, scroll to it
-	      var _getElement4 = getElement(_el.previousSibling.id),
-	        prevSiblingY = _getElement4.y,
-	        top = _getElement4.top;
-	      // 87 because of the headers
-	      if (_currentY > prevSiblingY && top < 87) {
-	        _el.previousSibling.scrollIntoView();
-	      }
-	      _onClickImage(selectedImageIdx - 1);
-	    } else if (key === 'arrowup') {
-	      e.preventDefault();
-	      var _getElement5 = getElement(currentId),
-	        currentX = _getElement5.x,
-	        _currentY2 = _getElement5.y;
-	      var lastInPrevRow;
-
-	      // loop backwards until we find the first item above in the same column
-	      for (var i = selectedImageIdx - 1; i >= 0; i--) {
-	        var _getElement6 = getElement("image-container-".concat(images[i].photoId)),
-	          _el2 = _getElement6.el,
-	          prevX = _getElement6.x,
-	          prevY = _getElement6.y,
-	          _top = _getElement6.top;
-	        if (_currentY2 > prevY) {
-	          if (lastInPrevRow === undefined) {
-	            lastInPrevRow = i;
-	          }
-	          if (currentX === prevX) {
-	            _onClickImage(i);
-	            // 87 because of the headers
-	            if (_top < 87) {
-	              _el2.scrollIntoView();
-	            }
-	            break;
-	          }
-	        }
-
-	        // if we've reached this, then there are grid items in the last row that don't perfectly align
-	        // so we take the reference to the last item in the prev row and use that to go to
-	        if (i === 0 && lastInPrevRow !== undefined) {
-	          var _getElement7 = getElement("image-container-".concat(images[lastInPrevRow].photoId)),
-	            newEl = _getElement7.el,
-	            newTop = _getElement7.top;
-	          _onClickImage(lastInPrevRow);
-	          // 87 because of the headers
-	          if (newTop < 87) {
-	            newEl.scrollIntoView();
-	          }
-	        }
-	      }
-	    } else if (key === 'arrowdown') {
-	      e.preventDefault();
-	      var _getElement8 = getElement(currentId),
-	        _currentX = _getElement8.x,
-	        _currentY3 = _getElement8.y;
-	      var firstInNextRow;
-
-	      // loop forward until we find the first item below in the same column
-	      for (var _i = selectedImageIdx + 1; _i < images.length; _i++) {
-	        var _getElement9 = getElement("image-container-".concat(images[_i].photoId)),
-	          _el3 = _getElement9.el,
-	          nextX = _getElement9.x,
-	          nextY = _getElement9.y,
-	          _bottom = _getElement9.bottom;
-	        if (_currentY3 < nextY) {
-	          if (firstInNextRow === undefined) {
-	            firstInNextRow = _i;
-	          }
-	          if (_currentX === nextX) {
-	            _onClickImage(_i);
-	            if (_bottom > window.innerHeight) {
-	              _el3.scrollIntoView(false);
-	            }
-	            break;
-	          }
-	        }
-
-	        // if we've reached this, then there are grid items in the last row that don't perfectly align
-	        // so we take the reference to the first item in the next row and use that to go to
-	        if (_i === images.length - 1 && firstInNextRow !== undefined) {
-	          var _getElement10 = getElement("image-container-".concat(images[firstInNextRow].photoId)),
-	            _newEl = _getElement10.el,
-	            newBottom = _getElement10.bottom;
-	          _onClickImage(firstInNextRow);
-	          if (newBottom > window.innerHeight) {
-	            _newEl.scrollIntoView(false);
-	          }
-	        }
-	      }
-	    } else if (key === ' ') {
-	      e.preventDefault();
-	      setIsPhotoViewerOpen(true);
-	    }
-	  };
-	  react.exports.useEffect(function () {
-	    document.addEventListener('keydown', handleKeydownEvent);
-	    return function () {
-	      return document.removeEventListener('keydown', handleKeydownEvent);
-	    };
-	  }, [images, selectedImageIdx, handleKeydownEvent]);
-	  var closePhotoViewer = function closePhotoViewer() {
-	    setIsPhotoViewerOpen(false);
-	  };
-	  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
-	    className: "photo-grid"
-	  }, images.map(function (imgObj, idx) {
-	    return /*#__PURE__*/React.createElement(DefaultImage, {
-	      imgObj: imgObj,
-	      idx: idx,
-	      isSelected: selectedImageIdx === idx,
-	      key: imgObj.photoId,
-	      onClickImage: function onClickImage(photoIdx) {
-	        return _onClickImage(photoIdx);
-	      }
-	    });
-	  })), isPhotoViewerOpen && !!images[selectedImageIdx] && /*#__PURE__*/React.createElement(Lightbox, {
-	    medium: images[selectedImageIdx].imageSrc,
-	    large: images[selectedImageIdx].imageSrc,
-	    onClose: closePhotoViewer,
-	    hideDownload: true,
-	    showRotate: true
-	  }));
-	}
-
-	function LeftPanel(_ref) {
-	  var listingId = _ref.listingId,
-	    photoId = _ref.photoId,
-	    labeledPhotoId = _ref.labeledPhotoId,
-	    labeledPhotoQualityTier = _ref.labeledPhotoQualityTier,
-	    onSubmitOrSkip = _ref.onSubmitOrSkip;
-	  var _useState = react.exports.useState(''),
-	    _useState2 = _slicedToArray(_useState, 2),
-	    photoQualityTier = _useState2[0],
-	    setPhotoQualityTier = _useState2[1];
-	  var _useState3 = react.exports.useState(false),
-	    _useState4 = _slicedToArray(_useState3, 2),
-	    isSaving = _useState4[0],
-	    setIsSaving = _useState4[1];
-	  var _useState5 = react.exports.useState(false),
-	    _useState6 = _slicedToArray(_useState5, 2),
-	    isSkipping = _useState6[0],
-	    setIsSkipping = _useState6[1];
-	  var handlePhotoQualityChange = react.exports.useCallback(function (e) {
-	    setPhotoQualityTier(e.target.value);
-	  }, [setPhotoQualityTier]);
-	  var handleSkip = function handleSkip(e) {
-	    setIsSkipping(true);
-	    onSubmitOrSkip();
-	    e.preventDefault();
-	    Labelbox.skip().then(function () {
-	      setPhotoQualityTier('');
-	      e.target.blur();
-	      Labelbox.fetchNextAssetToLabel();
-	      setIsSkipping(false);
-	    });
-	  };
-	  var handleSubmit = function handleSubmit(e) {
-	    if (photoQualityTier === '') {
-	      e.preventDefault();
-	      return;
-	    }
-	    setIsSaving(true);
-	    onSubmitOrSkip();
-	    e.preventDefault();
-	    var formattedData = {
-	      id_listing: listingId,
-	      photo_id: photoId,
-	      photo_quality: photoQualityTier
-	    };
-	    Labelbox.setLabelForAsset(JSON.stringify(formattedData)).then(function () {
-	      setPhotoQualityTier('');
-	      if (!labeledPhotoId) {
-	        Labelbox.fetchNextAssetToLabel();
-	      }
-	      setIsSaving(false);
-	    });
-	  };
-	  var handleKeyupEvent = function handleKeyupEvent(e) {
-	    if (!isSaving && !isSkipping) {
-	      switch (key) {
-	        case '1':
-	          e.preventDefault();
-	          setPhotoQualityTier('Most Inspiring');
-	          break;
-	        case '2':
-	          e.preventDefault();
-	          setPhotoQualityTier('High');
-	          break;
-	        case '3':
-	          e.preventDefault();
-	          setPhotoQualityTier('Acceptable');
-	          break;
-	        case '4':
-	          e.preventDefault();
-	          setPhotoQualityTier('Low Quality');
-	          break;
-	        case '5':
-	          e.preventDefault();
-	          setPhotoQualityTier('Unacceptable');
-	          break;
-	        case 's':
-	          e.preventDefault();
-	          handleSkip(e);
-	          break;
-	        case 'enter':
-	          e.preventDefault();
-	          handleSubmit(e);
-	        default:
-	          return;
-	      }
-	    }
-	  };
-	  react.exports.useEffect(function () {
-	    document.addEventListener('keyup', handleKeyupEvent);
-	    return function () {
-	      return document.removeEventListener('keyup', handleKeyupEvent);
-	    };
-	  }, [listingId, photoId, photoQualityTier, handleKeyupEvent]);
-	  react.exports.useEffect(function () {
-	    setPhotoQualityTier('');
-	  }, [listingId]);
-	  return /*#__PURE__*/React.createElement("form", null, /*#__PURE__*/React.createElement("label", null, "Listing ID:", /*#__PURE__*/React.createElement("input", {
-	    type: "text",
-	    name: "listing-id",
-	    readOnly: true,
-	    value: listingId
-	  })), /*#__PURE__*/React.createElement("label", null, "Photo ID:", /*#__PURE__*/React.createElement("input", {
-	    type: "text",
-	    name: "photo-id",
-	    readOnly: true,
-	    value: photoId
-	  })), /*#__PURE__*/React.createElement("label", null, /*#__PURE__*/React.createElement("div", {
-	    className: "label"
-	  }, "Photo Quality:"), /*#__PURE__*/React.createElement("select", {
-	    value: photoQualityTier,
-	    onChange: handlePhotoQualityChange
-	  }, /*#__PURE__*/React.createElement("option", {
-	    disabled: true,
-	    value: ""
-	  }, "-- Select a tier --"), /*#__PURE__*/React.createElement("option", {
-	    value: "Most Inspiring"
-	  }, "Most Inspiring"), /*#__PURE__*/React.createElement("option", {
-	    value: "High"
-	  }, "High"), /*#__PURE__*/React.createElement("option", {
-	    value: "Acceptable"
-	  }, "Acceptable"), /*#__PURE__*/React.createElement("option", {
-	    value: "Low Quality"
-	  }, "Low Quality"), /*#__PURE__*/React.createElement("option", {
-	    value: "Unacceptable"
-	  }, "Unacceptable"))), /*#__PURE__*/React.createElement("div", {
-	    className: "left-panel-ctas-wrapper"
-	  }, /*#__PURE__*/React.createElement("button", {
-	    disabled: isSkipping || isSaving,
-	    onClick: function onClick(e) {
-	      return handleSkip(e);
-	    },
-	    className: "cta skip-cta"
-	  }, isSkipping ? 'Skipping...' : 'Skip Listing'), /*#__PURE__*/React.createElement("button", {
-	    disabled: isSkipping || isSaving || photoQualityTier === '',
-	    className: "cta save-cta",
-	    type: "submit",
-	    onClick: function onClick(e) {
-	      return handleSubmit(e);
-	    }
-	  }, isSaving ? 'Submitting...' : 'Submit')), labeledPhotoId && /*#__PURE__*/React.createElement("div", {
-	    className: "existing-label-container"
-	  }, /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("span", {
-	    className: "bold-text"
-	  }, "Labeled Photo ID:"), ' ', labeledPhotoId), /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("span", {
-	    className: "bold-text"
-	  }, "Labeled Photo Quality:"), ' ', labeledPhotoQualityTier)));
+	function _toPropertyKey(arg) {
+	  var key = _toPrimitive(arg, "string");
+	  return typeof key === "symbol" ? key : String(key);
 	}
 
 	function Header(_ref) {
@@ -8575,23 +7403,26 @@
 	    hasPrev = _ref.hasPrev,
 	    hasNext = _ref.hasNext,
 	    projectId = _ref.projectId,
-	    hasLabel = _ref.hasLabel;
+	    setSelectedListing = _ref.setSelectedListing,
+	    setSelectedImageIdx = _ref.setSelectedImageIdx;
 	  var handleGoHome = react.exports.useCallback(function () {
 	    window.location.href = 'https://app.labelbox.com/projects/' + projectId;
 	  }, [projectId]);
 	  var handleGoBack = react.exports.useCallback(function () {
+	    setSelectedListing();
+	    setSelectedImageIdx();
 	    if (hasPrev) {
 	      Labelbox.setLabelAsCurrentAsset(currentAsset.previous);
 	    }
-	  }, [currentAsset, hasPrev]);
+	  }, [currentAsset]);
 	  var handleGoNext = react.exports.useCallback(function () {
+	    setSelectedListing();
+	    setSelectedImageIdx();
 	    if (hasNext) {
 	      Labelbox.setLabelAsCurrentAsset(currentAsset.next);
-	    } else if (!hasNext && hasLabel) {
-	      Labelbox.fetchNextAssetToLabel();
 	    }
-	  }, [currentAsset, hasNext, hasLabel]);
-	  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+	  }, [currentAsset]);
+	  return /*#__PURE__*/React.createElement("div", {
 	    className: "header-container"
 	  }, /*#__PURE__*/React.createElement("i", {
 	    className: "material-icons home-icon",
@@ -8603,129 +7434,582 @@
 	    className: "header-title",
 	    id: "externalid"
 	  }, "Label this asset"), /*#__PURE__*/React.createElement("i", {
-	    className: "material-icons next-icon ".concat(hasNext || !hasNext && hasLabel ? 'button-default' : ''),
-	    onClick: hasNext || !hasNext && hasLabel ? handleGoNext : undefined
-	  }, "keyboard_arrow_right")), /*#__PURE__*/React.createElement("div", {
-	    className: "keyboard-shortcuts"
-	  }, /*#__PURE__*/React.createElement("span", {
-	    className: "bold-text"
-	  }, "Select Photo:"), " Arrows |", ' ', /*#__PURE__*/React.createElement("span", {
-	    className: "bold-text"
-	  }, "View Photo:"), " Space |", ' ', /*#__PURE__*/React.createElement("span", {
-	    className: "bold-text"
-	  }, "Close Photo:"), " Esc |", ' ', /*#__PURE__*/React.createElement("span", {
-	    className: "bold-text"
-	  }, "Set Quality:"), " 1-5 |", ' ', /*#__PURE__*/React.createElement("span", {
-	    className: "bold-text"
-	  }, "Submit:"), " Enter |", ' ', /*#__PURE__*/React.createElement("span", {
-	    className: "bold-text"
-	  }, "Skip:"), " s"));
+	    className: "material-icons next-icon ".concat(hasNext ? 'button-default' : ''),
+	    onClick: hasNext ? handleGoNext : undefined
+	  }, "keyboard_arrow_right"));
 	}
 
+	function ListingDetailsHeader(_ref) {
+	  var attribute = _ref.attribute,
+	    qualityTier = _ref.qualityTier,
+	    _ref$selectedListing = _ref.selectedListing,
+	    selectedListing = _ref$selectedListing === void 0 ? {} : _ref$selectedListing;
+	  return /*#__PURE__*/React.createElement("div", {
+	    className: "header sticky"
+	  }, /*#__PURE__*/React.createElement("div", {
+	    className: "listing-title"
+	  }, /*#__PURE__*/React.createElement("h3", null, attribute, " - ", qualityTier), /*#__PURE__*/React.createElement("div", {
+	    className: "listing-header"
+	  }, /*#__PURE__*/React.createElement("div", {
+	    className: "listing-info"
+	  }, "Listing ID: ", selectedListing.listingId), /*#__PURE__*/React.createElement("div", {
+	    className: "listing-info"
+	  }, "Property type: ", selectedListing.propertyType), /*#__PURE__*/React.createElement("div", {
+	    className: "listing-info"
+	  }, "Room type: ", selectedListing.roomType), /*#__PURE__*/React.createElement("div", {
+	    className: "listing-info"
+	  }, /*#__PURE__*/React.createElement("a", {
+	    href: "https://www.airbnb.com/rooms/".concat(selectedListing.listingId),
+	    id: "selected-pdp-link",
+	    target: "_blank"
+	  }, "PDP Link")))));
+	}
+
+	function getEffectiveImageUrl(photoLink) {
+	  var effectiveImgUrl = photoLink;
+	  // if (!photoLink.includes('/im/')) {
+	  //   const originalUrl = new URL(photoLink);
+	  //   effectiveImgUrl = `${originalUrl.origin}/im${originalUrl.pathname}${originalUrl.search}`;
+	  // }
+	  return effectiveImgUrl !== null && effectiveImgUrl !== void 0 && effectiveImgUrl.includes('?') ? "".concat(effectiveImgUrl) : "".concat(effectiveImgUrl, "?im_w=480");
+	}
+
+	function DefaultImage(_ref) {
+	  var hasQualityTierChanged = _ref.hasQualityTierChanged,
+	    imgObj = _ref.imgObj,
+	    idx = _ref.idx,
+	    isEdited = _ref.isEdited,
+	    isSelected = _ref.isSelected,
+	    onClickImage = _ref.onClickImage;
+	  var listingId = imgObj.listingId;
+	  var imageUrl = getEffectiveImageUrl(imgObj.photoLink);
+	  return /*#__PURE__*/React.createElement("div", {
+	    className: "image-container",
+	    onClick: function onClick() {
+	      return onClickImage(idx);
+	    },
+	    id: "image-container-".concat(listingId)
+	  }, /*#__PURE__*/React.createElement("img", {
+	    src: imageUrl,
+	    className: "default-image ".concat(hasQualityTierChanged ? 'image-quality-changed' : '', " ").concat(isEdited ? 'image-edited' : '', " ").concat(isSelected ? 'image-selected' : '')
+	  }), /*#__PURE__*/React.createElement("figcaption", null, listingId));
+	}
+
+	function ImageGrid(_ref) {
+	  var images = _ref.images,
+	    _onClickImage = _ref.onClickImage,
+	    photoEdits = _ref.photoEdits,
+	    qualityTier = _ref.qualityTier,
+	    selectedImageIdx = _ref.selectedImageIdx;
+	  return /*#__PURE__*/React.createElement("div", {
+	    className: "photo-grid"
+	  }, images.map(function (imgObj, idx) {
+	    var listingEdit = photoEdits.find(function (edit) {
+	      return edit.listingId === imgObj.listingId;
+	    });
+	    var hasQualiterTierChanged = !!(listingEdit !== null && listingEdit !== void 0 && listingEdit.photoQualityTier) && (listingEdit === null || listingEdit === void 0 ? void 0 : listingEdit.photoQualityTier) !== qualityTier;
+	    return /*#__PURE__*/React.createElement(DefaultImage, {
+	      hasQualityTierChanged: hasQualiterTierChanged,
+	      imgObj: imgObj,
+	      idx: idx,
+	      isEdited: !!listingEdit,
+	      isSelected: selectedImageIdx === idx,
+	      key: imgObj.photoId,
+	      onClickImage: function onClickImage(photoIdx) {
+	        return _onClickImage(photoIdx);
+	      }
+	    });
+	  }));
+	}
+
+	function getUpdateReason(edit, originalDefaultPhotoId, originalPhotoQualityTier) {
+	  var defaultPhotoId = edit.defaultPhotoId,
+	    photoQualityTier = edit.photoQualityTier;
+	  var defaultPhotoIdChanged = !!defaultPhotoId && defaultPhotoId !== originalDefaultPhotoId;
+	  var photoQualityTierChanged = !!photoQualityTier && photoQualityTier !== originalPhotoQualityTier;
+	  if (photoQualityTierChanged && photoQualityTier === 'Remove') {
+	    return 'remove category';
+	  }
+	  if (defaultPhotoIdChanged && photoQualityTierChanged) {
+	    return 'update photo + quality';
+	  }
+	  if (photoQualityTierChanged) {
+	    return 'update quality';
+	  }
+	  if (defaultPhotoIdChanged) {
+	    return 'update photo';
+	  }
+	  return '';
+	}
+	function formatEditDataForSubmission(photoEdits, attribute, originalPhotoQualityTier, gridImages) {
+	  var formatted = photoEdits.map(function (edit) {
+	    var listingId = edit.listingId,
+	      defaultPhotoId = edit.defaultPhotoId,
+	      photoQualityTier = edit.photoQualityTier;
+	    var listingInfo = gridImages.find(function (listing) {
+	      return listing.listingId === listingId;
+	    });
+	    var originalDefaultPhotoId = listingInfo === null || listingInfo === void 0 ? void 0 : listingInfo.photoId;
+	    var data = {
+	      id_listing: listingId,
+	      listing_category: attribute,
+	      photo_id: defaultPhotoId,
+	      photo_quality: photoQualityTier,
+	      update_reason: getUpdateReason(edit, originalDefaultPhotoId, originalPhotoQualityTier)
+	    };
+	    return data;
+	  });
+	  return JSON.stringify(formatted);
+	}
+
+	function Content(_ref) {
+	  var assetData = _ref.assetData,
+	    gridImages = _ref.gridImages,
+	    onClickImage = _ref.onClickImage,
+	    photoEdits = _ref.photoEdits,
+	    selectedListing = _ref.selectedListing,
+	    selectedImageIdx = _ref.selectedImageIdx,
+	    setSelectedListing = _ref.setSelectedListing,
+	    setSelectedImageIdx = _ref.setSelectedImageIdx,
+	    setPhotoEdits = _ref.setPhotoEdits;
+	  react.exports.useEffect(function () {
+	    document.querySelector('.content').scrollTo(0, 0);
+	  }, [assetData]);
+	  var handleSkip = react.exports.useCallback(function () {
+	    setSelectedListing();
+	    setSelectedImageIdx();
+	    setPhotoEdits([]);
+	    Labelbox.skip().then(function () {
+	      Labelbox.fetchNextAssetToLabel();
+	    });
+	  }, []);
+	  var handleSubmit = react.exports.useCallback(function () {
+	    setSelectedListing();
+	    setSelectedImageIdx();
+	    var formattedData = formatEditDataForSubmission(photoEdits, assetData === null || assetData === void 0 ? void 0 : assetData.attribute, assetData === null || assetData === void 0 ? void 0 : assetData.qualityTier, assetData === null || assetData === void 0 ? void 0 : assetData.gridImages);
+	    Labelbox.setLabelForAsset(formattedData, 'ANY').then(function () {
+	      setPhotoEdits([]);
+	      Labelbox.fetchNextAssetToLabel();
+	    });
+	  }, [photoEdits, assetData]);
+	  return /*#__PURE__*/React.createElement("div", {
+	    className: "content"
+	  }, /*#__PURE__*/React.createElement(ListingDetailsHeader, {
+	    attribute: assetData === null || assetData === void 0 ? void 0 : assetData.attribute,
+	    qualityTier: assetData === null || assetData === void 0 ? void 0 : assetData.qualityTier,
+	    selectedListing: selectedListing
+	  }), /*#__PURE__*/React.createElement(ImageGrid, {
+	    images: gridImages,
+	    onClickImage: onClickImage,
+	    photoEdits: photoEdits,
+	    qualityTier: assetData === null || assetData === void 0 ? void 0 : assetData.qualityTier,
+	    selectedImageIdx: selectedImageIdx
+	  }), /*#__PURE__*/React.createElement("div", {
+	    className: "cta-container"
+	  }, /*#__PURE__*/React.createElement("a", {
+	    className: "cta skip-cta",
+	    onClick: handleSkip
+	  }, "Skip"), /*#__PURE__*/React.createElement("a", {
+	    className: "cta submit-cta",
+	    onClick: handleSubmit
+	  }, "Submit")));
+	}
+
+	function getUpdatedDefaultPhotoInfo(photoEdits, listing) {
+	  return photoEdits.find(function (edit) {
+	    return edit.listingId === listing.listingId;
+	  });
+	}
+
+	function LeftPanel(_ref) {
+	  var assetData = _ref.assetData,
+	    newDefaultPhotoId = _ref.newDefaultPhotoId,
+	    photoEdits = _ref.photoEdits,
+	    selectedListing = _ref.selectedListing,
+	    setNewDefaultPhotoId = _ref.setNewDefaultPhotoId,
+	    setPhotoEdits = _ref.setPhotoEdits;
+	  var originalPhotoQualityTier = assetData.qualityTier;
+	  var originalDefaultPhotoId = selectedListing.photoId;
+	  var updatedDefaultPhotoInfo = getUpdatedDefaultPhotoInfo(photoEdits, selectedListing);
+	  var updatedDefaultPhotoId = updatedDefaultPhotoInfo === null || updatedDefaultPhotoInfo === void 0 ? void 0 : updatedDefaultPhotoInfo.defaultPhotoId;
+	  var updatedDefaultPhotoQualityTier = updatedDefaultPhotoInfo === null || updatedDefaultPhotoInfo === void 0 ? void 0 : updatedDefaultPhotoInfo.photoQualityTier;
+	  var _useState = react.exports.useState(updatedDefaultPhotoQualityTier || originalPhotoQualityTier),
+	    _useState2 = _slicedToArray(_useState, 2),
+	    photoQualityTier = _useState2[0],
+	    setPhotoQualityTier = _useState2[1];
+	  react.exports.useEffect(function () {
+	    setPhotoQualityTier(updatedDefaultPhotoQualityTier || originalPhotoQualityTier);
+	  }, [selectedListing]);
+	  function handlePhotoQualityChange(e) {
+	    setPhotoQualityTier(e.target.value);
+	  }
+	  function clearUnsavedChanges() {
+	    setNewDefaultPhotoId('');
+	    setPhotoQualityTier(assetData.qualityTier);
+	  }
+	  function handleResetChanges() {
+	    clearUnsavedChanges();
+
+	    // delete saved change entry from photoEdits
+	    setPhotoEdits(function (prevEdits) {
+	      var prevChangeIndex = prevEdits.findIndex(function (edit) {
+	        return edit.listingId === selectedListing.listingId;
+	      });
+	      if (prevChangeIndex !== -1) {
+	        return [].concat(_toConsumableArray(prevEdits.slice(0, prevChangeIndex)), _toConsumableArray(prevEdits.slice(prevChangeIndex + 1)));
+	      } else {
+	        return prevEdits;
+	      }
+	    });
+	  }
+	  function handleSubmit(e) {
+	    e.preventDefault();
+	    // photo id and quality tier both same as original data
+	    if ((!newDefaultPhotoId || newDefaultPhotoId === originalDefaultPhotoId) && photoQualityTier === originalPhotoQualityTier) {
+	      return setPhotoEdits(function (prevEdits) {
+	        var prevChangeIndex = prevEdits.findIndex(function (edit) {
+	          return edit.listingId === selectedListing.listingId;
+	        });
+	        if (prevChangeIndex !== -1) {
+	          // delete previous edit
+	          return [].concat(_toConsumableArray(prevEdits.slice(0, prevChangeIndex)), _toConsumableArray(prevEdits.slice(prevChangeIndex + 1)));
+	        }
+	        return prevEdits;
+	      });
+	    }
+
+	    // change in photo id
+	    if (!!newDefaultPhotoId) {
+	      if (newDefaultPhotoId !== originalDefaultPhotoId) {
+	        setPhotoEdits(function (prevEdits) {
+	          var prevChangeIndex = prevEdits.findIndex(function (edit) {
+	            return edit.listingId === selectedListing.listingId;
+	          });
+	          if (prevChangeIndex !== -1) {
+	            // override previous edit
+	            return [].concat(_toConsumableArray(prevEdits.slice(0, prevChangeIndex)), [Object.assign({}, prevEdits[prevChangeIndex], {
+	              defaultPhotoId: newDefaultPhotoId
+	            })], _toConsumableArray(prevEdits.slice(prevChangeIndex + 1)));
+	          } else {
+	            // add to photoEdits
+	            return [].concat(_toConsumableArray(prevEdits), [{
+	              listingId: selectedListing.listingId,
+	              defaultPhotoId: newDefaultPhotoId,
+	              photoQualityTier: photoQualityTier
+	            }]);
+	          }
+	        });
+	      } else {
+	        setPhotoEdits(function (prevEdits) {
+	          var prevChangeIndex = prevEdits.findIndex(function (edit) {
+	            return edit.listingId === selectedListing.listingId;
+	          });
+	          if (prevChangeIndex !== -1) {
+	            var copy = Object.assign({}, prevEdits[prevChangeIndex], {
+	              defaultPhotoId: newDefaultPhotoId
+	            });
+	            return [].concat(_toConsumableArray(prevEdits.slice(0, prevChangeIndex)), [copy], _toConsumableArray(prevEdits.slice(prevChangeIndex + 1)));
+	          }
+	          return prevEdits;
+	        });
+	      }
+	    }
+
+	    // change photo quality tier
+	    if (photoQualityTier !== originalPhotoQualityTier) {
+	      setPhotoEdits(function (prevEdits) {
+	        var prevChangeIndex = prevEdits.findIndex(function (edit) {
+	          return edit.listingId === selectedListing.listingId;
+	        });
+	        if (prevChangeIndex !== -1) {
+	          return [].concat(_toConsumableArray(prevEdits.slice(0, prevChangeIndex)), [Object.assign({}, prevEdits[prevChangeIndex], {
+	            photoQualityTier: photoQualityTier
+	          })], _toConsumableArray(prevEdits.slice(prevChangeIndex + 1)));
+	        } else {
+	          return [].concat(_toConsumableArray(prevEdits), [{
+	            listingId: selectedListing.listingId,
+	            defaultPhotoId: originalDefaultPhotoId || updatedDefaultPhotoId || originalDefaultPhotoId,
+	            photoQualityTier: photoQualityTier
+	          }]);
+	        }
+	      });
+	    } else {
+	      // if photo edit exists for the listing, update the photoQualityTier
+	      setPhotoEdits(function (prevEdits) {
+	        var prevChangeIndex = prevEdits.findIndex(function (edit) {
+	          return edit.listingId === selectedListing.listingId;
+	        });
+	        if (prevChangeIndex !== -1) {
+	          return [].concat(_toConsumableArray(prevEdits.slice(0, prevChangeIndex)), [Object.assign({}, prevEdits[prevChangeIndex], {
+	            photoQualityTier: photoQualityTier
+	          })], _toConsumableArray(prevEdits.slice(prevChangeIndex + 1)));
+	        }
+	        return prevEdits;
+	      });
+	    }
+	  }
+	  return /*#__PURE__*/React.createElement("form", {
+	    onSubmit: handleSubmit
+	  }, /*#__PURE__*/React.createElement("label", null, "Photo id:", /*#__PURE__*/React.createElement("input", {
+	    type: "text",
+	    name: "photo-id",
+	    readOnly: true,
+	    value: newDefaultPhotoId || updatedDefaultPhotoId || originalDefaultPhotoId
+	  })), /*#__PURE__*/React.createElement("label", null, /*#__PURE__*/React.createElement("div", {
+	    className: "label"
+	  }, "Photo quality:"), /*#__PURE__*/React.createElement("select", {
+	    value: photoQualityTier,
+	    onChange: handlePhotoQualityChange
+	  }, /*#__PURE__*/React.createElement("option", {
+	    value: "Most Inspiring"
+	  }, "Most Inspiring"), /*#__PURE__*/React.createElement("option", {
+	    value: "High"
+	  }, "High"), /*#__PURE__*/React.createElement("option", {
+	    value: "Acceptable"
+	  }, "Acceptable"), /*#__PURE__*/React.createElement("option", {
+	    value: "Low Quality"
+	  }, "Low Quality"), /*#__PURE__*/React.createElement("option", {
+	    value: "Unacceptable"
+	  }, "Unacceptable"), /*#__PURE__*/React.createElement("option", {
+	    value: "Remove"
+	  }, "Remove"))), /*#__PURE__*/React.createElement("div", {
+	    className: "left-panel-ctas-wrapper"
+	  }, /*#__PURE__*/React.createElement("button", {
+	    onClick: handleResetChanges,
+	    className: "cta clear-cta"
+	  }, "Reset"), /*#__PURE__*/React.createElement("input", {
+	    className: "cta save-cta",
+	    type: "submit",
+	    value: "Save"
+	  })));
+	}
+
+	function AdditionalImage(_ref) {
+	  var isSelected = _ref.isSelected,
+	    listingImage = _ref.listingImage,
+	    _onClick = _ref.onClick;
+	  var imageUrl = getEffectiveImageUrl(listingImage.photoLink);
+	  return /*#__PURE__*/React.createElement("div", {
+	    className: "additional-image-wrapper"
+	  }, /*#__PURE__*/React.createElement("div", null, "Photo ID: ", listingImage.photoId), /*#__PURE__*/React.createElement("button", {
+	    className: "additional-image ".concat(isSelected ? 'image-selected' : ''),
+	    onClick: function onClick() {
+	      return _onClick(listingImage.photoId);
+	    }
+	  }, /*#__PURE__*/React.createElement("img", {
+	    src: imageUrl,
+	    width: "100%"
+	  })));
+	}
+
+	function AdditionalPhotos(_ref) {
+	  var selectedListing = _ref.selectedListing,
+	    onClickImage = _ref.onClickImage,
+	    newDefaultPhotoId = _ref.newDefaultPhotoId;
+	  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h5", null, "Other pictures"), selectedListing.listingImages.map(function (image) {
+	    return /*#__PURE__*/React.createElement(AdditionalImage, {
+	      key: image.photoId,
+	      isSelected: newDefaultPhotoId === image.photoId,
+	      listingImage: image,
+	      onClick: onClickImage
+	    });
+	  }));
+	}
+
+	function RightPanel(_ref) {
+	  var selectedListing = _ref.selectedListing,
+	    newDefaultPhotoId = _ref.newDefaultPhotoId,
+	    onClickImage = _ref.onClickImage;
+	  var scrollToTop = react.exports.useCallback(function (node) {
+	    node === null || node === void 0 ? void 0 : node.scrollTo(0, 0);
+	  }, [selectedListing]);
+	  if (!selectedListing) return null;
+	  var title = selectedListing.listingTitle,
+	    description = selectedListing.listingDescription,
+	    location = selectedListing.listingLocation,
+	    where = selectedListing.listingNeighborhood,
+	    lat = selectedListing.lat,
+	    lng = selectedListing.lng;
+
+	  // https://www.google.com/maps/search/?api=1&query={lat}%2C{lng}
+	  // src="https://maps.google.com/maps?q=${lat},${lng}&hl=es&z=14&amp;output=embed"
+	  // href="https://maps.google.com/maps?q=${lat},${lng};z=14&amp;output=embed"
+	  return /*#__PURE__*/React.createElement("div", {
+	    className: "flex-column right-side-panel",
+	    ref: scrollToTop
+	  }, /*#__PURE__*/React.createElement("h5", null, "Listing Info"), /*#__PURE__*/React.createElement("div", {
+	    className: "listing-info-container"
+	  }, /*#__PURE__*/React.createElement("div", {
+	    className: "listing-info"
+	  }, /*#__PURE__*/React.createElement("b", null, "Title"), ": ", title)), /*#__PURE__*/React.createElement("div", {
+	    className: "listing-info-container"
+	  }, /*#__PURE__*/React.createElement("div", {
+	    className: "listing-info"
+	  }, /*#__PURE__*/React.createElement("b", null, "Description"), ": ", description)), /*#__PURE__*/React.createElement("div", {
+	    className: "listing-info-container"
+	  }, /*#__PURE__*/React.createElement("div", {
+	    className: "listing-info"
+	  }, /*#__PURE__*/React.createElement("b", null, "Location"), ": ", location)), /*#__PURE__*/React.createElement("div", {
+	    className: "listing-info-container"
+	  }, /*#__PURE__*/React.createElement("div", {
+	    className: "listing-info"
+	  }, /*#__PURE__*/React.createElement("b", null, "Where You'll Be"), ": ", where)), /*#__PURE__*/React.createElement("div", {
+	    className: "listing-info-container"
+	  }, /*#__PURE__*/React.createElement("div", {
+	    className: "listing-info"
+	  }, /*#__PURE__*/React.createElement("iframe", {
+	    width: "450",
+	    height: "450",
+	    frameBorder: "0",
+	    scrolling: "yes",
+	    marginHeight: "0",
+	    marginWidth: "0",
+	    src: "https://maps.google.com/maps?q=".concat(lat, ",").concat(lng, "&z=14&output=embed")
+	  }))), /*#__PURE__*/React.createElement(AdditionalPhotos, {
+	    selectedListing: selectedListing,
+	    onClickImage: onClickImage,
+	    newDefaultPhotoId: newDefaultPhotoId
+	  }));
+	}
+
+	function get(url) {
+	  var Httpreq = new XMLHttpRequest();
+	  Httpreq.open('GET', url, false);
+	  Httpreq.send(null);
+	  return Httpreq.responseText;
+	}
+
+	function overrideGridImages(changes, gridImages) {
+	  var listingIdsWithUpdatedDefaultPhoto = changes.map(function (e) {
+	    return !!e.defaultPhotoId && e.listingId;
+	  });
+	  var updatedGridImages = gridImages.map(function (imgObj) {
+	    if (listingIdsWithUpdatedDefaultPhoto.includes(imgObj.listingId)) {
+	      var _imgObj$listingImages;
+	      var updatedPhotoId = changes.find(function (edit) {
+	        return edit.listingId === imgObj.listingId;
+	      }).defaultPhotoId;
+	      var updatedPhotoLink = (_imgObj$listingImages = imgObj.listingImages.find(function (photo) {
+	        return photo.photoId === updatedPhotoId;
+	      })) === null || _imgObj$listingImages === void 0 ? void 0 : _imgObj$listingImages.photoLink;
+	      return Object.assign({}, imgObj, {
+	        photoLink: updatedPhotoLink
+	      });
+	    }
+	    return imgObj;
+	  });
+	  return updatedGridImages;
+	}
+	function getEffectiveGridImages(assetData, photoEdits, selectedImageIdx, newDefaultPhotoId) {
+	  if (!assetData) return [];
+	  var gridImagesCopy = _toConsumableArray(assetData.gridImages);
+	  if (photoEdits.length) {
+	    gridImagesCopy = overrideGridImages(photoEdits, gridImagesCopy);
+	  }
+	  if (typeof selectedImageIdx === 'number' && !!newDefaultPhotoId) {
+	    var _gridImagesCopy$selec;
+	    return [].concat(_toConsumableArray(gridImagesCopy.slice(0, selectedImageIdx)), [Object.assign({}, gridImagesCopy[selectedImageIdx], {
+	      photoLink: (_gridImagesCopy$selec = gridImagesCopy[selectedImageIdx].listingImages.find(function (photo) {
+	        return photo.photoId === newDefaultPhotoId;
+	      })) === null || _gridImagesCopy$selec === void 0 ? void 0 : _gridImagesCopy$selec.photoLink
+	    })], _toConsumableArray(gridImagesCopy.slice(selectedImageIdx + 1)));
+	  }
+	  return gridImagesCopy;
+	}
+
+	// photoEdits data structure
+	// [{
+	//   listingId: 123,
+	//   defaultPhotoId: 345,
+	//   photoQualityTier: 'High',
+	// }]
+
+	function convertLabelToPhotoEditFormat(labels) {
+	  if (!Array.isArray(labels)) return [];
+	  return labels.map(function (label) {
+	    var id_listing = label.id_listing,
+	      photo_id = label.photo_id,
+	      photo_quality = label.photo_quality;
+	    return _objectSpread2(_objectSpread2({
+	      listingId: id_listing
+	    }, photo_id ? {
+	      defaultPhotoId: photo_id
+	    } : undefined), photo_quality ? {
+	      photoQualityTier: photo_quality
+	    } : undefined);
+	  });
+	}
+
+	var EMPTY_ARR = [];
 	function App() {
 	  var projectId = new URL(window.location.href).searchParams.get('project');
 	  var _useState = react.exports.useState(),
 	    _useState2 = _slicedToArray(_useState, 2),
-	    listingId = _useState2[0],
-	    setListingId = _useState2[1];
+	    currentAsset = _useState2[0],
+	    setCurrentAsset = _useState2[1];
 	  var _useState3 = react.exports.useState(),
 	    _useState4 = _slicedToArray(_useState3, 2),
-	    currentAsset = _useState4[0],
-	    setCurrentAsset = _useState4[1];
-	  var _useState5 = react.exports.useState([]),
+	    assetData = _useState4[0],
+	    setAssetData = _useState4[1];
+	  var _useState5 = react.exports.useState(),
 	    _useState6 = _slicedToArray(_useState5, 2),
-	    assetData = _useState6[0],
-	    setAssetData = _useState6[1];
+	    selectedListing = _useState6[0],
+	    setSelectedListing = _useState6[1];
 	  var _useState7 = react.exports.useState(),
 	    _useState8 = _slicedToArray(_useState7, 2),
 	    selectedImageIdx = _useState8[0],
 	    setSelectedImageIdx = _useState8[1];
-	  var _useState9 = react.exports.useState(),
+	  var _useState9 = react.exports.useState(''),
 	    _useState10 = _slicedToArray(_useState9, 2),
-	    selectedPhotoId = _useState10[0],
-	    setSelectedPhotoId = _useState10[1];
-	  var _useState11 = react.exports.useState(),
-	    _useState12 = _slicedToArray(_useState11, 2),
-	    labeledPhotoId = _useState12[0],
-	    setLabeledPhotoId = _useState12[1];
-	  var _useState13 = react.exports.useState(),
-	    _useState14 = _slicedToArray(_useState13, 2),
-	    labeledPhotoQualityTier = _useState14[0],
-	    setLabeledPhotoQualityTier = _useState14[1];
+	    newDefaultPhotoId = _useState10[0],
+	    setNewDefaultPhotoId = _useState10[1];
 	  var assetNext = react.exports.useRef();
 	  var assetPrev = react.exports.useRef();
-	  var _useState15 = react.exports.useState(true),
-	    _useState16 = _slicedToArray(_useState15, 2),
-	    isLoading = _useState16[0],
-	    setIsLoading = _useState16[1];
-	  var _useState17 = react.exports.useState(true),
-	    _useState18 = _slicedToArray(_useState17, 2),
-	    shouldAllowImageSelection = _useState18[0],
-	    setShouldAllowImageSelection = _useState18[1];
-	  var resetState = function resetState() {
-	    setLabeledPhotoId();
-	    setLabeledPhotoQualityTier();
-	  };
-	  react.exports.useEffect(function () {
-	    document.querySelector('.content').scrollTo(0, 0);
-	    if (labeledPhotoId) {
-	      setSelectedImageIdx(assetData.findIndex(function (image) {
-	        return labeledPhotoId === image.photoId;
-	      }));
-	    }
-	  }, [assetData, labeledPhotoId, setSelectedImageIdx]);
+
+	  // photoEdits data structure
+	  // [{
+	  //   listingId: 123,
+	  //   defaultPhotoId: 345,
+	  //   photoQualityTier: 'High',
+	  // }]
+	  var _useState11 = react.exports.useState(EMPTY_ARR),
+	    _useState12 = _slicedToArray(_useState11, 2),
+	    photoEdits = _useState12[0],
+	    setPhotoEdits = _useState12[1];
+	  var effectiveGridImages = getEffectiveGridImages(assetData, photoEdits, selectedImageIdx, newDefaultPhotoId);
 	  var handleAssetChange = react.exports.useCallback(function (asset) {
 	    if (asset) {
 	      // subscription to Labelbox makes increasing network calls as label history gets longer
 	      // to reduce jank from network calls, check the refs to ensure call is only made when relevant
 	      // data has changed
 	      if ((currentAsset === null || currentAsset === void 0 ? void 0 : currentAsset.id) !== asset.id && (currentAsset === null || currentAsset === void 0 ? void 0 : currentAsset.data) !== asset.data && (assetNext.current !== asset.next || assetPrev.current !== asset.previous)) {
-	        setIsLoading(true);
-	        resetState();
 	        assetNext.current = asset.next;
 	        assetPrev.current = asset.previous;
-	        var assetDataStr = get(asset.metadata[0].metaValue);
-	        var parsedAssetData = parseHtmlInput(assetDataStr);
-
-	        // Full match will be first element, listing ID will be second
-	        setListingId(assetDataStr.match(/href="https:\/\/www.airbnb.com\/rooms\/(.*?)"/)[1]);
-
-	        // default to first image
-	        setSelectedImageIdx(0);
-	        setSelectedPhotoId(parsedAssetData[0].photoId);
+	        var assetDataStr = get(asset.data).replace(/NaN/g, 'null');
+	        var parsedAssetData = JSON.parse(assetDataStr);
 	        setCurrentAsset(asset);
 	        setAssetData(parsedAssetData);
-	        setIsLoading(false);
-	        setShouldAllowImageSelection(true);
 	      }
 	      if (asset.label) {
-	        if (asset.label === 'Skip') {
-	          setLabeledPhotoId('Skipped');
-	          setLabeledPhotoQualityTier('Skipped');
-	          setSelectedImageIdx(undefined);
-	          return;
-	        }
-	        var label = {};
+	        if (asset.label === 'Skip') return;
+	        var labels = [];
 	        try {
-	          label = JSON.parse(asset.label);
+	          labels = JSON.parse(asset.label);
 	        } catch (e) {
 	          console.error(e);
 	        }
-	        setSelectedPhotoId(label.photo_id);
-	        setLabeledPhotoId(label.photo_id);
-	        setLabeledPhotoQualityTier(label.photo_quality);
+	        var formattedLabels = convertLabelToPhotoEditFormat(labels);
+
+	        // store labels in photoEdits mutable data structure
+	        setPhotoEdits(formattedLabels);
 	      }
 	    }
-	  }, [currentAsset]);
-	  var handleClickImage = react.exports.useCallback(function (imageIdx) {
-	    if (shouldAllowImageSelection) {
-	      setSelectedImageIdx(imageIdx);
-	      setSelectedPhotoId(assetData[imageIdx].photoId);
-	    }
-	  }, [assetData, setSelectedImageIdx, setSelectedPhotoId, shouldAllowImageSelection]);
-	  var onSubmitOrSkip = function onSubmitOrSkip() {
-	    setShouldAllowImageSelection(false);
-	  };
+	  }, [currentAsset, setCurrentAsset, setAssetData]);
+	  var handleClickDefaultImage = react.exports.useCallback(function (imageIdx) {
+	    setSelectedImageIdx(imageIdx);
+	    setSelectedListing(assetData.gridImages[imageIdx]);
+	    setNewDefaultPhotoId('');
+	  }, [assetData, setSelectedImageIdx, setSelectedListing, setNewDefaultPhotoId]);
 	  react.exports.useEffect(function () {
 	    Labelbox.currentAsset().subscribe(function (asset) {
 	      handleAssetChange(asset);
@@ -8733,27 +8017,37 @@
 	  }, [handleAssetChange]);
 	  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
 	    className: "flex-column left-side-panel"
-	  }, /*#__PURE__*/React.createElement(LeftPanel, {
-	    listingId: listingId,
-	    photoId: selectedPhotoId,
-	    labeledPhotoId: labeledPhotoId,
-	    labeledPhotoQualityTier: labeledPhotoQualityTier,
-	    onSubmitOrSkip: onSubmitOrSkip
-	  })), /*#__PURE__*/React.createElement("div", {
+	  }, selectedListing ? /*#__PURE__*/React.createElement(LeftPanel, {
+	    assetData: assetData,
+	    newDefaultPhotoId: newDefaultPhotoId,
+	    photoEdits: photoEdits,
+	    selectedListing: selectedListing,
+	    setNewDefaultPhotoId: setNewDefaultPhotoId,
+	    setPhotoEdits: setPhotoEdits
+	  }) : null), /*#__PURE__*/React.createElement("div", {
 	    className: "flex-grow flex-column"
 	  }, /*#__PURE__*/React.createElement(Header, {
 	    currentAsset: currentAsset,
 	    hasNext: !!(currentAsset !== null && currentAsset !== void 0 && currentAsset.next),
 	    hasPrev: !!(currentAsset !== null && currentAsset !== void 0 && currentAsset.previous),
 	    projectId: projectId,
-	    hasLabel: !!labeledPhotoId
-	  }), /*#__PURE__*/React.createElement("div", {
-	    className: "content"
-	  }, !isLoading && /*#__PURE__*/React.createElement(ImageGrid, {
-	    images: assetData,
-	    onClickImage: handleClickImage,
-	    selectedImageIdx: selectedImageIdx
-	  }), isLoading && /*#__PURE__*/React.createElement("p", null, "Loading..."))));
+	    setSelectedListing: setSelectedListing,
+	    setSelectedImageIdx: setSelectedImageIdx
+	  }), /*#__PURE__*/React.createElement(Content, {
+	    assetData: assetData,
+	    gridImages: effectiveGridImages,
+	    onClickImage: handleClickDefaultImage,
+	    photoEdits: photoEdits,
+	    selectedListing: selectedListing,
+	    selectedImageIdx: selectedImageIdx,
+	    setSelectedListing: setSelectedListing,
+	    setSelectedImageIdx: setSelectedImageIdx,
+	    setPhotoEdits: setPhotoEdits
+	  })), /*#__PURE__*/React.createElement(RightPanel, {
+	    selectedListing: selectedListing,
+	    onClickImage: setNewDefaultPhotoId,
+	    newDefaultPhotoId: newDefaultPhotoId
+	  }));
 	}
 
 	ReactDOM.render( /*#__PURE__*/React.createElement(App, null), document.getElementById('root'));

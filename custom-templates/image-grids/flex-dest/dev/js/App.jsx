@@ -1,39 +1,38 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { get, parseHtmlInput } from './utils';
-import ImageGrid from './components/ImageGrid';
-import LeftPanel from './components/LeftPanel';
-import Header from './components/Header';
+import Header from './Header';
+import Content from './Content';
+import LeftPanel from './LeftPanel';
+import RightPanel from './RightPanel';
+import { get } from './utils';
+import getEffectiveGridImages from './getEffectiveGridImages';
+import convertLabelToPhotoEditFormat from './convertLabelToPhotoEditFormat';
 
 const EMPTY_ARR = [];
 
 export default function App() {
   const projectId = new URL(window.location.href).searchParams.get('project');
-  const [listingId, setListingId] = useState();
   const [currentAsset, setCurrentAsset] = useState();
-  const [assetData, setAssetData] = useState([]);
+  const [assetData, setAssetData] = useState();
+  const [selectedListing, setSelectedListing] = useState();
   const [selectedImageIdx, setSelectedImageIdx] = useState();
-  const [selectedPhotoId, setSelectedPhotoId] = useState();
-  const [labeledPhotoId, setLabeledPhotoId] = useState();
-  const [labeledPhotoQualityTier, setLabeledPhotoQualityTier] = useState();
+  const [newDefaultPhotoId, setNewDefaultPhotoId] = useState('');
   const assetNext = useRef();
   const assetPrev = useRef();
-  const [isLoading, setIsLoading] = useState(true);
-  const [shouldAllowImageSelection, setShouldAllowImageSelection] =
-    useState(true);
 
-  const resetState = () => {
-    setLabeledPhotoId();
-    setLabeledPhotoQualityTier();
-  };
+  // photoEdits data structure
+  // [{
+  //   listingId: 123,
+  //   defaultPhotoId: 345,
+  //   photoQualityTier: 'High',
+  // }]
+  const [photoEdits, setPhotoEdits] = useState(EMPTY_ARR);
 
-  useEffect(() => {
-    document.querySelector('.content').scrollTo(0, 0);
-    if (labeledPhotoId) {
-      setSelectedImageIdx(
-        assetData.findIndex((image) => labeledPhotoId === image.photoId)
-      );
-    }
-  }, [assetData, labeledPhotoId, setSelectedImageIdx]);
+  const effectiveGridImages = getEffectiveGridImages(
+    assetData,
+    photoEdits,
+    selectedImageIdx,
+    newDefaultPhotoId
+  );
 
   const handleAssetChange = useCallback(
     (asset) => {
@@ -47,73 +46,41 @@ export default function App() {
           (assetNext.current !== asset.next ||
             assetPrev.current !== asset.previous)
         ) {
-          setIsLoading(true);
-          resetState();
-
           assetNext.current = asset.next;
           assetPrev.current = asset.previous;
-          const assetDataStr = get(asset.metadata[0].metaValue);
-          const parsedAssetData = parseHtmlInput(assetDataStr);
-
-          // Full match will be first element, listing ID will be second
-          setListingId(
-            assetDataStr.match(
-              /href="https:\/\/www.airbnb.com\/rooms\/(.*?)"/
-            )[1]
-          );
-
-          // default to first image
-          setSelectedImageIdx(0);
-          setSelectedPhotoId(parsedAssetData[0].photoId);
+          const assetDataStr = get(asset.data).replace(/NaN/g, 'null');
+          const parsedAssetData = JSON.parse(assetDataStr);
 
           setCurrentAsset(asset);
           setAssetData(parsedAssetData);
-
-          setIsLoading(false);
-          setShouldAllowImageSelection(true);
         }
 
         if (asset.label) {
-          if (asset.label === 'Skip') {
-            setLabeledPhotoId('Skipped');
-            setLabeledPhotoQualityTier('Skipped');
-            setSelectedImageIdx(undefined);
-            return;
-          }
-          let label = {};
+          if (asset.label === 'Skip') return;
+          let labels = [];
           try {
-            label = JSON.parse(asset.label);
+            labels = JSON.parse(asset.label);
           } catch (e) {
             console.error(e);
           }
+          const formattedLabels = convertLabelToPhotoEditFormat(labels);
 
-          setSelectedPhotoId(label.photo_id);
-          setLabeledPhotoId(label.photo_id);
-          setLabeledPhotoQualityTier(label.photo_quality);
+          // store labels in photoEdits mutable data structure
+          setPhotoEdits(formattedLabels);
         }
       }
     },
-    [currentAsset]
+    [currentAsset, setCurrentAsset, setAssetData]
   );
 
-  const handleClickImage = useCallback(
+  const handleClickDefaultImage = useCallback(
     (imageIdx) => {
-      if (shouldAllowImageSelection) {
-        setSelectedImageIdx(imageIdx);
-        setSelectedPhotoId(assetData[imageIdx].photoId);
-      }
+      setSelectedImageIdx(imageIdx);
+      setSelectedListing(assetData.gridImages[imageIdx]);
+      setNewDefaultPhotoId('');
     },
-    [
-      assetData,
-      setSelectedImageIdx,
-      setSelectedPhotoId,
-      shouldAllowImageSelection,
-    ]
+    [assetData, setSelectedImageIdx, setSelectedListing, setNewDefaultPhotoId]
   );
-
-  const onSubmitOrSkip = () => {
-    setShouldAllowImageSelection(false);
-  };
 
   useEffect(() => {
     Labelbox.currentAsset().subscribe((asset) => {
@@ -124,15 +91,16 @@ export default function App() {
   return (
     <>
       <div className="flex-column left-side-panel">
-        {
+        {selectedListing ? (
           <LeftPanel
-            listingId={listingId}
-            photoId={selectedPhotoId}
-            labeledPhotoId={labeledPhotoId}
-            labeledPhotoQualityTier={labeledPhotoQualityTier}
-            onSubmitOrSkip={onSubmitOrSkip}
+            assetData={assetData}
+            newDefaultPhotoId={newDefaultPhotoId}
+            photoEdits={photoEdits}
+            selectedListing={selectedListing}
+            setNewDefaultPhotoId={setNewDefaultPhotoId}
+            setPhotoEdits={setPhotoEdits}
           />
-        }
+        ) : null}
       </div>
       <div className="flex-grow flex-column">
         <Header
@@ -140,19 +108,26 @@ export default function App() {
           hasNext={!!currentAsset?.next}
           hasPrev={!!currentAsset?.previous}
           projectId={projectId}
-          hasLabel={!!labeledPhotoId}
+          setSelectedListing={setSelectedListing}
+          setSelectedImageIdx={setSelectedImageIdx}
         />
-        <div className="content">
-          {!isLoading && (
-            <ImageGrid
-              images={assetData}
-              onClickImage={handleClickImage}
-              selectedImageIdx={selectedImageIdx}
-            />
-          )}
-          {isLoading && <p>Loading...</p>}
-        </div>
+        <Content
+          assetData={assetData}
+          gridImages={effectiveGridImages}
+          onClickImage={handleClickDefaultImage}
+          photoEdits={photoEdits}
+          selectedListing={selectedListing}
+          selectedImageIdx={selectedImageIdx}
+          setSelectedListing={setSelectedListing}
+          setSelectedImageIdx={setSelectedImageIdx}
+          setPhotoEdits={setPhotoEdits}
+        />
       </div>
+      <RightPanel
+        selectedListing={selectedListing}
+        onClickImage={setNewDefaultPhotoId}
+        newDefaultPhotoId={newDefaultPhotoId}
+      />
     </>
   );
 }

@@ -16,7 +16,7 @@ body{
 .content{
   margin: 0px 20px;
   overflow-y: scroll;
-  scroll-behavior: smooth;
+  max-height: calc(100vh - 60px);
 }
 .left-side-panel {
   background-color: #EBEBEB;
@@ -44,7 +44,6 @@ body{
 
 .photo-grid{
   display: flex;
-  justify-content: center;
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
@@ -56,13 +55,21 @@ body{
 }
 
 .image-container{
-  display: flex;
-  flex-direction: column;
   cursor: pointer;
   width: 210px;
+  height: 260px;
   padding-top: 5px;
   padding-left: 5px;
   overflow: hidden;
+}
+
+.figcaption{
+    width: 210px;
+    padding-top: 5px;
+    padding-left: 5px;
+    display: block;
+    position: absolute;
+    overflow: visible;
 }
 
 .default-image {
@@ -158,10 +165,6 @@ body{
   margin-right: 10px; 
 }
 
-.skip-cta:focus {
-  background-color: #d3d3d3;
-}
-
 .submit-cta {
   border: 1px solid #222222;
   background-color: #222222;
@@ -213,14 +216,6 @@ select:focus {
   padding: 12px 24px;
 }
 
-.cta:disabled {
-  border: 1px solid #999999;
-  background-color: #cccccc;
-  color: #666666;
-  cursor: default;
-  background-image: none;
-}
-
 .save-cta {
   background-image: linear-gradient(to right, #E61E4D 0%, #E31C5F 50%, #D70466 100%);
   border: 1px solid transparent;
@@ -243,34 +238,11 @@ select:focus {
 }
 
 .left-panel-ctas-wrapper {
+  float: right;
   margin-top: 32px;
 }
 
 .image-quality-changed {
   filter: grayscale(1);
   opacity: 0.4;
-}
-
-.existing-label-container {
-  display: flex;
-  flex-direction: column;
-  margin-top: 32px;
-}
-
-.bold-text {
-  font-weight: bold;
-}
-
-.__react_modal_image__modal_container {
-  left: 360px !important;
-  width: calc(100% - 360px) !important;
-}
-
-.keyboard-shortcuts {
-  padding: 10px 0; 
-  margin-left: 20px;
-}
-
-.italic-text {
-  font-style: italic;
 }
