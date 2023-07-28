@@ -7436,10 +7436,14 @@
 	    };
 	  });
 	}
-
-	// TODO: double check that im_w is okay too
 	function getResizedImageUrl(photoLink) {
-	  return photoLink !== null && photoLink !== void 0 && photoLink.includes('?') ? "".concat(photoLink) : "".concat(photoLink, "?im_w=480");
+	  var _effectiveImgUrl;
+	  var effectiveImgUrl = photoLink;
+	  if (!photoLink.includes('/im/')) {
+	    var originalUrl = new URL(photoLink);
+	    effectiveImgUrl = "".concat(originalUrl.origin, "/im").concat(originalUrl.pathname).concat(originalUrl.search);
+	  }
+	  return (_effectiveImgUrl = effectiveImgUrl) !== null && _effectiveImgUrl !== void 0 && _effectiveImgUrl.includes('?') ? "".concat(effectiveImgUrl) : "".concat(effectiveImgUrl, "?im_w=480");
 	}
 
 	function DefaultImage(_ref) {
@@ -8472,7 +8476,7 @@
 	  };
 	  var handleKeyupEvent = function handleKeyupEvent(e) {
 	    if (!isSaving && !isSkipping) {
-	      switch (e.key.toLowerCase()) {
+	      switch (key) {
 	        case '1':
 	          e.preventDefault();
 	          setPhotoQualityTier('Most Inspiring');

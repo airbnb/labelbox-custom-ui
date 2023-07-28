@@ -87,7 +87,13 @@ export function parseHtmlInput(input) {
   );
 }
 
-// TODO: double check that im_w is okay too
 export function getResizedImageUrl(photoLink) {
-  return photoLink?.includes('?') ? `${photoLink}` : `${photoLink}?im_w=480`;
+  let effectiveImgUrl = photoLink;
+  if (!photoLink.includes('/im/')) {
+    const originalUrl = new URL(photoLink);
+    effectiveImgUrl = `${originalUrl.origin}/im${originalUrl.pathname}${originalUrl.search}`;
+  }
+  return effectiveImgUrl?.includes('?')
+    ? `${effectiveImgUrl}`
+    : `${effectiveImgUrl}?im_w=480`;
 }
