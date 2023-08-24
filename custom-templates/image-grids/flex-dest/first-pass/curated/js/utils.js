@@ -95,7 +95,7 @@ export function parseHtmlAssetData(assetDataStr) {
     return assetDataStr.split('\n')
     // filter empty strings
     .filter(i => i.length)
-    // first 7 elements are metadata
+    // first 8 elements are metadata
     .slice(0,7)
 }
 
@@ -104,21 +104,14 @@ export function parseHtmlDescription(assetDataStr) {
       const descArr = assetDataStr.split('\n')
       // filter empty strings
       .filter(i => i.length)
-      // description + PDP info are 8th element onwards
+      // description + PDP info are 9th element onwards
       .slice(7)
-    
-    return descArr.reduce((acc, currVal) => {
-      if (currVal.endsWith(':')) {
-        acc.push([currVal]);
-      } else {
-        if (acc.length === 1) {
-          acc[acc.length - 1].push(currVal)
-        } else {
-          acc[acc.length - 1] = `${acc[acc.length - 1]} ${currVal}`;
-        }
-      }
-      return acc;
-    })
+      
+    const groupedKeyValue = [];
+    for (let i = 0; i < descArr.length, i+2;) {
+      groupedKeyValue.push([descArr[i], descArr[i+1]])
+    };
+    return groupedKeyValue;
 }
 
 export function parseHtmlLinks(inputStr) {

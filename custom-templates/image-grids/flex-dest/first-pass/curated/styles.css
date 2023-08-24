@@ -1,0 +1,268 @@
+.flex-column{
+  flex-direction: column;
+}
+.flex-grow{
+  display: flex;
+  flex-grow: 1;
+}
+.content{
+  margin: 0px 20px;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+}
+.left-side-panel {
+  background-color: #EBEBEB;
+  width: 360px;
+  min-width: 360px;
+  border-right: 1px solid #DDDDDD;
+  overflow-y: scroll;
+  height: 100vh;
+  margin-right: 0px !important;
+  padding: 20px;
+}
+.right-side-panel{
+  width: 500px;
+  min-width: 500px;
+  border-left: 1px solid #DDDDDD;
+  overflow-y: scroll;
+  height: 100vh;
+  margin-right: 0px !important;
+  padding: 20px;
+}
+.additional-image-wrapper{
+  padding: 20px 0;
+  width: 100%;
+}
+
+.photo-grid{
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  z-index: -1;
+}
+
+.listing-info{
+  margin-right: 20px;
+}
+
+.image-container{
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  width: 210px;
+  padding-top: 5px;
+  padding-left: 5px;
+  overflow: hidden;
+}
+
+.default-image {
+  border: 3px solid transparent;
+  object-fit: cover;
+  width: 200px;
+  height: 200px;
+}
+
+.text{
+  background-color: #ececec;
+  padding: 30px;
+  font-size: 20px;
+  overflow: auto;
+  font-style: italic;
+}
+
+.sticky{
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 1;
+}
+
+.navbar{
+  padding: 10px;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.header-container {
+  display: flex;
+  align-items: center; 
+  padding: 10px 0; 
+  margin-left: 20px;
+}
+
+.home-icon {
+  color: #9b9b9b;
+  cursor: pointer; 
+  margin-right: 20px;
+}
+
+.back-icon {
+  margin-left: 5px;
+  opacity: 0.2;
+}
+
+.next-icon {
+  margin-left: -5px; 
+  opacity: 0.2; 
+}
+
+.button-default {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.header-title {
+  color: #717171;
+  padding: 0px 10px;
+}
+
+.listing-title {
+  display:flex;
+  flex-direction:column;
+}
+
+.listing-header {
+  display:flex;
+  flex-direction:row;
+  flex-grow:1;
+  align-items:flex-end;
+  padding-bottom:10px;
+}
+
+.image-edited {
+  border: 3px solid #00ff00;
+}
+
+.image-selected {
+  background-color: none !important;
+  border: 3px solid blue;
+}
+
+.cta-container {
+  display: flex;
+  margin-top: 24px;
+}
+
+.skip-cta {
+  border: 1px solid #222222;
+  color: #222222;
+  margin-right: 10px; 
+}
+
+.skip-cta:focus {
+  background-color: #d3d3d3;
+}
+
+.submit-cta {
+  border: 1px solid #222222;
+  background-color: #222222;
+  color: white;
+}
+
+.listing-info-container {
+  display:flex;
+  flex-direction:row;
+  flex-grow:1;
+  align-items:flex-end;
+  padding-bottom:10px;
+}
+
+.margin-bottom {
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: 600;
+  font-size: 14px;
+  color: black;
+}
+
+select {
+  display: inherit !important; 
+  border: 1px solid #222222;
+}
+
+select:focus {
+  outline: none !important;
+}
+
+.flex-column .additional-image {
+  background: none repeat scroll 0 0 transparent;
+  border: 3px solid transparent;
+  cursor: pointer;
+  line-height: 0;
+  padding: 0;
+}
+
+.flex-column .additional-image:focus {
+  border: 3px solid blue;
+}
+
+.cta {
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 12px 24px;
+}
+
+.cta:disabled {
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+  cursor: default;
+  background-image: none;
+}
+
+.save-cta {
+  background-image: linear-gradient(to right, #E61E4D 0%, #E31C5F 50%, #D70466 100%);
+  border: 1px solid transparent;
+  color: white;
+}
+
+
+.clear-cta {
+  margin-right: 12px;
+  color: #222222;
+  border: 1px solid #222222;
+}
+
+.clear-cta:focus {
+  background-color: #DDDDDD;
+}
+
+.label {
+  margin-bottom: 8px;
+}
+
+.left-panel-ctas-wrapper {
+  margin-top: 32px;
+}
+
+.image-quality-changed {
+  filter: grayscale(1);
+  opacity: 0.4;
+}
+
+.existing-label-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 32px;
+}
+
+.bold-text {
+  font-weight: bold;
+}
+
+.__react_modal_image__modal_container {
+  left: 360px !important;
+  width: calc(100% - 360px) !important;
+}
+
+.inline-list {
+  padding: 10px 0; 
+  margin: 0 20px;
+}
+
+.italic-text {
+  font-style: italic;
+}

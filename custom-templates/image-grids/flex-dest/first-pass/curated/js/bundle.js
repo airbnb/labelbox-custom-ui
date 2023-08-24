@@ -13746,7 +13746,7 @@
 	  .filter(function (i) {
 	    return i.length;
 	  })
-	  // first 7 elements are metadata
+	  // first 8 elements are metadata
 	  .slice(0, 7);
 	}
 	function parseHtmlDescription(assetDataStr) {
@@ -13756,20 +13756,13 @@
 	  .filter(function (i) {
 	    return i.length;
 	  })
-	  // description + PDP info are 8th element onwards
+	  // description + PDP info are 9th element onwards
 	  .slice(7);
-	  return descArr.reduce(function (acc, currVal) {
-	    if (currVal.endsWith(':')) {
-	      acc.push([currVal]);
-	    } else {
-	      if (acc.length === 1) {
-	        acc[acc.length - 1].push(currVal);
-	      } else {
-	        acc[acc.length - 1] = "".concat(acc[acc.length - 1], " ").concat(currVal);
-	      }
-	    }
-	    return acc;
-	  });
+	  var groupedKeyValue = [];
+	  for (var i = 0; i < descArr.length, i + 2;) {
+	    groupedKeyValue.push([descArr[i], descArr[i + 1]]);
+	  }
+	  return groupedKeyValue;
 	}
 	function parseHtmlLinks(inputStr) {
 	  // first, split the string by lines
