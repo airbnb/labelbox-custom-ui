@@ -4,9 +4,9 @@ import commonjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
 
 export default {
-  input: "custom-templates/image-grids/flex-dest/dev/js/index.js",
+  input: "custom-templates/image-grids/flex-dest/first-pass/v1/js/index.js",
   output: {
-    file: "custom-templates/image-grids/flex-dest/dev/js/bundle.js",
+    file: "custom-templates/image-grids/flex-dest/first-pass/v1/js/bundle.js",
     format: "iife",
     sourcemap: true,
   },

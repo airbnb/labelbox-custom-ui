@@ -95,8 +95,6 @@ export function parseHtmlAssetData(assetDataStr) {
     return assetDataStr.split('\n')
     // filter empty strings
     .filter(i => i.length)
-    // return first 7 metadata
-    .slice(0, 7);
 }
 
 export function parseHtmlLinks(inputStr) {

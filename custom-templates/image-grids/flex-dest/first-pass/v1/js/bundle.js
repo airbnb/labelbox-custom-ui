@@ -13745,9 +13745,7 @@
 	  // filter empty strings
 	  .filter(function (i) {
 	    return i.length;
-	  })
-	  // return first 7 metadata
-	  .slice(0, 7);
+	  });
 	}
 	function parseHtmlLinks(inputStr) {
 	  // first, split the string by lines
