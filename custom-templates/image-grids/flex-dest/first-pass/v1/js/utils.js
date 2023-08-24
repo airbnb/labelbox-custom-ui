@@ -101,13 +101,17 @@ export function parseHtmlAssetData(assetDataStr) {
 
 export function parseHtmlDescription(assetDataStr) {
       // first, split the string by lines
-      return assetDataStr.split('\n')
+      const descArr = assetDataStr.split('\n')
       // filter empty strings
       .filter(i => i.length)
       // description + PDP info are 9th element onwards
-      .slice(8)
-      // filter out nones
-      .filter(text => text !== 'None:')
+      .slice(7)
+      
+    const groupedKeyValue = [];
+    for (let i = 0; i < descArr.length, i+2;) {
+      groupedKeyValue.push([descArr[i], descArr[i+1]])
+    };
+    return groupedKeyValue;
 }
 
 export function parseHtmlLinks(inputStr) {

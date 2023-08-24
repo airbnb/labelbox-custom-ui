@@ -13751,17 +13751,18 @@
 	}
 	function parseHtmlDescription(assetDataStr) {
 	  // first, split the string by lines
-	  return assetDataStr.split('\n')
+	  var descArr = assetDataStr.split('\n')
 	  // filter empty strings
 	  .filter(function (i) {
 	    return i.length;
 	  })
 	  // description + PDP info are 9th element onwards
-	  .slice(8)
-	  // filter out nones
-	  .filter(function (text) {
-	    return text !== 'None:';
-	  });
+	  .slice(7);
+	  var groupedKeyValue = [];
+	  for (var i = 0; i < descArr.length, i + 2;) {
+	    groupedKeyValue.push([descArr[i], descArr[i + 1]]);
+	  }
+	  return groupedKeyValue;
 	}
 	function parseHtmlLinks(inputStr) {
 	  // first, split the string by lines
@@ -15142,7 +15143,9 @@
 	    selectedImageIdx: selectedImageIdx
 	  }), isLoading && /*#__PURE__*/React$2.createElement("p", null, "Loading...")), /*#__PURE__*/React$2.createElement("div", {
 	    className: "description"
-	  }, description)));
+	  }, description.map(function (val) {
+	    return /*#__PURE__*/React$2.createElement("div", null, val);
+	  }))));
 	}
 
 	ReactDOM.render( /*#__PURE__*/React$2.createElement(App, null), document.getElementById('root'));
