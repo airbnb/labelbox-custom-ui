@@ -163,9 +163,13 @@ export default function App() {
           )}
           {isLoading && <p>Loading...</p>}
         </div>
-        <div className="description">{description.map((val) => 
-        (<div>
-        {val}</div>)
+        <div className="description">
+        {description?.map((val) => 
+          (
+            <div>
+              {val}
+            </div>
+          )
         )}</div>
       </div>
     </>

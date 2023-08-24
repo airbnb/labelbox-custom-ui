@@ -15143,7 +15143,7 @@
 	    selectedImageIdx: selectedImageIdx
 	  }), isLoading && /*#__PURE__*/React$2.createElement("p", null, "Loading...")), /*#__PURE__*/React$2.createElement("div", {
 	    className: "description"
-	  }, description.map(function (val) {
+	  }, description === null || description === void 0 ? void 0 : description.map(function (val) {
 	    return /*#__PURE__*/React$2.createElement("div", null, val);
 	  }))));
 	}
