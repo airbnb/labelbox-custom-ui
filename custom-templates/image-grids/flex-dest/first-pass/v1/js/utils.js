@@ -94,14 +94,18 @@ export function parseHtmlAssetData(assetDataStr) {
     // first, split the string by lines
     return assetDataStr.split('\n')
     // filter empty strings
-    .filter(i => i.length).slice(0,8)
+    .filter(i => i.length)
+    // first 8 elements are metadata
+    .slice(0,7)
 }
 
 export function parseHtmlDescription(assetDataStr) {
       // first, split the string by lines
       return assetDataStr.split('\n')
       // filter empty strings
-      .filter(i => i.length).slice(8)
+      .filter(i => i.length)
+      // description + PDP info are 9th element onwards
+      .slice(8)
       // filter out nones
       .filter(text => text !== 'None:')
 }

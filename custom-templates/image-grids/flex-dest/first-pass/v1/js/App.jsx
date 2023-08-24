@@ -60,7 +60,7 @@ export default function App() {
           const assetImagesStr = get(asset.metadata[0].metaValue);
           const pdpAndGMapLinks = parseHtmlLinks(assetImagesStr);
           const parsedAssetImages = parseHtmlInput(assetImagesStr);
-          const parsedDescription = parseHtmlDescription(assetImagesStr);
+          const parsedDescription = parseHtmlDescription(assetDataStr);
 
           // Full match will be first element, listing ID will be second
           setListingId(

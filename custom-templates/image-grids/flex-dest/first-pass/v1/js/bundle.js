@@ -13745,7 +13745,9 @@
 	  // filter empty strings
 	  .filter(function (i) {
 	    return i.length;
-	  }).slice(0, 8);
+	  })
+	  // first 8 elements are metadata
+	  .slice(0, 7);
 	}
 	function parseHtmlDescription(assetDataStr) {
 	  // first, split the string by lines
@@ -13753,7 +13755,9 @@
 	  // filter empty strings
 	  .filter(function (i) {
 	    return i.length;
-	  }).slice(8)
+	  })
+	  // description + PDP info are 9th element onwards
+	  .slice(8)
 	  // filter out nones
 	  .filter(function (text) {
 	    return text !== 'None:';
@@ -15063,7 +15067,7 @@
 	        var assetImagesStr = get(asset.metadata[0].metaValue);
 	        var pdpAndGMapLinks = parseHtmlLinks(assetImagesStr);
 	        var parsedAssetImages = parseHtmlInput(assetImagesStr);
-	        var parsedDescription = parseHtmlDescription(assetImagesStr);
+	        var parsedDescription = parseHtmlDescription(assetDataStr);
 
 	        // Full match will be first element, listing ID will be second
 	        setListingId(assetImagesStr.match(/href="https:\/\/www.airbnb.com\/rooms\/(.*?)"/)[1]);
