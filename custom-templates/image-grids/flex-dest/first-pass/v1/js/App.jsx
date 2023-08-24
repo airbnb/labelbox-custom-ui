@@ -163,7 +163,7 @@ export default function App() {
           )}
           {isLoading && <p>Loading...</p>}
         </div>
-        <div className="description">
+        <div className="inline-list">
         {description?.map((val) => 
           (
             <div>
