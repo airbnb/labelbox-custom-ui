@@ -109,8 +109,8 @@ export default function LeftPanel({
     setPhotoQualityTier('');
   }, [listingId]);
 
-  return (
-    <form>
+  const SecondaryQuestions = (
+    <>
       <label>
         Listing ID:
         <input type="text" name="listing-id" readOnly value={listingId} />
@@ -131,6 +131,16 @@ export default function LeftPanel({
           <option value="Low Quality">Low Quality</option>
           <option value="Unacceptable">Unacceptable</option>
         </select>
+      </label>
+    </>
+  )
+
+  return (
+    <form>
+      <label for="category">
+        Does the listing fit the category?
+        <input type="radio" name="category" value="yes">Yes</input>
+        <input type="radio" name="category" value="no">No</input>
       </label>
       <div className="left-panel-ctas-wrapper">
         <button
