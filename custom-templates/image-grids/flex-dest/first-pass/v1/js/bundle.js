@@ -13769,7 +13769,7 @@
 	      }
 	    }
 	    return acc;
-	  });
+	  }, []);
 	}
 	function parseHtmlLinks(inputStr) {
 	  // first, split the string by lines

@@ -118,7 +118,7 @@ export function parseHtmlDescription(assetDataStr) {
         }
       }
       return acc;
-    })
+    }, [])
 }
 
 export function parseHtmlLinks(inputStr) {
