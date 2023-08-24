@@ -94,7 +94,16 @@ export function parseHtmlAssetData(assetDataStr) {
     // first, split the string by lines
     return assetDataStr.split('\n')
     // filter empty strings
-    .filter(i => i.length)
+    .filter(i => i.length).slice(0,8)
+}
+
+export function parseHtmlDescription(assetDataStr) {
+      // first, split the string by lines
+      return assetDataStr.split('\n')
+      // filter empty strings
+      .filter(i => i.length).slice(8)
+      // filter out nones
+      .filter(text => text !== 'None:')
 }
 
 export function parseHtmlLinks(inputStr) {

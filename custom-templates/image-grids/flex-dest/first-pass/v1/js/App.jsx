@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { get, parseHtmlInput, parseHtmlAssetData, parseHtmlLinks } from './utils';
+import { get, parseHtmlInput, parseHtmlAssetData, parseHtmlLinks, parseHtmlDescription } from './utils';
 import ImageGrid from './components/ImageGrid';
 import LeftPanel from './components/LeftPanel';
 import Header from './components/Header';
@@ -9,6 +9,7 @@ const EMPTY_ARR = [];
 export default function App() {
   const projectId = new URL(window.location.href).searchParams.get('project');
   const [listingId, setListingId] = useState();
+  const [description, setDescription] = useState();
   const [currentAsset, setCurrentAsset] = useState();
   const [imageObjs, setImageObjs] = useState([]);
   const [listingInfo, setListingInfo] = useState([]);
@@ -59,6 +60,7 @@ export default function App() {
           const assetImagesStr = get(asset.metadata[0].metaValue);
           const pdpAndGMapLinks = parseHtmlLinks(assetImagesStr);
           const parsedAssetImages = parseHtmlInput(assetImagesStr);
+          const parsedDescription = parseHtmlDescription(assetImagesStr);
 
           // Full match will be first element, listing ID will be second
           setListingId(
@@ -74,6 +76,7 @@ export default function App() {
           setCurrentAsset(asset);
           setImageObjs(parsedAssetImages);
           setListingInfo(parsedAssetData);
+          setDescription(parsedDescription);
 
           setIsLoading(false);
           setShouldAllowImageSelection(true);
@@ -160,6 +163,7 @@ export default function App() {
           )}
           {isLoading && <p>Loading...</p>}
         </div>
+        <div className="description">{description}</div>
       </div>
     </>
   );

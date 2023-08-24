@@ -13745,6 +13745,18 @@
 	  // filter empty strings
 	  .filter(function (i) {
 	    return i.length;
+	  }).slice(0, 8);
+	}
+	function parseHtmlDescription(assetDataStr) {
+	  // first, split the string by lines
+	  return assetDataStr.split('\n')
+	  // filter empty strings
+	  .filter(function (i) {
+	    return i.length;
+	  }).slice(8)
+	  // filter out nones
+	  .filter(function (text) {
+	    return text !== 'None:';
 	  });
 	}
 	function parseHtmlLinks(inputStr) {
@@ -14980,46 +14992,50 @@
 	    setListingId = _useState2[1];
 	  var _useState3 = react.exports.useState(),
 	    _useState4 = _slicedToArray$1(_useState3, 2),
-	    currentAsset = _useState4[0],
-	    setCurrentAsset = _useState4[1];
-	  var _useState5 = react.exports.useState([]),
+	    description = _useState4[0],
+	    setDescription = _useState4[1];
+	  var _useState5 = react.exports.useState(),
 	    _useState6 = _slicedToArray$1(_useState5, 2),
-	    imageObjs = _useState6[0],
-	    setImageObjs = _useState6[1];
+	    currentAsset = _useState6[0],
+	    setCurrentAsset = _useState6[1];
 	  var _useState7 = react.exports.useState([]),
 	    _useState8 = _slicedToArray$1(_useState7, 2),
-	    listingInfo = _useState8[0],
-	    setListingInfo = _useState8[1];
+	    imageObjs = _useState8[0],
+	    setImageObjs = _useState8[1];
 	  var _useState9 = react.exports.useState([]),
 	    _useState10 = _slicedToArray$1(_useState9, 2),
-	    linkNodes = _useState10[0],
-	    setLinkNodes = _useState10[1];
-	  var _useState11 = react.exports.useState(),
+	    listingInfo = _useState10[0],
+	    setListingInfo = _useState10[1];
+	  var _useState11 = react.exports.useState([]),
 	    _useState12 = _slicedToArray$1(_useState11, 2),
-	    selectedImageIdx = _useState12[0],
-	    setSelectedImageIdx = _useState12[1];
+	    linkNodes = _useState12[0],
+	    setLinkNodes = _useState12[1];
 	  var _useState13 = react.exports.useState(),
 	    _useState14 = _slicedToArray$1(_useState13, 2),
-	    selectedPhotoId = _useState14[0],
-	    setSelectedPhotoId = _useState14[1];
+	    selectedImageIdx = _useState14[0],
+	    setSelectedImageIdx = _useState14[1];
 	  var _useState15 = react.exports.useState(),
 	    _useState16 = _slicedToArray$1(_useState15, 2),
-	    labeledPhotoId = _useState16[0],
-	    setLabeledPhotoId = _useState16[1];
+	    selectedPhotoId = _useState16[0],
+	    setSelectedPhotoId = _useState16[1];
 	  var _useState17 = react.exports.useState(),
 	    _useState18 = _slicedToArray$1(_useState17, 2),
-	    labeledPhotoQualityTier = _useState18[0],
-	    setLabeledPhotoQualityTier = _useState18[1];
+	    labeledPhotoId = _useState18[0],
+	    setLabeledPhotoId = _useState18[1];
+	  var _useState19 = react.exports.useState(),
+	    _useState20 = _slicedToArray$1(_useState19, 2),
+	    labeledPhotoQualityTier = _useState20[0],
+	    setLabeledPhotoQualityTier = _useState20[1];
 	  var assetNext = react.exports.useRef();
 	  var assetPrev = react.exports.useRef();
-	  var _useState19 = react.exports.useState(true),
-	    _useState20 = _slicedToArray$1(_useState19, 2),
-	    isLoading = _useState20[0],
-	    setIsLoading = _useState20[1];
 	  var _useState21 = react.exports.useState(true),
 	    _useState22 = _slicedToArray$1(_useState21, 2),
-	    shouldAllowImageSelection = _useState22[0],
-	    setShouldAllowImageSelection = _useState22[1];
+	    isLoading = _useState22[0],
+	    setIsLoading = _useState22[1];
+	  var _useState23 = react.exports.useState(true),
+	    _useState24 = _slicedToArray$1(_useState23, 2),
+	    shouldAllowImageSelection = _useState24[0],
+	    setShouldAllowImageSelection = _useState24[1];
 	  var resetState = function resetState() {
 	    setLabeledPhotoId();
 	    setLabeledPhotoQualityTier();
@@ -15047,6 +15063,7 @@
 	        var assetImagesStr = get(asset.metadata[0].metaValue);
 	        var pdpAndGMapLinks = parseHtmlLinks(assetImagesStr);
 	        var parsedAssetImages = parseHtmlInput(assetImagesStr);
+	        var parsedDescription = parseHtmlDescription(assetImagesStr);
 
 	        // Full match will be first element, listing ID will be second
 	        setListingId(assetImagesStr.match(/href="https:\/\/www.airbnb.com\/rooms\/(.*?)"/)[1]);
@@ -15058,6 +15075,7 @@
 	        setCurrentAsset(asset);
 	        setImageObjs(parsedAssetImages);
 	        setListingInfo(parsedAssetData);
+	        setDescription(parsedDescription);
 	        setIsLoading(false);
 	        setShouldAllowImageSelection(true);
 	      }
@@ -15118,7 +15136,9 @@
 	    images: imageObjs,
 	    onClickImage: handleClickImage,
 	    selectedImageIdx: selectedImageIdx
-	  }), isLoading && /*#__PURE__*/React$2.createElement("p", null, "Loading..."))));
+	  }), isLoading && /*#__PURE__*/React$2.createElement("p", null, "Loading...")), /*#__PURE__*/React$2.createElement("div", {
+	    className: "description"
+	  }, description)));
 	}
 
 	ReactDOM.render( /*#__PURE__*/React$2.createElement(App, null), document.getElementById('root'));
