@@ -14899,17 +14899,19 @@
 	  }, "Low Quality"), /*#__PURE__*/React$2.createElement("option", {
 	    value: "Unacceptable"
 	  }, "Unacceptable"))));
-	  return /*#__PURE__*/React$2.createElement("form", null, /*#__PURE__*/React$2.createElement("label", {
-	    "for": "category"
-	  }, "Does the listing fit the category?", /*#__PURE__*/React$2.createElement("input", {
+	  return /*#__PURE__*/React$2.createElement("form", null, /*#__PURE__*/React$2.createElement("p", null, "Does the listing fit the category?"), /*#__PURE__*/React$2.createElement("input", {
 	    type: "radio",
 	    name: "category",
 	    value: "yes"
+	  }), /*#__PURE__*/React$2.createElement("label", {
+	    "for": "yes"
 	  }, "Yes"), /*#__PURE__*/React$2.createElement("input", {
 	    type: "radio",
 	    name: "category",
 	    value: "no"
-	  }, "No")), /*#__PURE__*/React$2.createElement("div", {
+	  }), /*#__PURE__*/React$2.createElement("label", {
+	    "for": "no"
+	  }, "No"), /*#__PURE__*/React$2.createElement("div", {
 	    className: "left-panel-ctas-wrapper"
 	  }, /*#__PURE__*/React$2.createElement("button", {
 	    disabled: isSkipping || isSaving,
