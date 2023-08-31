@@ -14904,13 +14904,13 @@
 	    name: "category",
 	    value: "yes"
 	  }), /*#__PURE__*/React$2.createElement("label", {
-	    "for": "yes"
+	    htmlFor: "yes"
 	  }, "Yes"), /*#__PURE__*/React$2.createElement("input", {
 	    type: "radio",
 	    name: "category",
 	    value: "no"
 	  }), /*#__PURE__*/React$2.createElement("label", {
-	    "for": "no"
+	    htmlFor: "no"
 	  }, "No"), /*#__PURE__*/React$2.createElement("div", {
 	    className: "left-panel-ctas-wrapper"
 	  }, /*#__PURE__*/React$2.createElement("button", {
