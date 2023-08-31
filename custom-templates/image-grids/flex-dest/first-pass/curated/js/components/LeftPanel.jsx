@@ -7,6 +7,7 @@ export default function LeftPanel({
   labeledPhotoQualityTier,
   onSubmitOrSkip,
   setShouldAllowImageSelection,
+  setSelectedPhotoId,
 }) {
   const [photoQualityTier, setPhotoQualityTier] = useState('');
   const [isSaving, setIsSaving] = useState(false);
@@ -114,6 +115,7 @@ export default function LeftPanel({
       setShouldAllowImageSelection(false);
       setListingFitsCategory(false);
       setShowSecondaryQuestions(false);
+      setSelectedPhotoId();
     }
   }
 
@@ -127,7 +129,7 @@ export default function LeftPanel({
   }, [listingId]);
 
   const SecondaryQuestions = (
-    <>
+    <div>
       <label>
         Listing ID:
         <input type="text" name="listing-id" readOnly value={listingId} />
@@ -149,7 +151,7 @@ export default function LeftPanel({
           <option value="Unacceptable">Unacceptable</option>
         </select>
       </label>
-    </>
+    </div>
   )
 
   const showSubmitBtnDisabled = () => {

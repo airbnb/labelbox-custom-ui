@@ -137,6 +137,7 @@ export default function App() {
             labeledPhotoId={labeledPhotoId}
             labeledPhotoQualityTier={labeledPhotoQualityTier}
             onSubmitOrSkip={onSubmitOrSkip}
+            setSelectedPhotoId={setSelectedPhotoId}
             setShouldAllowImageSelection={setShouldAllowImageSelection}
           />
         }

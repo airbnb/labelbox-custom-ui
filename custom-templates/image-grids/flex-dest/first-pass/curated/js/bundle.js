@@ -14784,7 +14784,8 @@
 	    labeledPhotoId = _ref.labeledPhotoId,
 	    labeledPhotoQualityTier = _ref.labeledPhotoQualityTier,
 	    onSubmitOrSkip = _ref.onSubmitOrSkip,
-	    setShouldAllowImageSelection = _ref.setShouldAllowImageSelection;
+	    setShouldAllowImageSelection = _ref.setShouldAllowImageSelection,
+	    setSelectedPhotoId = _ref.setSelectedPhotoId;
 	  var _useState = react.exports.useState(''),
 	    _useState2 = _slicedToArray$1(_useState, 2),
 	    photoQualityTier = _useState2[0],
@@ -14888,6 +14889,7 @@
 	      setShouldAllowImageSelection(false);
 	      setListingFitsCategory(false);
 	      setShowSecondaryQuestions(false);
+	      setSelectedPhotoId();
 	    }
 	  };
 	  react.exports.useEffect(function () {
@@ -14899,7 +14901,7 @@
 	  react.exports.useEffect(function () {
 	    setPhotoQualityTier('');
 	  }, [listingId]);
-	  var SecondaryQuestions = /*#__PURE__*/React$2.createElement(React$2.Fragment, null, /*#__PURE__*/React$2.createElement("label", null, "Listing ID:", /*#__PURE__*/React$2.createElement("input", {
+	  var SecondaryQuestions = /*#__PURE__*/React$2.createElement("div", null, /*#__PURE__*/React$2.createElement("label", null, "Listing ID:", /*#__PURE__*/React$2.createElement("input", {
 	    type: "text",
 	    name: "listing-id",
 	    readOnly: true,
@@ -15178,6 +15180,7 @@
 	    labeledPhotoId: labeledPhotoId,
 	    labeledPhotoQualityTier: labeledPhotoQualityTier,
 	    onSubmitOrSkip: onSubmitOrSkip,
+	    setSelectedPhotoId: setSelectedPhotoId,
 	    setShouldAllowImageSelection: setShouldAllowImageSelection
 	  })), /*#__PURE__*/React$2.createElement("div", {
 	    className: "flex-grow flex-column"
