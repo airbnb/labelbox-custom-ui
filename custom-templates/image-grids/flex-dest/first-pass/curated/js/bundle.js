@@ -14802,7 +14802,7 @@
 	    _useState8 = _slicedToArray$1(_useState7, 2),
 	    showSecondaryQuestions = _useState8[0],
 	    setShowSecondaryQuestions = _useState8[1];
-	  var _useState9 = react.exports.useState(),
+	  var _useState9 = react.exports.useState(false),
 	    _useState10 = _slicedToArray$1(_useState9, 2),
 	    listingFitsCategory = _useState10[0],
 	    setListingFitsCategory = _useState10[1];
@@ -14901,7 +14901,9 @@
 	  react.exports.useEffect(function () {
 	    setPhotoQualityTier('');
 	  }, [listingId]);
-	  var SecondaryQuestions = /*#__PURE__*/React$2.createElement("div", null, /*#__PURE__*/React$2.createElement("label", null, "Listing ID:", /*#__PURE__*/React$2.createElement("input", {
+	  var SecondaryQuestions = /*#__PURE__*/React$2.createElement("div", {
+	    className: "secondary-questions"
+	  }, /*#__PURE__*/React$2.createElement("label", null, "Listing ID:", /*#__PURE__*/React$2.createElement("input", {
 	    type: "text",
 	    name: "listing-id",
 	    readOnly: true,

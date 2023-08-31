@@ -125,6 +125,15 @@ input:not([type])+label:after,input[type=text]:not(.browser-default)+label:after
   transition: .2s opacity ease-out, .2s color ease-out
 }
 
+select {
+  background-color: rgba(255,255,255,0.9);
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #f2f2f2;
+  border-radius: 2px;
+  height: 3rem
+}
+
 .flex-column{
   flex-direction: column;
 }
@@ -242,6 +251,10 @@ input:not([type])+label:after,input[type=text]:not(.browser-default)+label:after
   flex-grow:1;
   align-items:flex-end;
   padding-bottom:10px;
+}
+
+.secondary-questions {
+  margin-top: 20px;
 }
 
 .image-edited {

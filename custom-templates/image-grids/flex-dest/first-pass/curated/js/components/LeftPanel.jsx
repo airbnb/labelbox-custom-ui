@@ -13,7 +13,7 @@ export default function LeftPanel({
   const [isSaving, setIsSaving] = useState(false);
   const [isSkipping, setIsSkipping] = useState(false);
   const [showSecondaryQuestions, setShowSecondaryQuestions] = useState(false);
-  const [listingFitsCategory, setListingFitsCategory] = useState();
+  const [listingFitsCategory, setListingFitsCategory] = useState(false);
 
   const handlePhotoQualityChange = useCallback(
     (e) => {
@@ -129,7 +129,7 @@ export default function LeftPanel({
   }, [listingId]);
 
   const SecondaryQuestions = (
-    <div>
+    <div className='secondary-questions'>
       <label>
         Listing ID:
         <input type="text" name="listing-id" readOnly value={listingId} />
