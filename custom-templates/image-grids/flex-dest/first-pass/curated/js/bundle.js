@@ -14870,7 +14870,7 @@
 	  react.exports.useEffect(function () {
 	    setPhotoQualityTier('');
 	  }, [listingId]);
-	  return /*#__PURE__*/React$2.createElement("form", null, /*#__PURE__*/React$2.createElement("label", null, "Listing ID:", /*#__PURE__*/React$2.createElement("input", {
+	  /*#__PURE__*/React$2.createElement(React$2.Fragment, null, /*#__PURE__*/React$2.createElement("label", null, "Listing ID:", /*#__PURE__*/React$2.createElement("input", {
 	    type: "text",
 	    name: "listing-id",
 	    readOnly: true,
@@ -14898,7 +14898,18 @@
 	    value: "Low Quality"
 	  }, "Low Quality"), /*#__PURE__*/React$2.createElement("option", {
 	    value: "Unacceptable"
-	  }, "Unacceptable"))), /*#__PURE__*/React$2.createElement("div", {
+	  }, "Unacceptable"))));
+	  return /*#__PURE__*/React$2.createElement("form", null, /*#__PURE__*/React$2.createElement("label", {
+	    "for": "category"
+	  }, "Does the listing fit the category?", /*#__PURE__*/React$2.createElement("input", {
+	    type: "radio",
+	    name: "category",
+	    value: "yes"
+	  }, "Yes"), /*#__PURE__*/React$2.createElement("input", {
+	    type: "radio",
+	    name: "category",
+	    value: "no"
+	  }, "No")), /*#__PURE__*/React$2.createElement("div", {
 	    className: "left-panel-ctas-wrapper"
 	  }, /*#__PURE__*/React$2.createElement("button", {
 	    disabled: isSkipping || isSaving,
