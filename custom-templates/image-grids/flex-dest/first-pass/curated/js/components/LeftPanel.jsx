@@ -138,10 +138,14 @@ export default function LeftPanel({
   return (
     <form>
         <p>Does the listing fit the category?</p>
-        <input type="radio" name="category" value="yes" />
-        <label htmlFor="yes">Yes</label>
-        <input type="radio" name="category" value="no" />
-        <label htmlFor="no">No</label>
+        <label htmlFor="yes">
+          <input type="radio" id="yes" name="category" value="yes" />
+        Yes
+        </label>
+        <label htmlFor="no">
+        <input type="radio" id="no" name="category" value="no" />
+        No
+        </label>
       <div className="left-panel-ctas-wrapper">
         <button
           disabled={isSkipping || isSaving}

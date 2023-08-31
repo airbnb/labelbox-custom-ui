@@ -14906,19 +14906,21 @@
 	  }, "Low Quality"), /*#__PURE__*/React$2.createElement("option", {
 	    value: "Unacceptable"
 	  }, "Unacceptable"))));
-	  return /*#__PURE__*/React$2.createElement("form", null, /*#__PURE__*/React$2.createElement("p", null, "Does the listing fit the category?"), /*#__PURE__*/React$2.createElement("input", {
+	  return /*#__PURE__*/React$2.createElement("form", null, /*#__PURE__*/React$2.createElement("p", null, "Does the listing fit the category?"), /*#__PURE__*/React$2.createElement("label", {
+	    htmlFor: "yes"
+	  }, /*#__PURE__*/React$2.createElement("input", {
 	    type: "radio",
+	    id: "yes",
 	    name: "category",
 	    value: "yes"
-	  }), /*#__PURE__*/React$2.createElement("label", {
-	    htmlFor: "yes"
-	  }, "Yes"), /*#__PURE__*/React$2.createElement("input", {
+	  }), "Yes"), /*#__PURE__*/React$2.createElement("label", {
+	    htmlFor: "no"
+	  }, /*#__PURE__*/React$2.createElement("input", {
 	    type: "radio",
+	    id: "no",
 	    name: "category",
 	    value: "no"
-	  }), /*#__PURE__*/React$2.createElement("label", {
-	    htmlFor: "no"
-	  }, "No"), /*#__PURE__*/React$2.createElement("div", {
+	  }), "No"), /*#__PURE__*/React$2.createElement("div", {
 	    className: "left-panel-ctas-wrapper"
 	  }, /*#__PURE__*/React$2.createElement("button", {
 	    disabled: isSkipping || isSaving,
