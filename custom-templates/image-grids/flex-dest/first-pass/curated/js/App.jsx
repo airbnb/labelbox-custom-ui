@@ -22,7 +22,7 @@ export default function App() {
   const assetPrev = useRef();
   const [isLoading, setIsLoading] = useState(true);
   const [shouldAllowImageSelection, setShouldAllowImageSelection] =
-    useState(true);
+    useState(false);
 
   const resetState = () => {
     setLabeledPhotoId();
@@ -69,8 +69,6 @@ export default function App() {
             )[1]
           );
 
-          // default to first image
-          setSelectedImageIdx(0);
           setSelectedPhotoId(parsedAssetImages[0].photoId);
           setLinkNodes(pdpAndGMapLinks);
           setCurrentAsset(asset);
@@ -79,7 +77,6 @@ export default function App() {
           setDescription(parsedDescription);
 
           setIsLoading(false);
-          setShouldAllowImageSelection(true);
         }
 
         if (asset.label) {
@@ -140,6 +137,7 @@ export default function App() {
             labeledPhotoId={labeledPhotoId}
             labeledPhotoQualityTier={labeledPhotoQualityTier}
             onSubmitOrSkip={onSubmitOrSkip}
+            setShouldAllowImageSelection={setShouldAllowImageSelection}
           />
         }
       </div>

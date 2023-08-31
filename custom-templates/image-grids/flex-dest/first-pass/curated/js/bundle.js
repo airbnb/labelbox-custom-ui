@@ -14783,7 +14783,8 @@
 	    photoId = _ref.photoId,
 	    labeledPhotoId = _ref.labeledPhotoId,
 	    labeledPhotoQualityTier = _ref.labeledPhotoQualityTier,
-	    onSubmitOrSkip = _ref.onSubmitOrSkip;
+	    onSubmitOrSkip = _ref.onSubmitOrSkip,
+	    setShouldAllowImageSelection = _ref.setShouldAllowImageSelection;
 	  var _useState = react.exports.useState(''),
 	    _useState2 = _slicedToArray$1(_useState, 2),
 	    photoQualityTier = _useState2[0],
@@ -14796,6 +14797,14 @@
 	    _useState6 = _slicedToArray$1(_useState5, 2),
 	    isSkipping = _useState6[0],
 	    setIsSkipping = _useState6[1];
+	  var _useState7 = react.exports.useState(false),
+	    _useState8 = _slicedToArray$1(_useState7, 2),
+	    showSecondaryQuestions = _useState8[0],
+	    setShowSecondaryQuestions = _useState8[1];
+	  var _useState9 = react.exports.useState(),
+	    _useState10 = _slicedToArray$1(_useState9, 2),
+	    listingFitsCategory = _useState10[0],
+	    setListingFitsCategory = _useState10[1];
 	  var handlePhotoQualityChange = react.exports.useCallback(function (e) {
 	    setPhotoQualityTier(e.target.value);
 	  }, [setPhotoQualityTier]);
@@ -14868,6 +14877,19 @@
 	      }
 	    }
 	  };
+	  var handlePrimaryAnswerChange = function handlePrimaryAnswerChange(e) {
+	    var val = e.target.value;
+	    if (val === 'yes') {
+	      setShouldAllowImageSelection(true);
+	      setListingFitsCategory(true);
+	      setShowSecondaryQuestions(true);
+	    }
+	    if (val === 'no') {
+	      setShouldAllowImageSelection(false);
+	      setListingFitsCategory(false);
+	      setShowSecondaryQuestions(false);
+	    }
+	  };
 	  react.exports.useEffect(function () {
 	    document.addEventListener('keyup', handleKeyupEvent);
 	    return function () {
@@ -14877,7 +14899,7 @@
 	  react.exports.useEffect(function () {
 	    setPhotoQualityTier('');
 	  }, [listingId]);
-	  /*#__PURE__*/React$2.createElement(React$2.Fragment, null, /*#__PURE__*/React$2.createElement("label", null, "Listing ID:", /*#__PURE__*/React$2.createElement("input", {
+	  var SecondaryQuestions = /*#__PURE__*/React$2.createElement(React$2.Fragment, null, /*#__PURE__*/React$2.createElement("label", null, "Listing ID:", /*#__PURE__*/React$2.createElement("input", {
 	    type: "text",
 	    name: "listing-id",
 	    readOnly: true,
@@ -14906,21 +14928,32 @@
 	  }, "Low Quality"), /*#__PURE__*/React$2.createElement("option", {
 	    value: "Unacceptable"
 	  }, "Unacceptable"))));
+	  var showSubmitBtnDisabled = function showSubmitBtnDisabled() {
+	    if (isSkipping || isSaving) return true;
+	    if (listingFitsCategory) {
+	      return !photoQualityTier || !photoId;
+	    }
+	    if (listingFitsCategory === false) {
+	      return false;
+	    }
+	  };
 	  return /*#__PURE__*/React$2.createElement("form", null, /*#__PURE__*/React$2.createElement("p", null, "Does the listing fit the category?"), /*#__PURE__*/React$2.createElement("label", {
 	    htmlFor: "yes"
 	  }, /*#__PURE__*/React$2.createElement("input", {
 	    type: "radio",
 	    id: "yes",
 	    name: "category",
-	    value: "yes"
+	    value: "yes",
+	    onChange: handlePrimaryAnswerChange
 	  }), "Yes"), /*#__PURE__*/React$2.createElement("label", {
 	    htmlFor: "no"
 	  }, /*#__PURE__*/React$2.createElement("input", {
 	    type: "radio",
 	    id: "no",
 	    name: "category",
-	    value: "no"
-	  }), "No"), /*#__PURE__*/React$2.createElement("div", {
+	    value: "no",
+	    onChange: handlePrimaryAnswerChange
+	  }), "No"), showSecondaryQuestions && SecondaryQuestions, /*#__PURE__*/React$2.createElement("div", {
 	    className: "left-panel-ctas-wrapper"
 	  }, /*#__PURE__*/React$2.createElement("button", {
 	    disabled: isSkipping || isSaving,
@@ -14928,7 +14961,7 @@
 	    onClick: handleSkip,
 	    type: "button"
 	  }, isSkipping ? 'Skipping...' : 'Skip Listing'), /*#__PURE__*/React$2.createElement("button", {
-	    disabled: isSkipping || isSaving || photoQualityTier === '',
+	    disabled: showSubmitBtnDisabled(),
 	    className: "cta save-cta",
 	    type: "submit",
 	    onClick: handleSubmit
@@ -15059,7 +15092,7 @@
 	    _useState22 = _slicedToArray$1(_useState21, 2),
 	    isLoading = _useState22[0],
 	    setIsLoading = _useState22[1];
-	  var _useState23 = react.exports.useState(true),
+	  var _useState23 = react.exports.useState(false),
 	    _useState24 = _slicedToArray$1(_useState23, 2),
 	    shouldAllowImageSelection = _useState24[0],
 	    setShouldAllowImageSelection = _useState24[1];
@@ -15094,9 +15127,6 @@
 
 	        // Full match will be first element, listing ID will be second
 	        setListingId(assetImagesStr.match(/href="https:\/\/www.airbnb.com\/rooms\/(.*?)"/)[1]);
-
-	        // default to first image
-	        setSelectedImageIdx(0);
 	        setSelectedPhotoId(parsedAssetImages[0].photoId);
 	        setLinkNodes(pdpAndGMapLinks);
 	        setCurrentAsset(asset);
@@ -15104,7 +15134,6 @@
 	        setListingInfo(parsedAssetData);
 	        setDescription(parsedDescription);
 	        setIsLoading(false);
-	        setShouldAllowImageSelection(true);
 	      }
 	      if (asset.label) {
 	        if (asset.label === 'Skip') {
@@ -15146,7 +15175,8 @@
 	    photoId: selectedPhotoId,
 	    labeledPhotoId: labeledPhotoId,
 	    labeledPhotoQualityTier: labeledPhotoQualityTier,
-	    onSubmitOrSkip: onSubmitOrSkip
+	    onSubmitOrSkip: onSubmitOrSkip,
+	    setShouldAllowImageSelection: setShouldAllowImageSelection
 	  })), /*#__PURE__*/React$2.createElement("div", {
 	    className: "flex-grow flex-column"
 	  }, /*#__PURE__*/React$2.createElement(Header, {

@@ -6,10 +6,13 @@ export default function LeftPanel({
   labeledPhotoId,
   labeledPhotoQualityTier,
   onSubmitOrSkip,
+  setShouldAllowImageSelection,
 }) {
   const [photoQualityTier, setPhotoQualityTier] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [isSkipping, setIsSkipping] = useState(false);
+  const [showSecondaryQuestions, setShowSecondaryQuestions] = useState(false);
+  const [listingFitsCategory, setListingFitsCategory] = useState();
 
   const handlePhotoQualityChange = useCallback(
     (e) => {
@@ -100,6 +103,20 @@ export default function LeftPanel({
     }
   };
 
+  const handlePrimaryAnswerChange = (e) => {
+    const val = e.target.value;
+    if (val === 'yes') {
+      setShouldAllowImageSelection(true);
+      setListingFitsCategory(true);
+      setShowSecondaryQuestions(true);
+    } 
+    if (val === 'no') {
+      setShouldAllowImageSelection(false);
+      setListingFitsCategory(false);
+      setShowSecondaryQuestions(false);
+    }
+  }
+
   useEffect(() => {
     document.addEventListener('keyup', handleKeyupEvent);
     return () => document.removeEventListener('keyup', handleKeyupEvent);
@@ -135,17 +152,28 @@ export default function LeftPanel({
     </>
   )
 
+  const showSubmitBtnDisabled = () => {
+    if (isSkipping || isSaving) return true;
+    if (listingFitsCategory) {
+      return !photoQualityTier || !photoId;
+    }
+    if (listingFitsCategory === false) {
+      return false;
+    }
+  }
+
   return (
     <form>
         <p>Does the listing fit the category?</p>
         <label htmlFor="yes">
-          <input type="radio" id="yes" name="category" value="yes" />
+          <input type="radio" id="yes" name="category" value="yes" onChange={handlePrimaryAnswerChange} />
         Yes
         </label>
         <label htmlFor="no">
-        <input type="radio" id="no" name="category" value="no" />
+        <input type="radio" id="no" name="category" value="no" onChange={handlePrimaryAnswerChange} />
         No
         </label>
+        {showSecondaryQuestions && SecondaryQuestions}
       <div className="left-panel-ctas-wrapper">
         <button
           disabled={isSkipping || isSaving}
@@ -156,7 +184,7 @@ export default function LeftPanel({
           {isSkipping ? 'Skipping...' : 'Skip Listing'}
         </button>
         <button
-          disabled={isSkipping || isSaving || photoQualityTier === ''}
+          disabled={showSubmitBtnDisabled()}
           className="cta save-cta"
           type="submit"
           onClick={handleSubmit}
