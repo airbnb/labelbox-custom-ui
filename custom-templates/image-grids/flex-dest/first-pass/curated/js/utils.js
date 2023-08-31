@@ -100,19 +100,27 @@ export function parseHtmlAssetData(assetDataStr) {
 }
 
 export function parseHtmlDescription(assetDataStr) {
-      // first, split the string by lines
-      const descArr = assetDataStr.split('\n')
-      // filter empty strings
-      .filter(i => i.length)
-      // description + PDP info are 9th element onwards
-      .slice(7)
-      
-    const groupedKeyValue = [];
-    for (let i = 0; i < descArr.length, i+2;) {
-      groupedKeyValue.push([descArr[i], descArr[i+1]])
-    };
-    return groupedKeyValue;
+  // first, split the string by lines
+  const descArr = assetDataStr.split('\n')
+  // filter empty strings
+  .filter(i => i.length)
+  // description + PDP info are 8th element onwards
+  .slice(7)
+
+return descArr.reduce((acc, currVal) => {
+  if (currVal.endsWith(':')) {
+    acc.push([currVal]);
+  } else {
+    if (acc.length === 1) {
+      acc[acc.length - 1].push(currVal)
+    } else {
+      acc[acc.length - 1] = `${acc[acc.length - 1]} ${currVal}`;
+    }
+  }
+  return acc;
+}, [])
 }
+
 
 export function parseHtmlLinks(inputStr) {
     // first, split the string by lines

@@ -13756,13 +13756,20 @@
 	  .filter(function (i) {
 	    return i.length;
 	  })
-	  // description + PDP info are 9th element onwards
+	  // description + PDP info are 8th element onwards
 	  .slice(7);
-	  var groupedKeyValue = [];
-	  for (var i = 0; i < descArr.length, i + 2;) {
-	    groupedKeyValue.push([descArr[i], descArr[i + 1]]);
-	  }
-	  return groupedKeyValue;
+	  return descArr.reduce(function (acc, currVal) {
+	    if (currVal.endsWith(':')) {
+	      acc.push([currVal]);
+	    } else {
+	      if (acc.length === 1) {
+	        acc[acc.length - 1].push(currVal);
+	      } else {
+	        acc[acc.length - 1] = "".concat(acc[acc.length - 1], " ").concat(currVal);
+	      }
+	    }
+	    return acc;
+	  }, []);
 	}
 	function parseHtmlLinks(inputStr) {
 	  // first, split the string by lines
