@@ -14944,7 +14944,8 @@
 	    id: "yes",
 	    name: "category",
 	    value: "yes",
-	    onChange: handlePrimaryAnswerChange
+	    onChange: handlePrimaryAnswerChange,
+	    checked: listingFitsCategory
 	  }), "Yes"), /*#__PURE__*/React$2.createElement("label", {
 	    htmlFor: "no"
 	  }, /*#__PURE__*/React$2.createElement("input", {
@@ -14952,7 +14953,8 @@
 	    id: "no",
 	    name: "category",
 	    value: "no",
-	    onChange: handlePrimaryAnswerChange
+	    onChange: handlePrimaryAnswerChange,
+	    checked: listingFitsCategory === false
 	  }), "No"), showSecondaryQuestions && SecondaryQuestions, /*#__PURE__*/React$2.createElement("div", {
 	    className: "left-panel-ctas-wrapper"
 	  }, /*#__PURE__*/React$2.createElement("button", {
@@ -15196,7 +15198,9 @@
 	  }), isLoading && /*#__PURE__*/React$2.createElement("p", null, "Loading...")), /*#__PURE__*/React$2.createElement("div", {
 	    className: "description"
 	  }, description === null || description === void 0 ? void 0 : description.map(function (val) {
-	    return /*#__PURE__*/React$2.createElement("div", null, val);
+	    return /*#__PURE__*/React$2.createElement("div", {
+	      key: val
+	    }, val);
 	  }))));
 	}
 

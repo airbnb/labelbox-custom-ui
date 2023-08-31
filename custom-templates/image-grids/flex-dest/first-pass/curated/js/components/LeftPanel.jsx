@@ -166,11 +166,25 @@ export default function LeftPanel({
     <form>
         <p>Does the listing fit the category?</p>
         <label htmlFor="yes">
-          <input type="radio" id="yes" name="category" value="yes" onChange={handlePrimaryAnswerChange} />
+          <input 
+            type="radio" 
+            id="yes" 
+            name="category" 
+            value="yes" 
+            onChange={handlePrimaryAnswerChange} 
+            checked={listingFitsCategory}
+          />
         Yes
         </label>
         <label htmlFor="no">
-        <input type="radio" id="no" name="category" value="no" onChange={handlePrimaryAnswerChange} />
+        <input 
+          type="radio" 
+          id="no" 
+          name="category" 
+          value="no" 
+          onChange={handlePrimaryAnswerChange} 
+          checked={listingFitsCategory === false} 
+        />
         No
         </label>
         {showSecondaryQuestions && SecondaryQuestions}

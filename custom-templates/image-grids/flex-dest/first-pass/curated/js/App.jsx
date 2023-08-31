@@ -164,7 +164,7 @@ export default function App() {
         <div className="description">
         {description?.map((val) => 
           (
-            <div>
+            <div key={val}>
               {val}
             </div>
           )
