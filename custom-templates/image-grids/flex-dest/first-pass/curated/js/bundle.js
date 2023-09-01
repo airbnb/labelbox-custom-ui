@@ -13807,10 +13807,11 @@
 	  var imgObj = _ref.imgObj,
 	    idx = _ref.idx,
 	    isSelected = _ref.isSelected,
-	    onClickImage = _ref.onClickImage;
+	    onClickImage = _ref.onClickImage,
+	    shouldAllowImageSelection = _ref.shouldAllowImageSelection;
 	  var imageUrl = getEffectiveImageUrl(imgObj.imageSrc);
 	  return /*#__PURE__*/React$2.createElement("div", {
-	    className: "image-container",
+	    className: "image-container ".concat(shouldAllowImageSelection ? 'image-container-disabled' : ''),
 	    onClick: function onClick() {
 	      return onClickImage(idx);
 	    },
@@ -14605,7 +14606,8 @@
 	function ImageGrid(_ref) {
 	  var images = _ref.images,
 	    _onClickImage = _ref.onClickImage,
-	    selectedImageIdx = _ref.selectedImageIdx;
+	    selectedImageIdx = _ref.selectedImageIdx,
+	    shouldAllowImageSelection = _ref.shouldAllowImageSelection;
 	  var _useState = react.exports.useState(false),
 	    _useState2 = _slicedToArray$1(_useState, 2),
 	    isPhotoViewerOpen = _useState2[0],
@@ -14767,7 +14769,8 @@
 	      key: imgObj.photoId,
 	      onClickImage: function onClickImage(photoIdx) {
 	        return _onClickImage(photoIdx);
-	      }
+	      },
+	      shouldAllowImageSelection: shouldAllowImageSelection
 	    });
 	  })), isPhotoViewerOpen && !!images[selectedImageIdx] && /*#__PURE__*/React$2.createElement(Lightbox, {
 	    medium: images[selectedImageIdx].imageSrc,
@@ -15201,7 +15204,8 @@
 	  }, !isLoading && /*#__PURE__*/React$2.createElement(ImageGrid, {
 	    images: imageObjs,
 	    onClickImage: handleClickImage,
-	    selectedImageIdx: selectedImageIdx
+	    selectedImageIdx: selectedImageIdx,
+	    shouldAllowImageSelection: shouldAllowImageSelection
 	  }), isLoading && /*#__PURE__*/React$2.createElement("p", null, "Loading...")), /*#__PURE__*/React$2.createElement("div", {
 	    className: "description"
 	  }, description === null || description === void 0 ? void 0 : description.map(function (val) {

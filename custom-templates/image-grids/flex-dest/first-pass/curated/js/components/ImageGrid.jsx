@@ -12,7 +12,7 @@ function getElement(id) {
   return { el, x, y, top, bottom };
 }
 
-export default function ImageGrid({ images, onClickImage, selectedImageIdx }) {
+export default function ImageGrid({ images, onClickImage, selectedImageIdx, shouldAllowImageSelection }) {
   const [isPhotoViewerOpen, setIsPhotoViewerOpen] = useState(false);
 
   const handleKeydownEvent = (e) => {
@@ -180,6 +180,7 @@ export default function ImageGrid({ images, onClickImage, selectedImageIdx }) {
               isSelected={selectedImageIdx === idx}
               key={imgObj.photoId}
               onClickImage={(photoIdx) => onClickImage(photoIdx)}
+              shouldAllowImageSelection={shouldAllowImageSelection}
             />
           );
         })}

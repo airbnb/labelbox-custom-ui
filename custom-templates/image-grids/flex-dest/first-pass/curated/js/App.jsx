@@ -161,6 +161,7 @@ export default function App() {
               images={imageObjs}
               onClickImage={handleClickImage}
               selectedImageIdx={selectedImageIdx}
+              shouldAllowImageSelection={shouldAllowImageSelection}
             />
           )}
           {isLoading && <p>Loading...</p>}
