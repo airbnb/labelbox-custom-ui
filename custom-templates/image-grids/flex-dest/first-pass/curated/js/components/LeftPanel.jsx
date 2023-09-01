@@ -115,7 +115,6 @@ export default function LeftPanel({
       setShouldAllowImageSelection(false);
       setListingFitsCategory(false);
       setShowSecondaryQuestions(false);
-      setSelectedPhotoId();
     }
   }
 

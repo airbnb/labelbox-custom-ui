@@ -14784,8 +14784,8 @@
 	    labeledPhotoId = _ref.labeledPhotoId,
 	    labeledPhotoQualityTier = _ref.labeledPhotoQualityTier,
 	    onSubmitOrSkip = _ref.onSubmitOrSkip,
-	    setShouldAllowImageSelection = _ref.setShouldAllowImageSelection,
-	    setSelectedPhotoId = _ref.setSelectedPhotoId;
+	    setShouldAllowImageSelection = _ref.setShouldAllowImageSelection;
+	    _ref.setSelectedPhotoId;
 	  var _useState = react.exports.useState(''),
 	    _useState2 = _slicedToArray$1(_useState, 2),
 	    photoQualityTier = _useState2[0],
@@ -14889,7 +14889,6 @@
 	      setShouldAllowImageSelection(false);
 	      setListingFitsCategory(false);
 	      setShowSecondaryQuestions(false);
-	      setSelectedPhotoId();
 	    }
 	  };
 	  react.exports.useEffect(function () {
@@ -15164,6 +15163,9 @@
 	    if (shouldAllowImageSelection) {
 	      setSelectedImageIdx(imageIdx);
 	      setSelectedPhotoId(imageObjs[imageIdx].photoId);
+	    } else {
+	      setSelectedImageIdx(undefined);
+	      setSelectedPhotoId(undefined);
 	    }
 	  }, [imageObjs, setSelectedImageIdx, setSelectedPhotoId, shouldAllowImageSelection]);
 	  var onSubmitOrSkip = function onSubmitOrSkip() {

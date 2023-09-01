@@ -107,6 +107,9 @@ export default function App() {
       if (shouldAllowImageSelection) {
         setSelectedImageIdx(imageIdx);
         setSelectedPhotoId(imageObjs[imageIdx].photoId);
+      } else {
+        setSelectedImageIdx(undefined);
+        setSelectedPhotoId(undefined);
       }
     },
     [
