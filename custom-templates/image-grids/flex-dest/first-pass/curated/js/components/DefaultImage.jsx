@@ -12,7 +12,7 @@ export default function DefaultImage({
 
   return (
     <div
-      className={`image-container ${shouldAllowImageSelection ? 'image-container-disabled' : ''}`}
+      className={`image-container ${!shouldAllowImageSelection ? 'image-container-disabled' : ''}`}
       onClick={() => onClickImage(idx)}
       id={`image-container-${imgObj.photoId}`}
     >

@@ -13811,7 +13811,7 @@
 	    shouldAllowImageSelection = _ref.shouldAllowImageSelection;
 	  var imageUrl = getEffectiveImageUrl(imgObj.imageSrc);
 	  return /*#__PURE__*/React$2.createElement("div", {
-	    className: "image-container ".concat(shouldAllowImageSelection ? 'image-container-disabled' : ''),
+	    className: "image-container ".concat(!shouldAllowImageSelection ? 'image-container-disabled' : ''),
 	    onClick: function onClick() {
 	      return onClickImage(idx);
 	    },
@@ -14824,7 +14824,7 @@
 	    });
 	  };
 	  var handleSubmit = function handleSubmit(e) {
-	    if (photoQualityTier === '') {
+	    if (listingFitsCategory && photoQualityTier === '') {
 	      e.preventDefault();
 	      return;
 	    }

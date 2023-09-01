@@ -36,7 +36,7 @@ export default function LeftPanel({
   };
 
   const handleSubmit = (e) => {
-    if (photoQualityTier === '') {
+    if (listingFitsCategory && photoQualityTier === '') {
       e.preventDefault();
       return;
     }
